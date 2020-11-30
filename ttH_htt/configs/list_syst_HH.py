@@ -227,9 +227,9 @@ def specific_syst(analysis, list_channel_opt) :
            # "CMS_ttHl_EWK_jet"      : {"correlated" : True, "renameTo" : "CMS_multilepton_EWK_jet"   , "proc" : ["WZ"], "channels" : [k for k,v in list_channel_opt.items() if "WZ" in v["bkg_procs_from_MC"] or "ZZ" in v["bkg_procs_from_MC"]]}, ## added only on SRs atm 
 
             # ######## theory
-            "CMS_ttHl_thu_shape_ttH"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ttH", "proc" : ttH_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in ttH_proc)]},
-            "CMS_ttHl_thu_shape_tHq"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_tHq", "proc" : tHq_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in tHq_proc)]},
-            "CMS_ttHl_thu_shape_tHW"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_tHW", "proc" : tHW_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in tHW_proc)]},
+            "CMS_ttHl_thu_shape_ttH"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ttH", "proc" : ttH_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in ttH_procs)]},
+            "CMS_ttHl_thu_shape_tHq"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_tHq", "proc" : tHq_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in tHq_procs)]},
+            "CMS_ttHl_thu_shape_tHW"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_tHW", "proc" : tHW_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in tHW_procs)]},
             "CMS_ttHl_thu_shape_ttW"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ttW", "proc" : ["TTW", "TTWW"], "channels" : [k for k,v in list_channel_opt.items() if "TTW" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_ttZ"     : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ttZ", "proc" : ["TTZ"], "channels" : [k for k,v in list_channel_opt.items() if "TTZ" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_HH"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggHH", "proc" : ["ggHH"], "channels" : list(list_channel_opt.keys())},

@@ -91,9 +91,9 @@ elif analysis == "HH" :
     info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH.py"
     execfile(info_file)
     print ("list of signals/bkgs by channel taken from: %s" % info_file)
-    print ("syst values and channels options taken from: %s " % syst_file)
     syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst_HH.py"
     execfile(syst_file)
+    print ("syst values and channels options taken from: %s " % syst_file)
 else :
     print ("Analysis %s not implemented, should be \"ttH\" or \"HH\"")
     sys.exit()
