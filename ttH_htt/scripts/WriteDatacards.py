@@ -67,9 +67,9 @@ renamedHHInput         = options.renamedHHInput
 
 # output the card
 if options.output_file == "none" :
-    output_file = cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")
+    output_file = (cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")).replace("addSystFakeRate","datacard")
 else :
-    output_file = options.output_file
+    output_file =  cardFolder + "/" + options.output_file
 
 if use_Exptl_HiggsBR_Uncs:
     print("Using Experimental Unc.s on Higgs BRs")
@@ -79,18 +79,21 @@ else:
 if not os.path.exists(cardFolder):
     os.makedirs(cardFolder)
 
-syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst.py"
-execfile(syst_file)
-print ("syst values and channels options taken from: %s " % syst_file)
 
 if analysis == "ttH" :
     info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels.py"
     execfile(info_file)
     print ("list of signals/bkgs by channel taken from: %s" % info_file)
+    print ("syst values and channels options taken from: %s " % syst_file)
+    syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst.py"
+    execfile(syst_file)
 elif analysis == "HH" :
     info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH.py"
     execfile(info_file)
     print ("list of signals/bkgs by channel taken from: %s" % info_file)
+    print ("syst values and channels options taken from: %s " % syst_file)
+    syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst_HH.py"
+    execfile(syst_file)
 else :
     print ("Analysis %s not implemented, should be \"ttH\" or \"HH\"")
     sys.exit()
@@ -281,7 +284,7 @@ for specific_syst in theory_ln_Syst :
     procs = theory_ln_Syst[specific_syst]["proc"]
     if len(procs) == 0 :
         continue
-    if "HH" in procs[0] :
+    if "HH" in procs[0] and analysis == "ttH":
         for decay in list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["decays_hh"] :
             procs = procs + [procs[0] + decay]
     elif "H" in procs[0] and analysis == "ttH":
@@ -289,6 +292,26 @@ for specific_syst in theory_ln_Syst :
             continue
         for decay in list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["decays"] :
             procs = procs + [procs[0] + decay]
+    if "HH" in procs[0] and analysis == "HH":
+        procs_hh = []
+        for pr in higgs_procs_plain:
+            if procs[0] in pr: 
+                procs_hh.append(pr)
+        procs = procs + procs_hh
+    elif "H" in procs[0] and analysis == "HH":
+        procs_H = []
+        singlehiggs_proc_no_BR = ["TTH", "tHq","tHW", "WH","ZH","qqH", "ggH"]
+        singlehiggs_procs_w_BR = []
+        for proc in singlehiggs_proc_no_BR:
+            singlehiggs_procs_w_BR.append(proc+"_hww")
+            singlehiggs_procs_w_BR.append(proc+"_hzz")
+            singlehiggs_procs_w_BR.append(proc+"_htt")
+            singlehiggs_procs_w_BR.append(proc+"_hbb")
+            singlehiggs_procs_w_BR.append(proc+"_hgg")
+        for pr in singlehiggs_procs_w_BR:
+            if procs[0] in pr: 
+                procs_H.append(pr)
+        procs = procs + procs_H
     else :
         if procs[0] not in bkg_procs_from_MC :
             continue
@@ -298,45 +321,6 @@ for specific_syst in theory_ln_Syst :
         specific_syst_use = specific_syst
     cb.cp().process(procs).AddSyst(cb,  specific_syst_use, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
     print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", procs)
-
-if analysis == "HH" :
-
-    specific_syst == "pdf_HH"
-    cb.cp().process(higgs_procs_plain).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", higgs_procs_plain)
-
-    specific_syst = "QCDscale_HH"
-    cb.cp().process(higgs_procs_plain).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", higgs_procs_plain)
-
-    specific_syst = "TopmassUnc_HH"
-    cb.cp().process(higgs_procs_plain).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", higgs_procs_plain)
-
-    specific_syst = "pdf_Higgs_ttH"
-    cb.cp().process(["TTH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["TTH"])
-
-    specific_syst = "QCDscale_ttH"
-    cb.cp().process(["TTH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["TTH"])
-
-    specific_syst = "pdf_qg"
-    cb.cp().process(["TH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["TH"])
-
-    specific_syst = "QCDscale_tHq"
-    cb.cp().process(["TH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["TH"])
-
-    specific_syst = "QCDscale_WH"
-    cb.cp().process(["VH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["VH"])
-
-    specific_syst = "pdf_WH"
-    cb.cp().process(["VH"]).AddSyst(cb,  specific_syst, "lnN", ch.SystMap()(theory_ln_Syst[specific_syst]["value"]))
-    print ("added " + specific_syst + " with value " + str(theory_ln_Syst[specific_syst]["value"]) + " to processes: ", ["VH"])
-
 
 ########################################
 # BR syst
@@ -398,6 +382,8 @@ if shape :
             continue
         if (specific_syst == "CMS_ttHl_Clos_e_shape") and era != 2018:
             continue
+        if ("thu_shape_HH" in specific_syst and signal_type == "nonresLO"): # please fix
+            continue
         if channel not in specific_shape_systs[specific_syst]["channels"] :
             if ( "HEM" in specific_syst ) : print ("WTF", specific_shape_systs[specific_syst]["channels"])
             continue
@@ -406,6 +392,13 @@ if shape :
         #else :
         #    applyTo = specific_shape_systs[specific_syst]["proc"]
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH" ):
+            procs = []
+            for pr in higgs_procs_plain:
+                if specific_shape_systs[specific_syst]["proc"][0] in pr: 
+                    procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
             continue
@@ -501,8 +494,17 @@ if shape :
             continue
         if specific_shape_systs[specific_syst]["correlated"] and specific_shape_systs[specific_syst]["renameTo"] == None :
             continue
+        if ("thu_shape_HH" in specific_syst and signal_type == "nonresLO"): # please fix
+            continue
         #################
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH"):
+            procs = []
+            for pr in higgs_procs_plain:
+                if specific_shape_systs[specific_syst]["proc"][0] in pr: 
+                    procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
             continue
@@ -536,7 +538,7 @@ if shape :
 
 ########################################
 
-if not ( signal_type == "none" and mass == "none" and HHtype == "none" ) :
+if ( not ( signal_type == "none" and mass == "none" and HHtype == "none" )) and options.output_file=="none" :
     output_file =  "%s_%s_%s_%s" % (output_file, HHtype, signal_type, mass )
 
 bins = cb.bin_set()

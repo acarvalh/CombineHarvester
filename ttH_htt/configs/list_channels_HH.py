@@ -10,10 +10,14 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     # naming convention and separating by branching ratio
     # by now it will look for them (eg ttH_hww) in the prepareDatacards and not find
     decays_hh = []
+    decays_hh_vbf = []
     if renamedHHInput :
         if HHtype == "bbWW" :
             decays_hh = ["SL_hbb_hww", "DL_hbb_hww", "hbb_htt"]
             decays_hh_vbf = ["hbb_htt"]
+        elif HHtype == "multilep" :
+            decays_hh = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhtautau","htautauhzz"]
+            decays_hh_vbf = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhzz","htautauhtautau"] # "htautauhtautau"
         elif HHtype == "bbWW_bbtt" :
             decays_hh = ["hbb_htt"]
             decays_hh_vbf = ["hbb_htt"]
@@ -29,6 +33,8 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     else :
         if HHtype == "bbWW" :
             decays_hh = ["bbvv_sl", "bbtt", "bbvv"]
+        elif HHtype == "multilep" :
+            decays_hh = ["wwww","ttww", "tttt", "ttzz", "zzww", "zzzz"]
         elif HHtype == "bbWW_SL" :
             decays_hh = ["bbvv_sl"]
         elif HHtype == "bbWW_DL" :
@@ -38,9 +44,10 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
             sys.exit()
 
     #---> by now not used, we may use to implement systematics/BR -- see how decays_hh is used in WriteDatacards
-    higgs_procs = [ [y + x  for x in decays if not (x in ["hzg", "hmm"] and y != "ttH")] for y in sigs]
+    #higgs_procs = [ [y + x  for x in decays if not (x in ["hzg", "hmm"] and y != "ttH")] for y in sigs]
+    higgs_procs = [ [y + x  for x in decays if not (x in ["hzg", "hmm"])] for y in sigs]
 
-    prefix_VBF = "signal_ggf_nonresonant"
+    prefix_VBF = "signal_vbf_nonresonant"
     SM_VBF     = "1_1_1"
     prefix_GF  = "signal_ggf_nonresonant"
     couplings_GF_NLO = [ "cHHH0", "cHHH1", "cHHH5" ]
@@ -50,15 +57,16 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         prefix_VBF = "qqHH"
         SM_VBF     = "CV_1_C2V_1_kl_1"
         prefix_GF  = "ggHH"
-        couplings_GF_NLO = [ "kl_0_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
+        #couplings_GF_NLO = [ "kl_0_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
+        couplings_GF_NLO = [ "kl_2p45_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
         # --> using "cHHH2p45" as control -- check closure to see if this is the best case
-        couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1" ] # , "CV_0p5_C2V_1_kl_1"
+        couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1", "CV_0p5_C2V_1_kl_1" ]
 
     if signal_type == "nonresLO" :
         listSig = []
         for decay_hh in decays_hh :
             listSig = listSig + [
-            "%s_hh_%s%s"  % (prefix_GF, decay_hh, mass),
+            "%s_%s"  % (prefix_GF, decay_hh),
             "%s_%s_hh_%s" % (prefix_VBF, SM_VBF, decay_hh)
             ]
         sigs = [ listSig ]
@@ -66,15 +74,15 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         listSig = []
         for decay_hh in decays_hh :
             for massType in couplings_GF_NLO :
-                listSig = listSig + [ "%s_%s_hh_%s" % (prefix_GF, massType , decay_hh) ]
+                listSig = listSig + [ "%s_%s_%s" % (prefix_GF, massType , decay_hh) ]
         for decay_hh in decays_hh_vbf :
             for massType in couplings_VBF :
-                listSig = listSig + [ "%s_%s_hh_%s" % (prefix_VBF, massType, decay_hh) ]
+                listSig = listSig + [ "%s_%s_%s" % (prefix_VBF, massType, decay_hh) ]
         sigs = [ listSig ]
     elif signal_type == "res" :
         listSig = []
         for decay_hh in decays_hh :
-            listSig = listSig + [ "signal_ggf_%s_hh_%s" % (mass, decay_hh) ]
+            listSig = listSig + [ "signal_ggf_%s_%s" % (mass, decay_hh) ]
         sigs = [ listSig ]
     else :
         print("signal_type %s not implemented" % (signal_type))
@@ -89,9 +97,15 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #higgs_procs = sigs + [["ttH_hww", "tHW_hww", "WH_hww"]]
     #higgs_proc_no_BR = []
     ## the bellow would be if some list of single h processes with decay modes and correct naming convention are in the inputs, but higgs_proc_no_BR is
-    higgs_procs = sigs
-    higgs_proc_no_BR = ["TTH", "TH", "VH",]
-
+    higgs_procs_w_BR = []
+    higgs_proc_no_BR = ["TTH", "tHq","tHW", "WH","ZH","qqH", "ggH"]
+    for proc in higgs_proc_no_BR:
+        higgs_procs_w_BR.append(proc+"_hww")
+        higgs_procs_w_BR.append(proc+"_hzz")
+        higgs_procs_w_BR.append(proc+"_htt")
+        higgs_procs_w_BR.append(proc+"_hbb")
+        higgs_procs_w_BR.append(proc+"_hgg")
+    
     higgs_procs = sigs
 
     conversions = "Convs"
@@ -103,23 +117,55 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         flips       = "data_flips"
 
     info_channel = {
-        "2l_0tau" : {
+        "0l_4tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ"] + higgs_proc_no_BR,
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
-        "1l_0tau" : {
+        "1l_3tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ"] + higgs_proc_no_BR,
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "2lss" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "2l_2tau" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "3l" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "3l_1tau" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ", "ggZZ", "qqZZ", "Flips"] + higgs_procs_w_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "4l" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         }
+
+
     }
     #---> by now "TTH", "TH" and "VH" are automatically marked as BKG
 
     return {
-        "higgs_procs"      : higgs_procs,
+        "higgs_procs"      : sigs,
         "decays"           : [],
         "decays_hh"        : decays_hh,
         "info_bkg_channel" : info_channel,
