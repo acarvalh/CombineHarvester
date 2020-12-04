@@ -53,8 +53,14 @@ def getQuantiles(inputShapesL):
         x = np.array(x)
         quant= bgs_test.GetQuantiles(nq,x,y)
         x = np.append(x,np.array([1.]))
+        binstomask = np.ones(len(x), dtype=bool)
+        for en in range(len(x)-1):
+            if (bgs_test.FindBin(x[en]) is bgs_test.FindBin(x[en+1])):
+                binstomask[en +1] =False
+        print binstomask
+        x = x[binstomask]
         #print nq, x, len(x)
-        bgs_test= bgs_test.Rebin(nq,bgs_test.GetName() ,x)
+        bgs_test= bgs_test.Rebin(len(x)-1,bgs_test.GetName() ,x)
         quantileOk= True
         for j in range(bgs_test.GetNbinsX()):
             #print bgs_test.GetBinError(j)/bgs_test.GetBinContent(j), bgs_test.GetBinContent(j), bgs_test.GetBinError(j)

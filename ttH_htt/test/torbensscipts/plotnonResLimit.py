@@ -4,6 +4,7 @@ import subprocess
 import glob
 import shutil
 import ROOT
+ROOT.gROOT.SetBatch(True)
 from collections import OrderedDict
 import CMS_lumi, tdrstyle
 from optparse import OptionParser
@@ -118,8 +119,8 @@ def plotUpperLimits(resultdict, xlabel, ylabel,outpath):
  
     x1 = 0.55
     x2 = x1 + 0.24
-    y2 = 0.76
-    y1 = 0.60
+    y2 = 0.86
+    y1 = 0.70
     legend = ROOT.TLegend(x1,y1,x2,y2)
     legend.SetFillStyle(0)
     legend.SetBorderSize(0)
@@ -131,6 +132,7 @@ def plotUpperLimits(resultdict, xlabel, ylabel,outpath):
     legend.Draw()
     print " "
     c.SaveAs(outpath)
+    c.SaveAs(outpath.replace('.pdf','.root'))
     c.Close()
  
 

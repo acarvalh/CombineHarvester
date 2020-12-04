@@ -9,8 +9,10 @@ from collections import OrderedDict
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--inputPath", type="string", dest="inputPath", help="Full path of where datacards are ")
+parser.add_option("--channel", type="string", dest="channel", help="channel name ")
 (options, args) = parser.parse_args()
 inputPath = options.inputPath
+channel = options.channel
 
 path16 = inputPath + "2016/"
 path17 = inputPath + "2017/"
@@ -30,8 +32,10 @@ for card in listproc:
     card17=path17+cardbasename.replace('2016','2017') 
     card18=path18+cardbasename.replace('2016','2018') 
     cardRun2=pathRun2+cardbasename.replace('2016','Run2') 
-    commands.append('combineCards.py %s %s %s >> %s'%(card16,card17,card18,cardRun2))
-
+    commands.append('combineCards.py HH_%s_2016=%s HH_%s_2017=%s HH_%s_2018=%s >> %s'%(channel, card16, channel,card17, channel,card18,cardRun2))
+    commands.append("sed -i 's|%s||g' %s"%(path16, cardRun2))
+    commands.append("sed -i 's|%s||g' %s"%(path17, cardRun2))
+    commands.append("sed -i 's|%s||g' %s"%(path18, cardRun2))
 for command in commands:
     print command
     p = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
