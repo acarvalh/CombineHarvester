@@ -17,6 +17,7 @@ parser.add_option("--ylabel", type="string", dest="ylabel", help="plot label")
 parser.add_option("--scanlabels", type="string", dest="scanlabels", help="scan labels seperated by :")
 parser.add_option("--log", action='store_true',dest="logy", default=False)
 parser.add_option("--min", type="float", dest="miny", help="min y", default = 0.0)
+parser.add_option("--max", type="float", dest="maxy", help="max y", default = 0.0)
 (options, args) = parser.parse_args()
 inputPaths = options.inputPaths
 scanlabels = options.scanlabels
@@ -25,6 +26,7 @@ spinCase = options.spinCase
 ylabel = options.ylabel
 logy = options.logy
 miny = options.miny
+maxy = options.maxy
 def getLimits(file_name): 
     file = ROOT.TFile(file_name)
     tree = file.Get("limit")
@@ -37,6 +39,7 @@ def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
     # see CMS plot guidelines: https://ghm.web.cern.ch/ghm/plots/
     tgraphs = []
     up2s = [ ]
+    colors =  [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,41,ROOT.kGray+1,ROOT.kMagenta+2,ROOT.kOrange+7,ROOT.kCyan+2]
     for k,r in enumerate(resultdicts):
         values = []
         for key in r.keys():
@@ -88,9 +91,10 @@ def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
     frame.GetXaxis().SetLimits(min(values),max(values))
     if logy:
         c.SetLogy()
+    if(maxy>0.): frame.SetMaximum(maxy)
     tgraphs[0].Draw()
     for i, g in enumerate(tgraphs):
-        g.SetLineColor(i+1)
+        g.SetLineColor(colors[i])
         g.SetLineWidth(2)
         g.Draw("Same")
     CMS_lumi.lumi_sqrtS = ylabel
@@ -98,9 +102,9 @@ def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
     ROOT.gPad.SetTicks(1,1)
     frame.Draw('sameaxis')
  
-    x1 = 0.55
+    x1 = 0.7
     x2 = x1 + 0.24
-    y2 = 0.76
+    y2 = 0.86
     y1 = 0.60
     legend = ROOT.TLegend(x1,y1,x2,y2)
     legend.SetFillStyle(0)

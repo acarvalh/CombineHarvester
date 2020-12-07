@@ -209,7 +209,7 @@ data_blinded = ROOT.TGraphAsymmErrors(n, datax, datay, dataexl, dataexh, dataeyl
 
 bglist = sorted(bglist, key=lambda hist: hist.Integral())
 bgstack = ROOT.THStack("bgs","bgs")
-bgstack.SetTitle(";BDTOutput quantile;Events")
+bgstack.SetTitle(";BDTOutput in BG quantiles; Events")
 for hist in bglist:
     if hist.Integral()>0.:
         bgstack.Add(hist)

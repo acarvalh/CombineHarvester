@@ -33,6 +33,7 @@ def getLimits(file_name):
 
 def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
     # see CMS plot guidelines: https://ghm.web.cern.ch/ghm/plots/
+    colors =  [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,41,ROOT.kGray+1,ROOT.kMagenta+2,ROOT.kOrange+7,ROOT.kCyan+2]
     tgraphs = []
     up2s = [ ]
 
@@ -98,7 +99,7 @@ def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
         c.SetLogy()
         tgraphs[0].Draw()
     for i, g in enumerate(tgraphs):
-        g.SetLineColor(i+1)
+        g.SetLineColor(colors[i])
         g.SetLineWidth(2)
         g.Draw("Same")
     CMS_lumi.lumi_sqrtS = ylabel
@@ -106,9 +107,9 @@ def plotUpperLimits(resultdicts, scanlabels, xlabel, ylabel,outpath):
     ROOT.gPad.SetTicks(1,1)
     frame.Draw('sameaxis')
  
-    x1 = 0.55
-    x2 = x1 + 0.24
-    y2 = 0.76
+    x1 = 0.75
+    x2 = 0.9
+    y2 = 0.85
     y1 = 0.60
     legend = ROOT.TLegend(x1,y1,x2,y2)
     legend.SetFillStyle(0)
