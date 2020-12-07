@@ -380,7 +380,7 @@ if shape :
             continue
         if "HEM" in specific_syst and stxs :
             continue
-        if (specific_syst == "CMS_ttHl_Clos_e_shape") and era != 2018:
+        if (specific_syst == "CMS_ttHl_Clos_e_shape") and era != 2018 and analysis == "ttH":
             continue
         if ("thu_shape_HH" in specific_syst and signal_type == "nonresLO"): # please fix
             continue
@@ -397,7 +397,7 @@ if shape :
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH" ):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
@@ -503,7 +503,7 @@ if shape :
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH"):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :

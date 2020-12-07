@@ -184,26 +184,27 @@ def specific_syst(analysis, list_channel_opt) :
             "CMS_ttHl_JER"                  : {"correlated" : False, "renameTo" : "CMS_JER_Era"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             # #### JEC_regrouped
             ## corr part
-            "CMS_ttHl_JESAbsolute"          : {"correlated" : True, "renameTo" : "CMS_JES_Abs"   ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESBBEC1"             : {"correlated" : True, "renameTo" : "CMS_JES_BBEC1"      ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESEC2"               : {"correlated" : True, "renameTo" : "CMS_JES_EC2"        ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESFlavorQCD"         : {"correlated" : True, "renameTo" : "CMS_JES_FlavQCD"  ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESHF"                : {"correlated" : True, "renameTo" : "CMS_JES_HF"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESRelativeBal"       : {"correlated" : True, "renameTo" : "CMS_JES_RelBal",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_JES"          : {"correlated" : True, "renameTo" : "CMS_JES"   ,  "proc" : "MCproc"                 , "channels" : ["3l"]},
+            "CMS_ttHl_JESAbsolute"          : {"correlated" : True, "renameTo" : "CMS_JES_Abs"   ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESBBEC1"             : {"correlated" : True, "renameTo" : "CMS_JES_BBEC1"      ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESEC2"               : {"correlated" : True, "renameTo" : "CMS_JES_EC2"        ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESFlavorQCD"         : {"correlated" : True, "renameTo" : "CMS_JES_FlavQCD"  ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESHF"                : {"correlated" : True, "renameTo" : "CMS_JES_HF"         ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESRelativeBal"       : {"correlated" : True, "renameTo" : "CMS_JES_RelBal",  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
             # ## uncorr part
-            "CMS_ttHl_JESAbsolute_Era"       : {"correlated" : False, "renameTo" : "CMS_JES_Abs_Era"      ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESBBEC1_Era"          : {"correlated" : False, "renameTo" : "CMS_JES_BBEC1_Era"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESEC2_Era"            : {"correlated" : False, "renameTo" : "CMS_JES_EC2_Era"           ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESRelativeSample_Era" : {"correlated" : False, "renameTo" : "CMS_JES_RelSample_Era",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_JESHF_Era"             : {"correlated" : False, "renameTo" : "CMS_JES_HF_Era"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_JESAbsolute_Era"       : {"correlated" : False, "renameTo" : "CMS_JES_Abs_Era"      ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESBBEC1_Era"          : {"correlated" : False, "renameTo" : "CMS_JES_BBEC1_Era"         ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESEC2_Era"            : {"correlated" : False, "renameTo" : "CMS_JES_EC2_Era"           ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESRelativeSample_Era" : {"correlated" : False, "renameTo" : "CMS_JES_RelSample_Era",  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
+            "CMS_ttHl_JESHF_Era"             : {"correlated" : False, "renameTo" : "CMS_JES_HF_Era"            ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))},
             # ############################## Lepton efficency:
             "CMS_ttHl_lepEff_elloose"       : {"correlated" : True, "renameTo" : "CMS_multilepton_eff_eloose_Era"    ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_lepEff_eltight"       : {"correlated" : True, "renameTo" : "CMS_multilepton_eff_etight_Era"    ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_lepEff_mutight"       : {"correlated" : True, "renameTo" : "CMS_multilepton_eff_mtight_Era"    ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_lepEff_muloose"       : {"correlated" : True, "renameTo" : "CMS_multilepton_eff_mloose_Era"    ,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             # ############################## Tau related:
-            "CMS_ttHl_tauIDSF"              : {"correlated" : False, "renameTo" : "CMS_multilepton_eff_t_Era"      , "proc" : "MCproc"                 , "channels" :  list(set(list(list_channel_opt.keys())) - set(["4l", "3l"]))},
-            "CMS_ttHl_tauES"                : {"correlated" : False, "renameTo" : "CMS_multilepton_scale_t_Era"     , "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l"]))},
+            "CMS_ttHl_tauIDSF"              : {"correlated" : False, "renameTo" : "CMS_multilepton_eff_t_Era"      , "proc" : "MCproc"                 , "channels" :  list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss"]))},
+            "CMS_ttHl_tauES"                : {"correlated" : False, "renameTo" : "CMS_multilepton_scale_t_Era"     , "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss"]))},
             # ########################### FakeRate:
             "CMS_ttHl_FRe_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_multilepton_FakeRate_e_pt"  , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_FRe_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_multilepton_FakeRate_e_norm", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
@@ -211,9 +212,9 @@ def specific_syst(analysis, list_channel_opt) :
             "CMS_ttHl_FRm_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_multilepton_FakeRate_m_pt"  , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_FRm_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_multilepton_FakeRate_m_norm", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             "CMS_ttHl_FRm_shape_eta_barrel" : {"correlated" : True, "renameTo" : "CMS_multilepton_FakeRate_m_be"  , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRjt_norm"            : {"correlated" : False, "renameTo" :"CMS_multilepton_FakeRate_jt_norm", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l"]))},
-            "CMS_ttHl_FRjt_shape"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_jt_shape" , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l"]))},
-            "CMS_ttHl_FRet_shift"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_et_shift", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l"]))},
+            "CMS_ttHl_FRjt_norm"            : {"correlated" : False, "renameTo" :"CMS_multilepton_FakeRate_jt_norm", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss"]))},
+            "CMS_ttHl_FRjt_shape"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_jt_shape" , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss"]))},
+            "CMS_ttHl_FRet_shift"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_et_shift", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss"]))},
             # ################# other
             "CMS_ttHl_topPtReweighting"     : {"correlated" : True, "renameTo" : "CMS_multilepton_topPtReweighting" , "proc" : ["TT"], "channels" : ["3l"]},
             #"CMS_ttHl_DYMCNormScaleFactors" : {"correlated" : False, "renameTo" : "CMS_multilepton_DYMCNormScaleFactors" , "proc" : ["DY"], "channels" : ["3l"]},
@@ -222,7 +223,7 @@ def specific_syst(analysis, list_channel_opt) :
             
             "CMS_ttHl_PS_TT_ISR"   : {"correlated" : True, "renameTo" : "CMS_multilepton_PS_TT_ISR"   , "proc" : ["TT"], "channels" : ["3l"]},
             "CMS_ttHl_PS_TT_FSR"   : {"correlated" : True, "renameTo" : "CMS_multilepton_PS_TT_FSR"   , "proc" : ["TT"], "channels" : ["3l"]},
-        "CMS_ttHl_JESHEM"       : {"correlated" : True,  "renameTo" : None  , "proc" : "MCproc"      , "channels" : list(list_channel_opt.keys())}, # only for 2018 -- that is set on the Writedatacards
+            "CMS_ttHl_JESHEM"       : {"correlated" : True,  "renameTo" : None  , "proc" : "MCproc"      , "channels" : list(set(list(list_channel_opt.keys())) - set(["3l"]))}, # only for 2018 -- that is set on the Writedatacards
            # "CMS_ttHl_EWK_btag"     : {"correlated" : True, "renameTo" : "CMS_multilepton_EWK_btag"   , "proc" : ["WZ"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))}, 
            # "CMS_ttHl_EWK_jet"      : {"correlated" : True, "renameTo" : "CMS_multilepton_EWK_jet"   , "proc" : ["WZ"], "channels" : [k for k,v in list_channel_opt.items() if "WZ" in v["bkg_procs_from_MC"] or "ZZ" in v["bkg_procs_from_MC"]]}, ## added only on SRs atm 
 
@@ -239,12 +240,12 @@ def specific_syst(analysis, list_channel_opt) :
 #            "CMS_ttHl_thu_shape_ggZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["ggZZ"], "channels" : [k for k,v in list_channel_opt.items() if "ggZZ" in v["bkg_procs_from_MC"]]},
  #           "CMS_ttHl_thu_shape_qqZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["qqZZ"], "channels" : [k for k,v in list_channel_opt.items() if "qqZZ" in v["bkg_procs_from_MC"]]},
             # ##################################### MC closure
-        #     "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_e_shape", "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if "4l" in n or "3l" in n or "2l" in n or "1l" in n ]}, # should be only 2018, that is done on the main code
+            "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_e_shape", "proc" : ["data_fakes"], "channels" : ["3l","2lss"]}, # should be only 2018, that is done on the main code
             
-        #     "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_m_shape"  , "proc" : ["data_fakes"], "channels" : list(list_channel_opt.keys())}, # there is no shape tend in
-        #     "CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["data_fakes"], "channels" : list(list_channel_opt.keys())]},
-        #     "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : None  , "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if "4l" in n or "3l" in n or "2l" in n or "1l" in n ]},
-        #     "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : None  , "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if "4l" in n or "3l" in n or "2l" in n or "1l" in n ]},
+            "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_m_shape"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss"]}, # there is no shape tend in
+            #"CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["data_fakes"], "channels" : list(list_channel_opt.keys())]},
+            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_e_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss"]},
+            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_m_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss"]},
         #     "CMS_ttHl_Clos_t_norm"  : {"correlated" : False, "renameTo" : None  , "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if ("1tau" in n or "2tau" in n) and not ("2lss_1tau" in n or "3l_1tau" in n) ]},
          }
         specific_ln_shape_systs = {
