@@ -37,7 +37,7 @@ parser.add_option("--forceModifyShapes",           action="store_true", dest="fo
 parser.add_option("--signal_type",    type="string",       dest="signal_type", help="Options: \"nonresLO\" | \"nonresNLO\" | \"res\" ", default="none")
 parser.add_option("--mass",           type="string",       dest="mass",        help="Options: \n nonresNLO = it will be ignored \n noresLO = \"SM\", \"BM12\", \"kl_1p00\"... \n \"spin0_900\", ...", default="none")
 parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilep\" | \"bbWW_bbtt\" ", default="none")
-parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=False)
+parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=True)
 
 (options, args) = parser.parse_args()
 
@@ -69,7 +69,7 @@ renamedHHInput         = options.renamedHHInput
 if options.output_file == "none" :
     output_file = (cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")).replace("addSystFakeRate","datacard")
 else :
-    output_file =  cardFolder + "/" + options.output_file
+    output_file =   options.output_file
 
 if use_Exptl_HiggsBR_Uncs:
     print("Using Experimental Unc.s on Higgs BRs")
@@ -223,7 +223,7 @@ print ("BKG from MC  (original)  : ", bkg_procs_from_MC)
 print ("BKG from data (original) : ", bkg_proc_from_data)
 print ("signal        (original): ", higgs_procs_plain)
 
-specific_syst_list = specific_syst(analysis, list_channel_opt)
+specific_syst_list = specific_syst(analysis, list_channel_opt, HHtype)
 print("analysis type        :", analysis)
 
 ###########################################
@@ -415,7 +415,7 @@ for specific_syst in specific_ln_systs :
     procs = list_proc(specific_ln_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
     if len(procs) == 0 :
         continue
-    name_syst = specific_syst
+    name_syst = specific_syst if specific_ln_systs[specific_syst]["renameTo"]==None else specific_ln_systs[specific_syst]["renameTo"]
     if not specific_ln_systs[specific_syst]["correlated"] :
         name_syst = specific_syst.replace("%sl" % analysis, "%sl%s" % (analysis, str(era - 2000)))
         # assuming that the syst for the HH analysis with have the label HHl
