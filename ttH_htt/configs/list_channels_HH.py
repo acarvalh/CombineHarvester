@@ -50,17 +50,16 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     prefix_VBF = "signal_vbf_nonresonant"
     SM_VBF     = "1_1_1"
     prefix_GF  = "signal_ggf_nonresonant"
-    couplings_GF_NLO = [ "cHHH0", "cHHH1", "cHHH5" ]
-    # --> using "cHHH2p45" as control -- check closure to see if this is the best case
-    couplings_VBF    = [ "1_1_1", "1_1_2", "1_2_1", "1_1_0", "1p5_1_1", "0p5_1_1" ]
+    couplings_GF_NLO = [ "cHHH0", "cHHH1", "cHHH5", "cHHH2p45" ]
+    couplings_VBF    = [ "1_1_1", "1_1_2", "1_2_1", "1_1_0", "1p5_1_1", "0p5_1_1", "1_0_1" ]
     if renamedHHInput :
         prefix_VBF = "qqHH"
         SM_VBF     = "CV_1_C2V_1_kl_1"
         prefix_GF  = "ggHH"
         #couplings_GF_NLO = [ "kl_0_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
-        couplings_GF_NLO = [ "kl_2p45_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
+        couplings_GF_NLO = [ "kl_2p45_kt_1", "kl_1_kt_1", "kl_5_kt_1", "kl_5_kt_1", "kl_2p45_kt_1" ]
         # --> using "cHHH2p45" as control -- check closure to see if this is the best case
-        couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1", "CV_0p5_C2V_1_kl_1" ]
+        couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1", "CV_0p5_C2V_1_kl_1", "CV_1_C2V_0_kl_1" ]
 
     if signal_type == "nonresLO" :
         listSig = []
