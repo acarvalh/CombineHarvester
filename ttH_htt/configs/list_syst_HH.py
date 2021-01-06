@@ -11,6 +11,17 @@ lumi_2016_2017       = {2016: 1.008,          2017: 1.006}
 lumi_13TeV_DB        = {2016: 1.005,          2017: 1.005}
 lumi_13TeV_GS        = {2016: 1.004,          2017: 1.001}
 
+vbf_dipole_ln_Syst = {
+    "0l_4tau" : {"wwww": 1.,   "ttww":1.94, "tttt":0.93, "zzww":1.,    "ttzz":1.,    "zzzz":1.},
+    "1l_3tau" : {"wwww": 1.,   "ttww":0.87, "tttt":0.9,  "zzww":1.,    "ttzz":0.83,  "zzzz":1.},
+    "2lss" :    {"wwww": 1.23, "ttww":1.47, "tttt":1.58, "zzww":1.33,  "ttzz":1.67,  "zzzz":1.},
+    "2l_2tau" : {"wwww": 1.08, "ttww":1.,   "tttt":0.94, "zzww":2.8,   "ttzz":1.32,  "zzzz":1.},
+    "3l" :      {"wwww": 0.99, "ttww":1.04, "tttt":1.07, "zzww":0.94,  "ttzz":1.07,  "zzzz":2.22},
+    "3l_1tau" : {"wwww": 0.8,  "ttww":0.96, "tttt":0.86, "zzww":2.65,  "ttzz":1.59,  "zzzz":1.},
+    "4l" :      {"wwww": 1.41, "ttww":0.82, "tttt":0.7,  "zzww":0.71,  "ttzz":2.08,  "zzzz":1.}
+}
+
+
 theory_ln_Syst = {
     "QCDscale_ttjets"             : {"value": (0.976 , 1.035),    "proc" : ["TT"]},
     "pdf_ttjets"                  : {"value": 1.04,               "proc" : ["TT"]}, # includes alpha s

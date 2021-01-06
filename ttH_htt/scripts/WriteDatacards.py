@@ -284,6 +284,37 @@ if 0 > 1 : # FIXME: remind why we added that at some point
                 cb.cp().process([proc]).AddSyst(cb, 'scale_%s' % hsbr, 'rateParam', ch.SystMap()(("(@0)", "scale_%s" % hsig[0])))
                 print ("process: " + hsbr + " is proportonal to", hsig[0])
 
+
+########################################
+# add vbf dipole recoile uncertainties #FIXME bbWW implementation
+if analysis != "ttH":
+    wwww_procs = []
+    ttww_procs = []
+    tttt_procs = []
+    ttzz_procs = []
+    zzww_procs = []
+    zzzz_procs = []
+    for pr in higgs_procs_plain:
+        if not ("qqHH" in pr or "signal_vbf_nonresonant" in pr):
+            continue
+        if "wwww" in pr or "hwwhww" in pr:
+            wwww_procs.append(pr)
+        if "ttww" in pr or "htautauhww" in pr:
+            ttww_procs.append(pr)
+        if "tttt" in pr or "htautauhtautau" in pr:
+            tttt_procs.append(pr)
+        if "ttzz" in pr or "htautauhzz" in pr:
+            ttzz_procs.append(pr)
+        if "zzww" in pr or "hzzhww" in pr:
+            zzww_procs.append(pr)
+        if "zzzz" in pr or "hzzhzz" in pr:
+            zzzz_procs.append(pr)
+    cb.cp().process(wwww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["wwww"],1.)))
+    cb.cp().process(ttww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttww"],1.)))
+    cb.cp().process(tttt_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["tttt"],1.)))
+    cb.cp().process(zzww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzww"],1.)))
+    cb.cp().process(ttzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttzz"],1.)))
+    cb.cp().process(tttt_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["tttt"],1.)))
 ########################################
 # add theory systematics
 for specific_syst in theory_ln_Syst :
