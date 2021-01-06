@@ -159,11 +159,11 @@ def specific_syst(analysis, list_channel_opt) :
         tHW_procs = ["tHW_htt", "tHW_hww", "tHW_hzz"]
 
         specific_ln_systs = {
-            "CMS_multilepton_fakes"            : {"value" : 1.5,  "correlated"   : True,  "proc" : ["data_fakes"],          "channels" : [k for k,v in list_channel_opt.items() if "data_fakes"  in v["bkg_proc_from_data"]]},  # for channels with "fakes_data"
+            "CMS_multilepton_fakes"            : {"value" : 1.3,  "correlated"   : True,  "proc" : ["data_fakes"],          "channels" : [k for k,v in list_channel_opt.items() if "data_fakes"  in v["bkg_proc_from_data"]]},  # for channels with "fakes_data"
+            "CMS_multilepton_FakableID_lnU"   : {"value" : 1.5,  "correlated"   : True,  "proc" : ["data_fakes"],           "channels" : ["1l_3tau", "3l_1tau"]},  #For channels with small changes to the tau selection not properly treated in the fake rate extraction
             "CMS_multilepton_QF"               : {"value" : 1.3,  "correlated"   : True,  "proc" : ["data_flips"],          "channels" : [k for k,v in list_channel_opt.items() if "data_flips"  in v["bkg_proc_from_data"]]},  # for channels with "flips_data"
             "CMS_multilepton_Convs"            : {"value" : 1.5,  "correlated"   : True,  "proc" : ["Convs"],               "channels" : [k for k,v in list_channel_opt.items() if "Convs" in v["bkg_procs_from_MC"]]},   # for channels with "conversions"
-            "CMS_multilepton_Other"           : {"value" : 1.5,  "correlated"   : True,  "proc" : ["Other"],                  "channels" : [k for k,v in list_channel_opt.items() if "Other" in v["bkg_procs_from_MC"]]},            # for channels with WZ
-     
+            "CMS_multilepton_Other"           : {"value" : 1.5,  "correlated"   : True,  "proc" : ["Other"],                "channels" : [k for k,v in list_channel_opt.items() if "Other" in v["bkg_procs_from_MC"]]},            # for channels with WZ
         }
         ## if it is uncorrelated and the name or renameTo contains "CMS_ttHl_" leave it (a 16/17/18 will be added just after ttHl), if not add an "Era" where the year should be (2016/2017/2018 will replace "Era")
         specific_shape = {
