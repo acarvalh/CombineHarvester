@@ -158,6 +158,18 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
             "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
+        },
+        "WZCR" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_proc_no_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "ZZCR" : {
+            "bkg_proc_from_data" : [ fakes    ],
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_proc_no_BR,
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
         }
 
 

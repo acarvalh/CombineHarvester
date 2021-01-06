@@ -38,6 +38,8 @@ parser.add_option("--signal_type",    type="string",       dest="signal_type", h
 parser.add_option("--mass",           type="string",       dest="mass",        help="Options: \n nonresNLO = it will be ignored \n noresLO = \"SM\", \"BM12\", \"kl_1p00\"... \n \"spin0_900\", ...", default="none")
 parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilep\" | \"bbWW_bbtt\" ", default="none")
 parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=False)
+parser.add_option("--isCR", action="store_true", dest="isCR",   help="If datacard is created for an CR.", default=False)
+
 
 (options, args) = parser.parse_args()
 
@@ -64,7 +66,7 @@ HHtype       = options.HHtype
 use_Exptl_HiggsBR_Uncs = options.use_Exptl_HiggsBR_Uncs
 forceModifyShapes      = options.forceModifyShapes
 renamedHHInput         = options.renamedHHInput
-
+isCR = options.isCR
 # output the card
 if options.output_file == "none" :
     output_file = (cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")).replace("addSystFakeRate","datacard")
@@ -99,12 +101,13 @@ else :
     sys.exit()
 
 higgs_procs = list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["higgs_procs"]
+if (isCR): higgs_procs = []
 list_channel_opt   = list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["info_bkg_channel"]
 bkg_proc_from_data = list_channel_opt[channel]["bkg_proc_from_data"]
 bkg_procs_from_MC  = list_channel_opt[channel]["bkg_procs_from_MC"]
 
 # if a coupling is done read the tH signal with that coupling on naming convention
-if not (coupling == "none" or coupling == "kt_1_kv_1") :
+if not (coupling == "none" or coupling == "kt_1_kv_1"):
     higgs_procs = [ [ entry.replace("tHq_", "tHq_%s_" % coupling).replace("tHW_", "tHW_%s_" % coupling) for entry in entries ] for entries in higgs_procs ]
 
 print higgs_procs
@@ -201,7 +204,10 @@ if shape :
         #    # I will not debug that now, the check_systematics is mostly to not deliver weird postfit shapes
         #    # with bins with large uncertainties, it does not matter for numeric results.
         #    check_systematics(inputShapes, coupling)
-        check_systematics(inputShapes, coupling)
+        if analysis == "ttH":
+            check_systematics(inputShapes, coupling)
+        else:
+            check_systematics(inputShapes, coupling, analysis)
     else :
         print ("file %s already modified" % inputShapes)
 else :
@@ -392,12 +398,12 @@ if shape :
         #else :
         #    applyTo = specific_shape_systs[specific_syst]["proc"]
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
-        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
-            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        #if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+        #    procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH" ):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
@@ -498,12 +504,12 @@ if shape :
             continue
         #################
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
-        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
-            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        ##if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+        #    procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH"):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :

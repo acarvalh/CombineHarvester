@@ -294,7 +294,7 @@ def rescale_stxs_pT_bins (inputShapesI, stxs_pT_bins, era) :
             print ("rescaled ", key, obj_name, factor, nominal.Integral(), obj.Integral())
     tfileout1.Close()
 
-def check_systematics (inputShapesL, coupling) :
+def check_systematics (inputShapesL, coupling, analysis = "ttH") :
     if coupling == "none" :
         print ("Not doing cards with couplings, skping to modify all shapes with 'kt' mark on it from tHq/tHW/HH")
     ## it assumes no subdirectories in the preparedatacards file,
@@ -304,12 +304,12 @@ def check_systematics (inputShapesL, coupling) :
     for nkey, key in enumerate(tfileout.GetListOfKeys()) :
         obj =  key.ReadObj()
         obj_name = key.GetName()
-        if (coupling == "none" or coupling == "kt_1_kv_1") and "_kt_" in obj_name :
+        if (coupling == "none" or coupling == "kt_1_kv_1") and "_kt_" in obj_name and analysis == "ttH" :
             continue
-        if not (coupling == "none" or coupling == "kt_1_kv_1") and ("tHq" in obj_name or "tHW" in obj_name) and not coupling in obj_name :
+        if not (coupling == "none" or coupling == "kt_1_kv_1") and ("tHq" in obj_name or "tHW" in obj_name) and not coupling in obj_name and analysis == "ttH":
             continue
         ### FIXME: not doing BSM HH
-        if "HH" in obj_name and "_kt_" in obj_name :
+        if "HH" in obj_name and "_kt_" in obj_name and analysis == "ttH":
             continue
         #if  "data_fakes" in obj_name:
         #    print ("===========> type of ", obj_name, type(obj))
