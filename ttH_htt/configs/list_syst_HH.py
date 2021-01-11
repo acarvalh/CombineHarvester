@@ -36,7 +36,7 @@ theory_ln_Syst = {
   
 #     "pdf_ttWW"                    : {"value": 1.03,               "proc" : ["TTWW"]},
 
-    "CMS_ttHl_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
+    "CMS_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
 
 
     # "TopmassUnc_HH"               : {"value": 1.026,              "proc" : ["HH"]},

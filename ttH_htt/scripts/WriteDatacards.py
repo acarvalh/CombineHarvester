@@ -39,6 +39,7 @@ parser.add_option("--mass",           type="string",       dest="mass",        h
 parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilep\" | \"bbWW_bbtt\" ", default="none")
 parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=False)
 parser.add_option("--isCR", action="store_true", dest="isCR",   help="If datacard is created for an CR.", default=False)
+parser.add_option("--withCR", action="store_true", dest="withCR",   help="If datacard is created for use with CR.", default=False)
 
 
 (options, args) = parser.parse_args()
@@ -67,6 +68,7 @@ use_Exptl_HiggsBR_Uncs = options.use_Exptl_HiggsBR_Uncs
 forceModifyShapes      = options.forceModifyShapes
 renamedHHInput         = options.renamedHHInput
 isCR = options.isCR
+withCR = options.withCR
 # output the card
 if options.output_file == "none" :
     output_file = (cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")).replace("addSystFakeRate","datacard")
@@ -287,7 +289,7 @@ if 0 > 1 : # FIXME: remind why we added that at some point
 
 ########################################
 # add vbf dipole recoile uncertainties #FIXME bbWW implementation
-if analysis != "ttH":
+if (analysis != "ttH") and (not isCR):
     wwww_procs = []
     ttww_procs = []
     tttt_procs = []
@@ -322,8 +324,19 @@ if analysis != "ttH":
     cb.cp().process(zzzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzzz"],1.)))
     print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzzz"]) + " to processes: ", zzzz_procs)
 ########################################
+# add rate parameters
+if withCR and analysis != "ttH" and HHtype=="multilep":
+    cb.cp().process(["WZ"]).AddSyst(cb, 'CMS_multilepton_xsWZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
+    cb.cp().process(["ggZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
+    cb.cp().process(["qqZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
+########################################
 # add theory systematics
 for specific_syst in theory_ln_Syst :
+    if withCR and analysis != "ttH" and HHtype=="multilep":
+        if "WZ" in specific_syst and "pdf" not in specific_syst:
+            continue
+        if ("ggZZ" in specific_syst or "ggZZ" in specific_syst) and "pdf" not in specific_syst:
+            continue
     procs = theory_ln_Syst[specific_syst]["proc"]
     if len(procs) == 0 :
         continue
