@@ -18,12 +18,62 @@ parser.add_option("--inputPath", type="string", dest="inputPath", help="Full pat
 parser.add_option("--card",      type="string", dest="card",      help="name of prepareDatacards.root. In not given will pick all from the inputPath", default="none")
 parser.add_option("--threshold",      type="float", dest="threshold",      help="relativ bin error threshold", default=0.3)
 parser.add_option("--quantSig", action='store_true',dest="quantSig", default=False)
+parser.add_option("--is4l", action='store_true',dest="is4l", default=False)
 (options, args) = parser.parse_args()
 
 inputPath = options.inputPath
 card      = options.card
 threshold = options.threshold
 quantSig = options.quantSig
+is4l = options.is4l
+def checkIfLabeledHistogram(hist):
+    areAllLabelled = True
+    nofBins = hist.GetNbinsX() + 1
+    for i in range(1,nofBins+1):
+        binLabel = hist.GetXaxis().GetBinLabel(i)
+        if not binLabel: areAllLabelled = False
+    return areAllLabelled
+
+def compIntegral(hist, und, ov):
+    nBins = hist.GetNbinsX()
+    first = 1
+    last = nBins
+    if und: first = 0
+    if ov: last = last +1
+    content = 0
+    for i in range(first, last+1):
+        content = content + hist.GetBinContent(i)
+    return content
+
+def makeBinContentsPositive(hist):
+    print "Correcting possible negative bins in:" + hist.GetName()
+    integral_original = max(0.,compIntegral(hist,False, False))
+    isLabelled = checkIfLabeledHistogram(hist)
+    initBin = 0
+    if isLabelled: initBin = 1
+    endBin = hist.GetNbinsX()+2
+    if isLabelled: endBin = endBin -1
+    for i in range(initBin,endBin):
+        binContent_original = hist.GetBinContent(i)
+        binError2_original = hist.GetBinError(i)*hist.GetBinError(i)
+        if binContent_original < 0.:
+            print "Changing bin content"
+            binContent_modified = 0.
+            binError2_modified = binError2_original + (binContent_original - binContent_modified)*(binContent_original - binContent_modified)
+            hist.SetBinContent(i, binContent_modified)
+            hist.SetBinError(i,math.sqrt(binError2_modified))
+    integral_modified = max(0.,compIntegral(hist, False, False))
+    if integral_original > 0. and integral_modified > 0.:
+        sf = integral_original / integral_modified
+        for i in range(initBin, endBin):
+            binContent = hist.GetBinContent(i)
+            hist.SetBinContent(i, sf*binContent)
+    elif ('dats_obs' not in hist.GetName()):
+        for i in range(initBin, endBin):
+            hist.SetBinContent(i, 0.001/((endBin - 1) - initBin))
+    print "integral old,new,corrected",integral_original,integral_modified,compIntegral(hist, False, False)
+    return hist
+
 def getQuantiles(inputShapesL):
     tfilein = ROOT.TFile(inputShapesL, "READ")
     bgs = ROOT.TH1F()
@@ -51,7 +101,6 @@ def getQuantiles(inputShapesL):
             else:
                 sig.Add(obj)
             ns = ns + 1
-    #quantileFound = False
     possible_quantiles=[]
     print bgs.Integral()
     for i in range(30):
@@ -60,6 +109,15 @@ def getQuantiles(inputShapesL):
         if nq < 5: continue
         bgs_test=bgs.Clone()
         sig_test=sig.Clone()
+        bgs_test_mod=bgs.Clone()
+        sig_test_mod=sig.Clone()
+        if is4l:
+            for i in range(1,bgs_test_mod.GetNbinsX()+1):
+                if bgs_test_mod.GetBinLowEdge(i)>0.9:
+                    bgs_test_mod.SetBinContent(i,0)
+                    bgs_test_mod.SetBinError(i,0)
+                    sig_test_mod.SetBinContent(i,0)
+                    sig_test_mod.SetBinError(i,0)
         y = []
         x = []
         for j in range(nq):
@@ -69,9 +127,9 @@ def getQuantiles(inputShapesL):
         x = np.array(x)
         quant = None
         if quantSig:
-            quant= sig_test.GetQuantiles(nq,x,y)
+            quant= sig_test_mod.GetQuantiles(nq,x,y)
         else:
-            quant= bgs_test.GetQuantiles(nq,x,y)
+            quant= bgs_test_mod.GetQuantiles(nq,x,y)
         x = np.append(x,np.array([1.]))
         #binstomask = np.ones(len(x), dtype=bool)
         # for en in range(len(x)-1):
@@ -91,7 +149,11 @@ def getQuantiles(inputShapesL):
             better_x.append(bgs_test.GetBinLowEdge(b))
         better_x[0] = 0.
         better_x=np.array(better_x)
-        x = np.append(better_x,np.array([1.]))
+        x = None
+        if is4l:
+            x = np.append(better_x,np.array([0.9,1.]))
+        else:
+            x = np.append(better_x,np.array([1.]))
         quantileOk= True
         bgs_test= bgs_test.Rebin(len(x)-1,bgs_test.GetName() ,x)
         sig_test= sig_test.Rebin(len(x)-1,sig_test.GetName() ,x)
@@ -103,6 +165,8 @@ def getQuantiles(inputShapesL):
             #print sig_test.GetBinContent(j+1)
             if(bgs_test.GetBinContent(j+1)>0):
                 quantileOk = quantileOk and bgs_test.GetBinError(j+1)/bgs_test.GetBinContent(j+1)<threshold
+            else:
+                quantileOk = False
         if quantileOk or nq is 5:
             possible_quantiles.append(x)
             #print nq, y, len(y), x, len(x)
@@ -118,6 +182,7 @@ def getQuantiles(inputShapesL):
         score = 0
         for j in range(bgs_test.GetNbinsX()):
             #score = score + sig_test.GetBinContent(j+1)*sig_test.GetBinContent(j+1)/bgs_test.GetBinContent(j+1)*(bgs_test.GetBinError(j+1)*bgs_test.GetBinError(j+1)/(bgs_test.GetBinContent(j+1)*bgs_test.GetBinContent(j+1)))
+            print binning
             score = score + sig_test.GetBinContent(j+1)*sig_test.GetBinContent(j+1)/bgs_test.GetBinContent(j+1)
             #score = score + math.sqrt(sig_test.GetBinContent(j+1)*sig_test.GetBinContent(j+1)/bgs_test.GetBinContent(j+1))
             #if math.sqrt(sig_test.GetBinContent(j+1)*sig_test.GetBinContent(j+1)/bgs_test.GetBinContent(j+1))>score:
@@ -148,6 +213,7 @@ def rebin (inputShapesL, inputShapesLnew, bins) :
         tfileout2.cd()
         nominal  = ROOT.TH1F()
         nominal = obj.Rebin(len(bins)-1,obj.GetName() , bins)
+        nominal = makeBinContentsPositive(nominal)
         nominal.Write()
         tfilein1.cd()
     tfilein1.Close()
@@ -168,7 +234,7 @@ else :
 
 for prepareDatacard in listproc :
     prepareDatacardNew = prepareDatacard.replace(inputPath, inputPathNew)
-    if ('Counter' not in str(prepareDatacardNew)):
+    if ('MVAOutput' in str(prepareDatacardNew)):
         bins = getQuantiles(prepareDatacard)
         print bins, len(bins)
         rebin(prepareDatacard,prepareDatacardNew, bins)

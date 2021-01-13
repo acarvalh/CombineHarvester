@@ -37,7 +37,9 @@ parser.add_option("--forceModifyShapes",           action="store_true", dest="fo
 parser.add_option("--signal_type",    type="string",       dest="signal_type", help="Options: \"nonresLO\" | \"nonresNLO\" | \"res\" ", default="none")
 parser.add_option("--mass",           type="string",       dest="mass",        help="Options: \n nonresNLO = it will be ignored \n noresLO = \"SM\", \"BM12\", \"kl_1p00\"... \n \"spin0_900\", ...", default="none")
 parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilep\" | \"bbWW_bbtt\" ", default="none")
-parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=True)
+parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=False)
+parser.add_option("--isCR", action="store_true", dest="isCR",   help="If datacard is created for an CR.", default=False)
+parser.add_option("--withCR", action="store_true", dest="withCR",   help="If datacard is created for use with CR.", default=False)
 
 (options, args) = parser.parse_args()
 
@@ -64,7 +66,8 @@ HHtype       = options.HHtype
 use_Exptl_HiggsBR_Uncs = options.use_Exptl_HiggsBR_Uncs
 forceModifyShapes      = options.forceModifyShapes
 renamedHHInput         = options.renamedHHInput
-
+isCR = options.isCR
+withCR = options.withCR
 # output the card
 if options.output_file == "none" :
     output_file = (cardFolder + "/" + str(os.path.basename(inputShapes)).replace(".root","").replace("prepareDatacards", "datacard")).replace("addSystFakeRate","datacard")
@@ -99,12 +102,13 @@ else :
     sys.exit()
 
 higgs_procs = list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["higgs_procs"]
+if (isCR): higgs_procs = []
 list_channel_opt   = list_channels( fake_mc, signal_type, mass, HHtype, renamedHHInput )["info_bkg_channel"]
 bkg_proc_from_data = list_channel_opt[channel]["bkg_proc_from_data"]
 bkg_procs_from_MC  = list_channel_opt[channel]["bkg_procs_from_MC"]
 
 # if a coupling is done read the tH signal with that coupling on naming convention
-if not (coupling == "none" or coupling == "kt_1_kv_1") :
+if not (coupling == "none" or coupling == "kt_1_kv_1"):
     higgs_procs = [ [ entry.replace("tHq_", "tHq_%s_" % coupling).replace("tHW_", "tHW_%s_" % coupling) for entry in entries ] for entries in higgs_procs ]
 
 print higgs_procs
@@ -201,7 +205,10 @@ if shape :
         #    # I will not debug that now, the check_systematics is mostly to not deliver weird postfit shapes
         #    # with bins with large uncertainties, it does not matter for numeric results.
         #    check_systematics(inputShapes, coupling)
-        check_systematics(inputShapes, coupling)
+        if analysis == "ttH":
+            check_systematics(inputShapes, coupling)
+        else:
+            check_systematics(inputShapes, coupling, analysis)
     else :
         print ("file %s already modified" % inputShapes)
 else :
@@ -278,9 +285,57 @@ if 0 > 1 : # FIXME: remind why we added that at some point
                 cb.cp().process([proc]).AddSyst(cb, 'scale_%s' % hsbr, 'rateParam', ch.SystMap()(("(@0)", "scale_%s" % hsig[0])))
                 print ("process: " + hsbr + " is proportonal to", hsig[0])
 
+
+########################################
+# add vbf dipole recoile uncertainties #FIXME bbWW implementation
+if (analysis != "ttH") and (not isCR):
+    wwww_procs = []
+    ttww_procs = []
+    tttt_procs = []
+    ttzz_procs = []
+    zzww_procs = []
+    zzzz_procs = []
+    for pr in higgs_procs_plain:
+        if not ("qqHH" in pr or "signal_vbf_nonresonant" in pr):
+            continue
+        if "wwww" in pr or "hwwhww" in pr:
+            wwww_procs.append(pr)
+        if "ttww" in pr or "htautauhww" in pr:
+            ttww_procs.append(pr)
+        if "tttt" in pr or "htautauhtautau" in pr:
+            tttt_procs.append(pr)
+        if "ttzz" in pr or "htautauhzz" in pr:
+            ttzz_procs.append(pr)
+        if "zzww" in pr or "hzzhww" in pr:
+            zzww_procs.append(pr)
+        if "zzzz" in pr or "hzzhzz" in pr:
+            zzzz_procs.append(pr)
+    cb.cp().process(wwww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["wwww"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["wwww"]) + " to processes: ", wwww_procs)
+    cb.cp().process(ttww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttww"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttww"]) + " to processes: ", ttww_procs)
+    cb.cp().process(tttt_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["tttt"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["tttt"]) + " to processes: ", tttt_procs)
+    cb.cp().process(zzww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzww"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzww"]) + " to processes: ", zzww_procs)
+    cb.cp().process(ttzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttzz"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttzz"]) + " to processes: ", ttzz_procs)
+    cb.cp().process(zzzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzzz"],1.)))
+    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzzz"]) + " to processes: ", zzzz_procs)
+########################################
+# add rate parameters
+if withCR and analysis != "ttH" and HHtype=="multilep":
+    cb.cp().process(["WZ"]).AddSyst(cb, 'CMS_multilepton_xsWZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
+    cb.cp().process(["ggZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
+    cb.cp().process(["qqZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
 ########################################
 # add theory systematics
 for specific_syst in theory_ln_Syst :
+    if withCR and analysis != "ttH" and HHtype=="multilep":
+        if "WZ" in specific_syst and "pdf" not in specific_syst:
+            continue
+        if ("ggZZ" in specific_syst or "ggZZ" in specific_syst) and "pdf" not in specific_syst:
+            continue
     procs = theory_ln_Syst[specific_syst]["proc"]
     if len(procs) == 0 :
         continue
@@ -392,12 +447,12 @@ if shape :
         #else :
         #    applyTo = specific_shape_systs[specific_syst]["proc"]
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
-        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
-            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        #if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+        #    procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH" ):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
@@ -419,11 +474,8 @@ for specific_syst in specific_ln_systs :
     if not specific_ln_systs[specific_syst]["correlated"] :
         name_syst = specific_syst.replace("%sl" % analysis, "%sl%s" % (analysis, str(era - 2000)))
         # assuming that the syst for the HH analysis with have the label HHl
-    if not analysis == "HH" :
-        if "lnU" in name_syst :
-            cb.cp().process(procs).AddSyst(cb,  name_syst, "lnU", ch.SystMap()(specific_ln_systs[specific_syst]["value"]))
-        else :
-            cb.cp().process(procs).AddSyst(cb,  name_syst, "lnN", ch.SystMap()(specific_ln_systs[specific_syst]["value"]))
+    if "lnU" in name_syst :
+        cb.cp().process(procs).AddSyst(cb,  name_syst, "lnU", ch.SystMap()(specific_ln_systs[specific_syst]["value"]))
     else :
         cb.cp().process(procs).AddSyst(cb,  name_syst, "lnN", ch.SystMap()(specific_ln_systs[specific_syst]["value"]))
     print ("added " + name_syst + " with value " + str(specific_ln_systs[specific_syst]["value"]) + " to processes: ",  specific_ln_systs[specific_syst]["proc"] )
@@ -498,12 +550,12 @@ if shape :
             continue
         #################
         procs = list_proc(specific_shape_systs[specific_syst], MC_proc, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
-        if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
-            procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
+        ##if("HEM" in specific_syst and signal_type == "nonresNLO"): # fix this!!!!
+        #    procs = list_proc(specific_shape_systs[specific_syst], bkg_procs_from_MC, bkg_proc_from_data + bkg_procs_from_MC, specific_syst)
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH"):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or "spin" in pr: 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
