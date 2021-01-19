@@ -27,12 +27,15 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--channel ", type="string", dest="channel", help="The ones whose variables implemented now are:\n   - 1l_2tau\n   - 2lss_1tau\n It will create a local folder and store the report*/xml", default="2lss_1tau")
 parser.add_option("--variables", type="string", dest="variables", help="Add convention to file name", default="teste")
-parser.add_option("--BINtype", type="string", dest="BINtype", help="regular / ranged / quantiles", default="regular")
+parser.add_option("--BINtype", type="string", dest="BINtype", help="regular / ranged / quantiles", default="quantiles")
+parser.add_option("--do_signalFlat", action="store_true", dest="do_signalFlat", help="whether you want to make signal flat or total bkg flat", default=False)
 parser.add_option("--output_path", type="string", dest="output_path", help="Where to copy prepareDatacards and make subdiretories with results")
 parser.add_option("--prepareDatacards_path", type="string", dest="prepareDatacard_path", help="Where to copy prepareDatacards and make subdiretories with results")
 parser.add_option("--doPlots", action="store_true", dest="doPlots", help="If you call this will not do plots with repport", default=False)
 parser.add_option("--drawLimitsOnly", action="store_true", dest="drawLimitsOnly", help="If you call this will not do plots with repport", default=False)
 parser.add_option("--doLimitsOnly", action="store_true", dest="doLimitsOnly", help="If you call this will not do plots with repport", default=False)
+parser.add_option("--BDTfor", dest="BDTfor", help="type of BDT to be considered", default="SM")
+parser.add_option("--shapeSyst",      action="store_true", dest="shapeSyst",   help="Do apply the shape systematics. Default: False", default=False)
 parser.add_option(
     "--signal_type",    type="string",       dest="signal_type",
     help="Options: \"nonresLO\" | \"nonresNLO\" | \"res\" ",
@@ -54,6 +57,15 @@ parser.add_option(
     help="To appear on the name of the file with the final plot. If era == 0 it assumes you gave the path for the 2018 era and it will use the same naming convention to look for the 2017/2016.",
     default=2016
     )
+parser.add_option(
+    "--subcats",
+    choices = ["Res_allReco", "boosted_semiboosted", "one_missing_boosted", "one_missing_resolved", "semiboosted_boosted_combine", "singleCat",
+               "resolved_singleCat", "boosted_singleCat", "resolved_2b_nonvbf", 'boosted', "resolved_2b_vbf", 'resolved_1b', 'HH_resolved_1b', 'HH_resolved_2b_vbf',
+               'HH_resolved_2b_nonvbf', 'HH_boosted', 'TT_resolved', 'TT_boosted', 'W_resolved', 'W_boosted', 'DY_resolved', 'DY_boosted', 'SingleTop_resolved', 'SingleTop_boosted','Other', ''],
+    dest="subcats",
+    help="subcategory to be considered in rebinning",
+    default=''
+    )
 (options, args) = parser.parse_args()
 
 doLimitsOnly   = options.doLimitsOnly
@@ -61,18 +73,21 @@ drawLimitsOnly = options.drawLimitsOnly
 doPlots    = options.doPlots
 channel    = options.channel
 BINtype    = options.BINtype
+do_signalFlat = options.do_signalFlat
 signal_type  = options.signal_type
 mass         = options.mass
 HHtype       = options.HHtype
 era          = options.era
 local        = options.output_path
 mom          = options.prepareDatacard_path
-
+BDTfor =  options.BDTfor
+in_more_subcats = options.subcats
+shape            = options.shapeSyst
 ## HH
 if channel == "2l_0tau"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt//cards/info_2l_0tau_datacards.py")
 if channel == "1l_0tau"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt//cards/info_1l_0tau_datacards.py")
 
-info = read_from()
+info = read_from(in_more_subcats, BDTfor)
 print ("Cards to rebin from %s" % channel)
 
 sendToCondor = False
@@ -133,11 +148,12 @@ for nn, source in enumerate(sources) :
     cmd += "--inputShapes %s.root " % (source)
     cmd += "--channel %s " % channel
     cmd += "--output_file %s " % (outfile)
-    cmd += "--noX_prefix --era 2017  --no_data --analysis HH " # --only_ttH_sig --only_BKG_sig --only_tHq_sig --fake_mc
+    cmd += "--noX_prefix --era %s  --no_data --analysis HH " % (era) # --only_ttH_sig --only_BKG_sig --only_tHq_sig --fake_mc
     ## TODO add only_HH_sig in WriteDatacards
     cmd += " --signal_type %s "      % signal_type
     cmd += " --mass %s "             % mass
     cmd += " --HHtype %s "           % HHtype
+    cmd += " --shapeSyst %s "        % shape
     log_datacard = "%s_datacard.log" % source
     runCombineCmd(cmd, ".", log_datacard)
 
@@ -185,6 +201,7 @@ if not (drawLimitsOnly or doLimitsOnly) :
             sourceL,
             binstoDo,
             BINtype,
+            do_signalFlat,
             info["originalBinning"],
             doPlots,
             bdtTypesToDo[nn],
@@ -215,7 +232,7 @@ if not (drawLimitsOnly or doLimitsOnly) :
     ax.set_ylabel('err/content last bin')
     ax.legend(loc='best', fancybox=False, shadow=False, ncol=1, fontsize=8)
     plt.grid(True)
-    namefig = local + '/' + options.variables + '_ErrOcont_' + BINtype + '.pdf'
+    namefig = local + '/' + options.variables + '_'+ signal_type + '_' + mass + '_' + options.subcats + '_ErrOcont_' + BINtype + '_do_signalFlat_' + str(do_signalFlat) +'_'+ BDTfor+'_'+ str(era)+'.png'
     fig.savefig(namefig)
     print ("saved",namefig)
     print (bin_isMoreThan02)
@@ -336,13 +353,13 @@ print sources
 print "draw limits"
 fig, ax = plt.subplots(figsize=(5, 5))
 if BINtype == "quantiles" :
-    namefig=local+'/'+options.variables+'_fullsim_limits_quantiles'
+    namefig=local+'/'+options.variables+'_'+options.channel+'_'+signal_type +'_'+mass+'_'+options.subcats +'_fullsim_limits_quantiles' + "_do_signalFlat_" + str(options.do_signalFlat) + '_' + BDTfor+'_'+str(era)
 if BINtype == "regular" or BINtype == "mTauTauVis":
-    namefig=local+'/'+options.variables+'_'+options.channel+'_fullsim_limits'
+    namefig=local+'/'+options.variables+'_'+options.channel+'_fullsim_limits' + '_' + BDTfor
 if BINtype == "ranged" :
     namefig=local+'/'+options.variables+'_fullsim_limits_ranged'
 file = open(namefig+".csv","w")
-#maxlim =-99.
+maxlimit =-99.
 for nn, source in enumerate(sourcesCards) :
     fileCardOnlyL = source.split("/")[len(source.split("/")) -1]
     print(fileCardOnlyL)
@@ -359,6 +376,7 @@ for nn, source in enumerate(sourcesCards) :
     print (len(binstoDo),len(limits[0]))
     print 'binstoDo= ', binstoDo
     print limits[0]
+    if max(limits[0]) > maxlimit : maxlimit = max(limits[0])
     for jj in limits[0] : file.write(unicode(str(jj)+', '))
     file.write(unicode('\n'))
     plt.plot(
@@ -377,7 +395,7 @@ ax.legend(
 ax.set_xlabel('nbins')
 ax.set_ylabel('limits')
 maxsum=0
-maxlim = info["maxlim"]
+maxlim = 1.5*maxlimit
 minlim = info["minlim"]
 plt.axis((min(binstoDo),max(binstoDo), minlim, maxlim))
 fig.savefig(namefig+'_ttH.png')

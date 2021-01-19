@@ -51,7 +51,8 @@ info_coupling = {
 }
 
 info_brs = OrderedDict()
-info_brs["bbvv_sl"] = "SL_hbb_hww"
+info_brs["bbww"] = "hbbhww"
+info_brs["bbzz"] = "hbbhzz"
 info_brs["bbvv"]    = "DL_hbb_hww"
 info_brs["bbtt"]    = "hbbhtautau"
 info_brs["ttww"] = "htautauhww"

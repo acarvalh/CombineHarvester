@@ -64,12 +64,31 @@ def getQuantiles(histoP, ntarget, xmax) :
     for  ii in range(1,ntarget+1) : yqbin[ii]=yq[ii]
     yqbin[ntarget] = xmax
     return yqbin
-
+global rebinHistogram_binindex
+def rebinHistogram_binindex(histogram) :
+  numBins = histogram.GetNbinsX()
+  histogram_rebinned = TH1F()
+  histogram_rebinned = TH1F(histogram.GetName(), histogram.GetName(),  numBins, 0.5, numBins + 0.5)
+  if not histogram_rebinned.GetSumw2N() : histogram_rebinned.Sumw2()
+  histogram_rebinned.Reset()
+  for idxBin in range(0, numBins+1) : # CV: include underflow and overflow bins                                                                                                                             
+    binContent = histogram.GetBinContent(idxBin)
+    binError = histogram.GetBinError(idxBin)
+    histogram_rebinned.SetBinContent(idxBin, binContent)
+    histogram_rebinned.SetBinError(idxBin, binError)
+  return histogram_rebinned
+global getHist_tobeFlat
+def getHist_tobeFlat(hist_dict, histSource) :
+    for key in hist_dict.keys() :
+        if 'LBN_%s' %key in histSource :
+            print key
+            return hist_dict[key]
 global rebinRegular
 def rebinRegular(
     histSource,
     nbin,
     BINtype,
+    do_signalFlat,
     originalBinning,
     doplots,
     bdtType,
@@ -125,12 +144,14 @@ def rebinRegular(
         hSum = TH1F()
         hFakes = TH1F()
         hSumAll = TH1F()
+        hSumSignal = TH1F()
         ratiohSum=1.
         ratiohSumP=1.
         name = histSource.split("/")[len(histSource.split("/"))-1] + "_" + str(nbins) + nameOutFileAddL + ".root"
         nameOutFile = "%s/%s" % (outdir, name)
         fileOut  = TFile(nameOutFile, "recreate")
         print ("created %s" % nameOutFile)
+        hist_dict = {}
         if withFolder :
             folders_Loop = file.GetListOfKeys()
         else :
@@ -148,6 +169,7 @@ def rebinRegular(
                 hSum = TH1F()
                 hFakes = TH1F()
                 hSumAll = TH1F()
+                hSumSignal = TH1F()
                 ratiohSum=1.
                 ratiohSumP=1.
             else :
@@ -169,6 +191,15 @@ def rebinRegular(
                        continue
                    h2  = obj.Clone()
                    print (h2.GetName(), h2.Integral())
+                   if h2.GetName().find('CMS') == -1:
+                       if h2.GetName() not in ["TT", 'W', 'DY', 'ST', 'data_obs', 'data_fakes', 'Convs', 'fakes_mc'] and h2.GetName().find('HH') == -1:
+                           if "Other" not in hist_dict.keys() :
+                               hist_dict["Other"] = h2
+                               hist_dict["Other"].Sumw2()
+                           else:
+                               hist_dict["Other"].Add(h2)
+                       else:
+                           hist_dict[h2.GetName()] = h2
                factor=1.
                if  not h2.GetSumw2N() :
                    h2.Sumw2()
@@ -178,8 +209,7 @@ def rebinRegular(
                    h2.SetName(str(h2.GetName()))
                histograms.append(h2.Clone())
                if "fakes_data" in h2.GetName() : hFakes=h2.Clone()
-               if "fakes_data" in h2.GetName() : hFakes=h2.Clone()
-               if h2.GetName().find("H") ==-1 and h2.GetName().find("data_obs") ==-1  : # and "DY" in h2.GetName()
+               if h2.GetName().find("HH") ==-1 and h2.GetName().find("data_obs") ==-1  and h2.GetName().find("fakes_mc") ==-1 and h2.GetName().find("CMS") ==-1: # and "DY" in h2.GetName()
                    #hSumDumb2 = obj # h2_rebin #
                    if BINtype=="quantiles" :
                        print ("sum to quantiles in BKG:", h2.GetName(), h2.Integral())
@@ -188,10 +218,24 @@ def rebinRegular(
                        hSumAll.SetName("hSumAllBk1")
                    else :
                        hSumAll.Add(h2)
+               if (h2.GetName().find("hh") != -1 or h2.GetName().find('HH') != -1) and h2.GetName().find("CMS") ==-1:
+                    if not hSumSignal.Integral()>0 :
+                        hSumSignal=h2.Clone()
+                        hSumSignal.SetName("hSumSignal")
+                    else:
+                        hSumSignal.Add(h2)
             #################################################
+            hist_dict["HH"] = hSumSignal
             print ("Sum of BKG: ", hSumAll.Integral(), ", hFakes.Integral: ",hFakes.Integral())
             if BINtype=="quantiles" :
-                nbinsQuant =  getQuantiles(hSumAll, nbins, xmax)
+                if do_signalFlat :
+                    if histSource.find('node') != -1:
+                        hist_tobeFlat = getHist_tobeFlat(hist_dict, histSource)
+                        nbinsQuant =  getQuantiles(hist_tobeFlat, nbins, xmax)
+                    else :
+                        nbinsQuant =  getQuantiles(hSumSignal, nbins, xmax)
+                else  :
+                    nbinsQuant =  getQuantiles(hSumAll, nbins, xmax)
             ## nbins+1 if first quantile is zero ## getQuantiles(hFakes,nbins,xmax) #
             #print ("Bins by quantiles ",nbins,nbinsQuant)
             if withFolder :
@@ -231,28 +275,8 @@ def rebinRegular(
                     contentNew =   histo.GetBinContent(newbin)
                     histo.SetBinContent(newbin, content+contentNew)
                     histo.SetBinError(newbin, sqrt(binError*binError+binErrorCopy*binErrorCopy))
-                if BINtype=="none" :
-                    histo=histogramCopy.Clone()
-                    histo.SetName(nameHisto)
-                elif BINtype=="ranged" or BINtype=="regular" :
-                    histo= TH1F( nameHisto, nameHisto , nbins , xmin , xmax)
-                elif BINtype=="quantiles" :
-                    nbinsQuant= getQuantiles(hSumAll,nbins,xmax) # getQuantiles(hSumAll,nbins,xmax) ## nbins+1 if first quantile is zero
-                    xmaxLbin=xmaxLbin+[nbinsQuant[nbins-2]]
-                    histo=TH1F( nameHisto, nameHisto , nbins , nbinsQuant) # nbins+1 if first is zero
-                elif BINtype=="mTauTauVis" :
-                    histo= TH1F( nameHisto, nameHisto , nbins , 0. , 200.)
-                histo.Sumw2()
-                #if BINtype=="quantiles" : ### fix that -- I do not want these written to the file
-                for place in range(0,histogramCopy.GetNbinsX() + 1) :
-                    content =      histogramCopy.GetBinContent(place)
-                    #if content < 0 : continue # print (content,place)
-                    binErrorCopy = histogramCopy.GetBinError(place);
-                    newbin =       histo.GetXaxis().FindBin(histogramCopy.GetXaxis().GetBinCenter(place))
-                    binError =     histo.GetBinError(newbin);
-                    contentNew =   histo.GetBinContent(newbin)
-                    histo.SetBinContent(newbin, content+contentNew)
-                    histo.SetBinError(newbin, sqrt(binError*binError+binErrorCopy*binErrorCopy))
+                if do_signalFlat :
+                    histo = rebinHistogram_binindex(histo)
                 if "fakes_data" in histo.GetName() and nkey == 0 :
                     ratio=1.
                     ratioP=1.
