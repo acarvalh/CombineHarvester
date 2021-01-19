@@ -23,20 +23,22 @@ vbf_dipole_ln_Syst = {
 
 
 theory_ln_Syst = {
-    "QCDscale_ttjets"             : {"value": (0.976 , 1.035),    "proc" : ["TT"]},
-    "pdf_ttjets"                  : {"value": 1.04,               "proc" : ["TT"]}, # includes alpha s
-    "TopmassUnc_ttjets"           : {"value": 1.03,               "proc" : ["TT"]},
+    #https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO
+    "QCDscale_ttjets"             : {"value": (0.965 , 1.024),    "proc" : ["TT"]},
+    "pdf_ttjets"                  : {"value": 1.042,               "proc" : ["TT"]}, # includes alpha s
+    "TopmassUnc_ttjets"           : {"value": 0.973/1.028,               "proc" : ["TT"]},
 
-
-    "QCDscale_ttZ"                : {"value": (0.904 , 1.112),    "proc" : ["TTZ"]},
+#https://arxiv.org/pdf/1610.07922.pdf
+    "QCDscale_ttZ"                : {"value": (0.887 , 1.096),    "proc" : ["TTZ"]},
     "QCDscale_ttW"                : {"value": (0.885 , 1.129),    "proc" : ["TTW"]},
 
-    "pdf_ttZ"                     : {"value": 0.966,              "proc" : ["TTZ"]},
-    "pdf_ttW"                     : {"value": 1.04,               "proc" : ["TTW"]},  
+    "pdf_ttZ"                     : {"value": 1.04,              "proc" : ["TTZ"]},  # includes alpha s 
+    "pdf_ttW"                     : {"value": 1.034,               "proc" : ["TTW"]},  
   
+    "EW_ttZ"                      : {"value": (0.998,1.0),               "proc" : ["TTZ"]},  
+    "EW_ttW"                      : {"value": (0.968,1.0),               "proc" : ["TTW"]},  
 #     "pdf_ttWW"                    : {"value": 1.03,               "proc" : ["TTWW"]},
 
-    "CMS_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
 
 
     # "TopmassUnc_HH"               : {"value": 1.026,              "proc" : ["HH"]},
@@ -94,9 +96,9 @@ theory_ln_Syst = {
    # "EW_corr_qqZZ"                 : {"value": 1.,              "proc" : ["qqZZ"]},
     "pdf_WZ"                      : {"value": (0.967/1.038),              "proc" : ["WZ"]},
     "QCDscale_WZ"                 : {"value": 1.014,              "proc" : ["WZ"]},
-# removed ones
+# other WZ/ZZ
 
-
+    "CMS_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
     }
 
 ## --- BR(H->XX)/BR_sm(H->XX) = (kappa_X)^2 -------------------------------------------------------------- ##
@@ -248,15 +250,15 @@ def specific_syst(analysis, list_channel_opt) :
             "CMS_ttHl_thu_shape_DY"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_DY", "proc" : ["DY"], "channels" : [k for k,v in list_channel_opt.items() if "DY" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_TT"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_TT", "proc" : ["TT"], "channels" : [k for k,v in list_channel_opt.items() if "TT" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_WZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_WZ", "proc" : ["WZ"], "channels" : [k for k,v in list_channel_opt.items() if "WZ" in v["bkg_procs_from_MC"]]},
-#            "CMS_ttHl_thu_shape_ggZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["ggZZ"], "channels" : [k for k,v in list_channel_opt.items() if "ggZZ" in v["bkg_procs_from_MC"]]},
- #           "CMS_ttHl_thu_shape_qqZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["qqZZ"], "channels" : [k for k,v in list_channel_opt.items() if "qqZZ" in v["bkg_procs_from_MC"]]},
+            #"CMS_ttHl_thu_shape_ggZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["ggZZ"], "channels" : [k for k,v in list_channel_opt.items() if "ggZZ" in v["bkg_procs_from_MC"]]},
+            "CMS_ttHl_thu_shape_qqZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["qqZZ"], "channels" : [k for k,v in list_channel_opt.items() if "qqZZ" in v["bkg_procs_from_MC"]]},
             # ##################################### MC closure
-            "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_e_shape", "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR"]}, # should be only 2018, that is done on the main code
+            "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_e_shape", "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR","ZZCR"]}, # should be only 2018, that is done on the main code
             
-            "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_m_shape"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR"]}, # there is no shape tend in
+            "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_m_shape"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR", "ZZCR"]}, # there is no shape tend in
             #"CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["data_fakes"], "channels" : list(list_channel_opt.keys())]},
-            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_e_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR"]},
-            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_m_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR"]},
+            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_e_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR", "ZZCR"]},
+            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_multilepton_Clos_m_norm"  , "proc" : ["data_fakes"], "channels" : ["3l","2lss","WZCR","ZZCR"]},
         #     "CMS_ttHl_Clos_t_norm"  : {"correlated" : False, "renameTo" : None  , "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if ("1tau" in n or "2tau" in n) and not ("2lss_1tau" in n or "3l_1tau" in n) ]},
          }
         specific_ln_shape_systs = {

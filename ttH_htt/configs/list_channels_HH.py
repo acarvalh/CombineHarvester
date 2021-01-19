@@ -66,7 +66,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         for decay_hh in decays_hh :
             listSig = listSig + [
             "%s_%s"  % (prefix_GF, decay_hh),
-            "%s_%s_hh_%s" % (prefix_VBF, SM_VBF, decay_hh)
+            #"%s_%s_hh_%s" % (prefix_VBF, SM_VBF, decay_hh)
             ]
         sigs = [ listSig ]
     elif signal_type == "nonresNLO" :
