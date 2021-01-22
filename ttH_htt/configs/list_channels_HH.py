@@ -13,8 +13,8 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     decays_hh_vbf = []
     if renamedHHInput :
         if HHtype == "bbWW" :
-            decays_hh = ["hbbhww", "hbbhtautau", "hbbhzz"]
-            decays_hh_vbf = ["hbbhtautau", "hbbhww", 'hbbhzz']
+            decays_hh = ["hbbhww", "hbbhtt", "hbbhzz"]
+            decays_hh_vbf = ["hbbhtt", "hbbhww", 'hbbhzz']
         elif HHtype == "multilep" :
             decays_hh = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhtautau","htautauhzz"]
             decays_hh_vbf = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhzz","htautauhtautau"] # "htautauhtautau"
@@ -57,7 +57,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         SM_VBF     = "CV_1_C2V_1_kl_1"
         prefix_GF  = "ggHH"
         #couplings_GF_NLO = [ "kl_0_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
-        couplings_GF_NLO = [ "kl_2p45_kt_1", "kl_1_kt_1", "kl_5_kt_1", "kl_5_kt_1", "kl_2p45_kt_1" ]
+        couplings_GF_NLO = [ "kl_1_kt_1", "kl_2p45_kt_1", "kl_5_kt_1", "kl_5_kt_1", "kl_2p45_kt_1" ]
         # --> using "cHHH2p45" as control -- check closure to see if this is the best case
         couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1", "CV_0p5_C2V_1_kl_1", "CV_1_C2V_0_kl_1" ]
 
@@ -118,13 +118,13 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     info_channel = {
         "2l_0tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ", "qqZZ", "ggZZ"] + higgs_procs_w_BR,
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ", "qqZZ", "ggZZ", "ST"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "1l_0tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "ST", "Other", "DY", "W", "WW", "WZ", "ZZ" "qqZZ", "ggZZ"] + higgs_procs_w_BR,
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "ST", "Other", "DY", "W", "WW", "WZ", "ZZ" "qqZZ", "ggZZ", "ST"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
