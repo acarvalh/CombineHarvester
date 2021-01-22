@@ -195,12 +195,14 @@ def rebin_hist(hist_rebin_local, fin, folder, name, itemDict, divideByBinWidth, 
         "labelPos" : float(allbins/2)
         }
 
-def rebin_data(template, dataTGraph1, folder, fin, fromHavester, lastbin, histtotal, catbin) :
+def rebin_data(template, dataTGraph1, folder, fin, fromHavester, lastbin, histtotal, catbin, unblind) :
     if not fromHavester :
 
         dataTGraph = fin[0].Get(folder + "/data")
         print("adding", folder + "/data")
         allbins = catbin #histtotal.GetNbinsX() #GetNonZeroBins(histtotal)
+        if not unblind:
+          allbins -= 2
         if len(fin) == 3 :
             for eraa in [1,2] :
                 if eraa == 1 : folderRead = folder.replace("2018", "2017")
@@ -272,10 +274,12 @@ def rebin_data(template, dataTGraph1, folder, fin, fromHavester, lastbin, histto
     dataTGraph1.SetMaximum(maxY)
     return allbins
 
-def err_data(dataTGraph1, template, dataTGraph, fromHavester, histtotal, folder, fin) :
+def err_data(dataTGraph1, template, dataTGraph, fromHavester, histtotal, folder, fin, unblind) :
     print(" do unblided bottom pad")
     if not fromHavester :
         allbins = histtotal.GetXaxis().GetNbins() #GetNonZeroBins(histtotal)
+        if not unblind:
+          allbins -= 2
         print("allbins", allbins)
         for ii in xrange(0, allbins) :
             #if ii == histtotal.GetXaxis().GetNbins() -1 or ii == histtotal.GetXaxis().GetNbins()-2 :
