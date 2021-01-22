@@ -114,8 +114,8 @@ print (info["bdtTypes"])
 
 counter=0
 for ii, bdtType in enumerate(info["bdtTypes"]) :
-    fileName = mom   + "/prepareDatacards_" + info["ch_nickname"] + "_" + bdtType + ".root"
-    source   = local + "/prepareDatacards_" + info["ch_nickname"] + "_" + bdtType
+    fileName = mom   + "/addSystFakeRates_" + info["ch_nickname"] + "_" + bdtType + ".root"
+    source   = local + "/addSystFakeRates_" + info["ch_nickname"] + "_" + bdtType
     print (fileName)
     if os.path.isfile(fileName) :
         proc              = subprocess.Popen(['cp ' + fileName + " " + local],shell=True,stdout=subprocess.PIPE)
@@ -140,9 +140,9 @@ print binstoDo
 ### first we do one datacard.txt / bdtType
 for nn, source in enumerate(sources) :
     if BINtype == "regular" :
-        outfile = "%s" % (source.replace("prepareDatacards_", "datacard_"))
+        outfile = "%s" % (source.replace("addSystFakeRates_", "datacard_"))
     if BINtype == "quantiles" or BINtype == "ranged":
-        outfile = "%s_%s" % (source.replace("prepareDatacards_", "datacard_"), BINtype )
+        outfile = "%s_%s" % (source.replace("addSystFakeRates_", "datacard_"), BINtype )
 
     cmd = "WriteDatacards.py "
     cmd += "--inputShapes %s.root " % (source)
@@ -153,7 +153,7 @@ for nn, source in enumerate(sources) :
     cmd += " --signal_type %s "      % signal_type
     cmd += " --mass %s "             % mass
     cmd += " --HHtype %s "           % HHtype
-    cmd += " --shapeSyst %s "        % shape
+    #cmd += " --shapeSyst %s --forceModifyShapes "        % shape
     log_datacard = "%s_datacard.log" % source
     runCombineCmd(cmd, ".", log_datacard)
 
@@ -182,7 +182,8 @@ if BINtype=="quantiles" :
 
 colorsToDo=['r','g','b','m','y','c', 'fuchsia', "peachpuff",'k','orange','y','c'] #['r','g','b','m','y','c','k']
 #########################################
-if not (drawLimitsOnly or doLimitsOnly) :
+#if not (drawLimitsOnly or doLimitsOnly) :
+if True:
     ## make rebinned datacards
     fig, ax = plt.subplots(figsize=(5, 5))
     plt.title(BINtype+" in sum of BKG ")
@@ -265,21 +266,21 @@ if not (drawLimitsOnly or doLimitsOnly) :
         plt.grid(True)
         fig.savefig(local+'/'+options.variables+'_fullsim_boundaries_quantiles.pdf')
 
-if not drawLimitsOnly :
+#if not drawLimitsOnly :
     ## doint Limits
-    for nn, sourceL in enumerate(sourcesCards) :
-        for nbins in binstoDo :
-            fileCardOnlyL = sourceL.split("/")[len(sourceL.split("/")) -1]
-            fileCardOnlynBinL = "%s_%s%s" % (fileCardOnlyL, str(nbins), nameOutFileAdd)
-            fileCardL = "%s/%s" % (mom_datacards, fileCardOnlynBinL)
-            print ("make limit for %s.txt" % fileCardL)
-            runCombineCmd("cp %s.txt %s.txt" % (sourceL, fileCardL))
-            with open("%s.txt" % fileCardL,'r+') as ff:
-                filedata = ff.read()
-                filedata = filedata.replace(fileCardOnlyL, fileCardOnlynBinL)
-                ff.truncate(0)
-                ff.write(filedata)
-
+for nn, sourceL in enumerate(sourcesCards) :
+    for nbins in binstoDo :
+        fileCardOnlyL = sourceL.split("/")[len(sourceL.split("/")) -1]
+        fileCardOnlynBinL = "%s_%s%s" % (fileCardOnlyL, str(nbins), nameOutFileAdd)
+        fileCardL = "%s/%s" % (mom_datacards, fileCardOnlynBinL)
+        print ("make limit for %s.txt" % fileCardL)
+        runCombineCmd("cp %s.txt %s.txt" % (sourceL, fileCardL))
+        with open("%s.txt" % fileCardL,'r+') as ff:
+            filedata = ff.read()
+            filedata = filedata.replace(fileCardOnlyL, fileCardOnlynBinL)
+            ff.truncate(0)
+            ff.write(filedata)
+        if drawLimitsOnly:    
             cmd = "combineTool.py  -M AsymptoticLimits  -t -1 %s.txt " % (fileCardL)
             if sendToCondor :
                 cmd += ToSubmit + " %s_%s%s " % ()
@@ -344,61 +345,63 @@ if not drawLimitsOnly :
                 if didPlot == False :
                     print ("!!!!!!!!!!!!!!!!!!!!!!!! The makePlots did not worked, to debug please check %s to see up to when the script worked AND run again for chasing the error:" % plotlog)
                     print(cmd)
-                    #sys.exit()
+                    #sys.exit()'''
 
 #########################################
 ## make limits
 print sources
 
-print "draw limits"
-fig, ax = plt.subplots(figsize=(5, 5))
-if BINtype == "quantiles" :
-    namefig=local+'/'+options.variables+'_'+options.channel+'_'+signal_type +'_'+mass+'_'+options.subcats +'_fullsim_limits_quantiles' + "_do_signalFlat_" + str(options.do_signalFlat) + '_' + BDTfor+'_'+str(era)
-if BINtype == "regular" or BINtype == "mTauTauVis":
-    namefig=local+'/'+options.variables+'_'+options.channel+'_fullsim_limits' + '_' + BDTfor
-if BINtype == "ranged" :
-    namefig=local+'/'+options.variables+'_fullsim_limits_ranged'
-file = open(namefig+".csv","w")
-maxlimit =-99.
-for nn, source in enumerate(sourcesCards) :
-    fileCardOnlyL = source.split("/")[len(source.split("/")) -1]
-    print(fileCardOnlyL)
-    limits = ReadLimits(
-        fileCardOnlyL,
-        binstoDo,
-        BINtype,
-        channel,
-        mom_datacards,
-        0, 0,
-        sendToCondor,
-        nameOutFileAdd
+if drawLimitsOnly :
+    print "draw limits"
+    fig, ax = plt.subplots(figsize=(5, 5))
+    if BINtype == "quantiles" :
+        namefig=local+'/'+options.variables+'_'+options.channel+'_'+signal_type +'_'+mass+'_'+options.subcats +'_fullsim_limits_quantiles' + "_do_signalFlat_" + str(options.do_signalFlat) + '_' + BDTfor+'_'+str(era)
+    if BINtype == "regular" or BINtype == "mTauTauVis":
+        namefig=local+'/'+options.variables+'_'+options.channel+'_fullsim_limits' + '_' + BDTfor
+    if BINtype == "ranged" :
+        namefig=local+'/'+options.variables+'_fullsim_limits_ranged'
+    file = open(namefig+".csv","w")
+    maxlimit =-99.
+    for nn, source in enumerate(sourcesCards) :
+        fileCardOnlyL = source.split("/")[len(source.split("/")) -1]
+        print(fileCardOnlyL)
+        limits = ReadLimits(
+            fileCardOnlyL,
+            binstoDo,
+            BINtype,
+            channel,
+            mom_datacards,
+            0, 0,
+            sendToCondor,
+            nameOutFileAdd
         )
-    print (len(binstoDo),len(limits[0]))
-    print 'binstoDo= ', binstoDo
-    print limits[0]
-    if max(limits[0]) > maxlimit : maxlimit = max(limits[0])
-    for jj in limits[0] : file.write(unicode(str(jj)+', '))
-    file.write(unicode('\n'))
-    plt.plot(
-        binstoDo,limits[0], color=colorsToDo[nn], linestyle='-',marker='o',
-        label=bdtTypesToDoFile[nn].replace("output_NN_", "").replace("_withWZ", "").replace("3l_0tau", "") #.replace("mvaOutput_0l_2tau_deeptauVTight", "mva_legacy")
+        print (len(binstoDo),len(limits[0]))
+        print 'binstoDo= ', binstoDo
+        print limits[0]
+        if max(limits[0]) > maxlimit : maxlimit = max(limits[0])
+        for jj in limits[0] : file.write(unicode(str(jj)+', '))
+        file.write(unicode('\n'))
+        plt.plot(
+            binstoDo,limits[0], color=colorsToDo[nn], linestyle='-',marker='o',
+            label=bdtTypesToDoFile[nn].replace("output_NN_", "").replace("_withWZ", "").replace("3l_0tau", "") #.replace("mvaOutput_0l_2tau_deeptauVTight", "mva_legacy")
         )
-    plt.plot(binstoDo,limits[1], color=colorsToDo[nn], linestyle='-')
-    plt.plot(binstoDo,limits[3], color=colorsToDo[nn], linestyle='-')
-ax.legend(
-    loc='upper left',
-    fancybox=False,
-    shadow=False ,
-    ncol=1,
-    fontsize=8
-)
-ax.set_xlabel('nbins')
-ax.set_ylabel('limits')
-maxsum=0
-maxlim = 1.5*maxlimit
-minlim = info["minlim"]
-plt.axis((min(binstoDo),max(binstoDo), minlim, maxlim))
-fig.savefig(namefig+'_ttH.png')
-fig.savefig(namefig+'_ttH.pdf')
-file.close()
-print ("saved",namefig)
+        plt.plot(binstoDo,limits[1], color=colorsToDo[nn], linestyle='-')
+        plt.plot(binstoDo,limits[3], color=colorsToDo[nn], linestyle='-')
+    ax.legend(
+        loc='upper left',
+        fancybox=False,
+        shadow=False ,
+        ncol=1,
+        fontsize=8
+    )
+    ax.set_xlabel('nbins')
+    ax.set_ylabel('limits')
+    maxsum=0
+    maxlim = 1.5*maxlimit
+    minlim = info["minlim"]
+    plt.axis((min(binstoDo),max(binstoDo), minlim, maxlim))
+    fig.savefig(namefig+'_ttH.png')
+    fig.savefig(namefig+'_ttH.pdf')
+    file.close()
+    print ("saved",namefig)
+
