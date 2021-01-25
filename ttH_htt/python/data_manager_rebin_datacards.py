@@ -73,6 +73,7 @@ def rebinHistogram_binindex(histogram) :
   histogram_rebinned.Reset()
   for idxBin in range(0, numBins+1) : # CV: include underflow and overflow bins                                                                                                                             
     binContent = histogram.GetBinContent(idxBin)
+    print 'bincont=========== ', binContent, '\t', idxBin
     binError = histogram.GetBinError(idxBin)
     histogram_rebinned.SetBinContent(idxBin, binContent)
     histogram_rebinned.SetBinError(idxBin, binError)
@@ -80,9 +81,12 @@ def rebinHistogram_binindex(histogram) :
 global getHist_tobeFlat
 def getHist_tobeFlat(hist_dict, histSource) :
     for key in hist_dict.keys() :
+        print 'key========', key, histSource
         if 'LBN_%s' %key in histSource :
-            print key
+            print 'found key====== ', key
             return hist_dict[key]
+        elif 'LBN_SingleTop' in histSource and 'ST' in key:
+            return hist_dict['ST']
 global rebinRegular
 def rebinRegular(
     histSource,
@@ -191,12 +195,15 @@ def rebinRegular(
                        continue
                    h2  = obj.Clone()
                    print (h2.GetName(), h2.Integral())
-                   if h2.GetName().find('CMS') == -1:
-                       if h2.GetName() not in ["TT", 'W', 'DY', 'ST', 'data_obs', 'data_fakes', 'Convs', 'fakes_mc'] and h2.GetName().find('HH') == -1:
+                   if h2.GetName().find('CMS') == -1 and h2.GetName().find('HH') == -1 and h2.GetName().find('hh') == -1:
+                       print 'name=========== ', h2.GetName()
+                       if h2.GetName() not in ["TT", 'W', 'DY', 'ST', 'data_obs', 'data_fakes', 'Convs', 'fakes_mc']:
                            if "Other" not in hist_dict.keys() :
+                               print 'other========= ', h2.GetName()
                                hist_dict["Other"] = h2
                                hist_dict["Other"].Sumw2()
                            else:
+                               print 'other===========', h2.GetName()
                                hist_dict["Other"].Add(h2)
                        else:
                            hist_dict[h2.GetName()] = h2
@@ -209,18 +216,21 @@ def rebinRegular(
                    h2.SetName(str(h2.GetName()))
                histograms.append(h2.Clone())
                if "fakes_data" in h2.GetName() : hFakes=h2.Clone()
-               if h2.GetName().find("HH") ==-1 and h2.GetName().find("data_obs") ==-1  and h2.GetName().find("fakes_mc") ==-1 and h2.GetName().find("CMS") ==-1: # and "DY" in h2.GetName()
+               if (h2.GetName().find("HH") ==-1 or h2.GetName().find("hh") ==-1) and h2.GetName().find("data_obs") ==-1  and h2.GetName().find("fakes_mc") ==-1 and h2.GetName().find("CMS") ==-1: # and "DY" in h2.GetName()
                    #hSumDumb2 = obj # h2_rebin #
                    if BINtype=="quantiles" :
                        print ("sum to quantiles in BKG:", h2.GetName(), h2.Integral())
                    if not hSumAll.Integral()>0 :
                        hSumAll=h2.Clone()
+                       hSumAll.Sumw2()
                        hSumAll.SetName("hSumAllBk1")
                    else :
                        hSumAll.Add(h2)
                if (h2.GetName().find("hh") != -1 or h2.GetName().find('HH') != -1) and h2.GetName().find("CMS") ==-1:
+                    print 'signal=========', h2.GetName()
                     if not hSumSignal.Integral()>0 :
                         hSumSignal=h2.Clone()
+                        hSumSignal.Sumw2()
                         hSumSignal.SetName("hSumSignal")
                     else:
                         hSumSignal.Add(h2)
@@ -229,8 +239,9 @@ def rebinRegular(
             print ("Sum of BKG: ", hSumAll.Integral(), ", hFakes.Integral: ",hFakes.Integral())
             if BINtype=="quantiles" :
                 if do_signalFlat :
-                    if histSource.find('node') != -1:
+                    if histSource.find('LBN') != -1:
                         hist_tobeFlat = getHist_tobeFlat(hist_dict, histSource)
+                        print 'tobeflat============ ', hist_tobeFlat.GetName()
                         nbinsQuant =  getQuantiles(hist_tobeFlat, nbins, xmax)
                     else :
                         nbinsQuant =  getQuantiles(hSumSignal, nbins, xmax)

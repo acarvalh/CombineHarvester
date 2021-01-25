@@ -6,8 +6,8 @@ def sigmatHW(KT, KV):
 
 def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_minor_tH_local, tH_separated) :
     dprocs = OrderedDict()
-    Hdecays_long = [ "hww", "hzz", "htt",] #  "hzg", "hmm"
-    Hdecays      = ["hww", "htt" , "hzz"]
+    Hdecays_long = [ "hww", "hzz", "htt", "hbb"] #  "hzg", "hmm"
+    Hdecays      = ["hww", "htt" , "hzz", "hbb"]
     other_H_proc = 0
     ## the order of the entries will be the order of the drawing, that is why this is almost manual
     # TODO: write it on a smarther way
@@ -30,7 +30,7 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
         if "TT" in all_procs     : dprocs["TT"]           = {"color" : 114, "fillStype" : 1001, "label" : 't#bar{t} + jets'   , "make border" : True}
         if "ST" in all_procs     : dprocs["ST"]           = {"color" : 212, "fillStype" : 1001, "label" : 'ST'   , "make border" : True}
         if "Rares" in all_procs     : dprocs["Rares"]     = {"color" : 851, "fillStype" : 1001, "label" : "Rares"       , "make border" : True}
-        if "Others" in all_procs     : dprocs["Rares"]     = {"color" : 851, "fillStype" : 1001, "label" : "Rares"       , "make border" : True}
+        if "Other" in all_procs     : dprocs["Other"]     = {"color" : 851, "fillStype" : 1001, "label" : "Rares"       , "make border" : True}
         if "EWK" in all_procs       : dprocs["EWK"]       = {"color" : 610, "fillStype" : 1001, "label" : "EWK"         , "make border" : True}
         if "W" in all_procs       : dprocs["W"]       = {"color" : 610, "fillStype" : 1001, "label" : "W"         , "make border" : True}
         if "ZZ" in all_procs        : dprocs["ZZ"]        = {"color" : 52,  "fillStype" : 1001, "label" : "ZZ"          , "make border" : True}
@@ -44,14 +44,19 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
         ### signals
         if "HH" in all_procs         : dprocs["HH"]         = {"color" : 4, "fillStype" : 1001, "label" : "none"           , "make border" : False}
         if "VH" in all_procs         : dprocs["VH"]         = {"color" : 4, "fillStype" : 1001, "label" : "VH + TH"           , "make border" : True}
-        if "TH" in all_procs         : dprocs["TH"]         = {"color" : 4, "fillStype" : 1001, "label" : 'none'          , "make border" : False}
-        for hig_proc in ["TTWH", "TTZH", "qqH", "VH", "WH", "ZH", "ggH"] :
+        #if "TH" in all_procs         : dprocs["TH"]         = {"color" : 4, "fillStype" : 1001, "label" : 'none'          , "make border" : False}
+        add_legend = True
+        for hig_proc in ["WH", "ZH", "ggH", "qqH", "TTH", "TH"] :
             if hig_proc in all_procs   and not leading_minor_H_local == "HH"    :
                 for decay in Hdecays :
                     if "%s_%s" % (hig_proc, decay) == leading_minor_H_local : #
                         dprocs[leading_minor_H_local]       = {"color" : 208, "fillStype" : 1001, "label" : "VH + ggH + q#bar{q}H"      , "make border" : False} # "Other H processes" "tHW + VH + ggH + qqH + HH + ttVH"
                     else :
-                        dprocs["%s_%s" % (hig_proc, decay)]       = {"color" : 208, "fillStype" : 1001, "label" : "none"         , "make border" : False}
+                        label = 'none'
+                        if add_legend:
+                            label = "TTH + TH + VH"
+                            add_legend = False
+                        dprocs["%s_%s" % (hig_proc, decay)]       = {"color" : 208, "fillStype" : 1001, "label" : label         , "make border" : False}
         if not tH_separated :
             if "tHW" in all_procs :
                 for decay in list(Hdecays) :
@@ -136,7 +141,7 @@ def list_channels_draw(analysis) :
     info_channel = {
     "2l_0tau"   : {
         "bkg_proc_from_data" : [fakes       ],
-        "bkg_procs_from_MC"  : [ "TT", "Convs", "TTH", "TH", "TTZ", "TTW", "TTWW", "TT", "Other", "VH", "DY", "W", "WW", "WZ", "ZZ"], #
+        "bkg_procs_from_MC"  : [ "TT", "ST", "Convs", "TTH", "TH", "TTZ", "TTW", "TTWW", "TT", "Other", "WH", "ZH", "DY", "W", "WW", "WZ", "ZZ", "qqH", "ggH"], #
         "signal" : [], # "signal_ggf_nonresonant_hh_bbttSM", "signal_ggf_nonresonant_hh_bbvv_slSM", "signal_ggf_nonresonant_hh_bbvvSM"
         "signal_HH" : ["signal_ggf_nonresonant_hh_bbttSM", "signal_ggf_nonresonant_hh_bbvv_slSM", "signal_ggf_nonresonant_hh_bbvvSM"], #
         "leading_minor_H" : "TH", ## The legend for the mino H proc will only appear if this process is in the card
@@ -144,7 +149,7 @@ def list_channels_draw(analysis) :
         },
     "1l_0tau"   : {
         "bkg_proc_from_data" : [fakes       ],
-        "bkg_procs_from_MC"  : [ "TT", "ST", "Convs", "TTH", "TH", "TTZ", "TTW", "TTWW", "WW", "WZ", "ZZ", "Other", "VH", "DY", "W"],
+        "bkg_procs_from_MC"  : [ "TT", "ST", "Convs", "TTH", "TH", "TTZ", "TTW", "TTWW", "WW", "WZ", "ZZ", "Other", "WH", "ZH", "DY", "W"],
         "signal_HH" : ["signal_ggf_nonresonant_hh_bbttkl_1p00", "signal_ggf_nonresonant_hh_bbvv_slkl_1p00", "signal_ggf_nonresonant_hh_bbvvkl_1p00"], #
         "leading_minor_H" : "TH", ## The legend for the mino H proc will only appear if this process is in the card
         "leading_minor_tH" : "tHq_htt" ## The legend for the mino H proc will only appear if this process is in the card

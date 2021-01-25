@@ -10,11 +10,12 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--inputPath", type="string", dest="inputPath", help="Full path of where prepareDatacards.root are ")
 parser.add_option("--card",      type="string", dest="card",      help="name of prepareDatacards.root. In not given will pick all from the inputPath", default="none")
-parser.add_option("--analysis",      type="string", dest="card",      help="Name of the analysis to allow for custom proccesses i.e. multilepton_data_fakes", default="none")
+parser.add_option("--analysis",      type="string", dest="card",      help="Name of the analysis to allow for custom proccesses i.e. multilepton_data_fakes", default="multilepton")
 (options, args) = parser.parse_args()
 
 inputPath = options.inputPath
 card      = options.card
+analysis      = options.analysis
 
 #Propably unnecesary by now
 info_syst = {
@@ -27,10 +28,10 @@ info_channel = {
     "signal_ggf_nonresonant_" : "ggHH_",
     "signal_vbf_nonresonant_" : "qqHH_",
     "TTH_"                    : "ttH_",
-    "data_fakes_"              : "multilepton_data_fakes_",
-    "data_flips_"              : "multilepton_data_flips_",
-    "Convs_"              : "multilepton_Convs_",
-    "Other_"              : "multilepton_Other_",
+    "data_fakes_"              : "%s_data_fakes_"%analysis,
+    "data_flips_"              : "%s_data_flips_"%analysis,
+    "Convs_"              : "%s_Convs_"%analysis,
+    "Other_"              : "%s_Other_"%analysis,
 }
 
 info_coupling = {
@@ -51,7 +52,7 @@ info_coupling = {
 info_brs = OrderedDict()
 info_brs["bbvv_sl"] = "SL_hbb_hww"
 info_brs["bbvv"]    = "DL_hbb_hww"
-info_brs["bbtt"]    = "hbbhtautau"
+info_brs["bbtt"]    = "hbbhtt"
 info_brs["ttww"] = "htthww"
 info_brs["zzzz"] = "hzzhzz"
 info_brs["ttzz"] = "htthzz"

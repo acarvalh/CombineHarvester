@@ -13,8 +13,8 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     decays_hh_vbf = []
     if renamedHHInput :
         if HHtype == "bbWW" :
-            decays_hh = ["hbbhww", "hbbhtautau", "hbbhzz"]
-            decays_hh_vbf = ["hbbhtautau", "hbbhww", 'hbbhzz']
+            decays_hh = ["hbbhww", "hbbhtt", "hbbhzz"]
+            decays_hh_vbf = ["hbbhtt", "hbbhww", 'hbbhzz']
         elif HHtype == "multilep" :
             decays_hh = ["hwwhww","htthww","hzzhww","hzzhzz","htthtt","htthzz"]
             decays_hh_vbf = ["hwwhww","htthww","hzzhww","hzzhzz","htthzz","htthtt"] # "htautauhtautau"
@@ -95,7 +95,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #higgs_proc_no_BR = []
     ## the bellow would be if some list of single h processes with decay modes and correct naming convention are in the inputs, but higgs_proc_no_BR is
     higgs_procs_w_BR = []
-    higgs_proc_no_BR = ["TTH", "tHq","tHW", "WH","ZH","qqH", "ggH"]
+    higgs_proc_no_BR = ["TTH", "tHq","tHW", "WH","ZH","qqH", "ggH","ttH"]
     for proc in higgs_proc_no_BR:
         higgs_procs_w_BR.append(proc+"_hww")
         higgs_procs_w_BR.append(proc+"_hzz")
