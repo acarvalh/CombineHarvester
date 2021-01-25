@@ -300,11 +300,11 @@ if (analysis != "ttH") and (not isCR):
             continue
         if "wwww" in pr or "hwwhww" in pr:
             wwww_procs.append(pr)
-        if "ttww" in pr or "htautauhww" in pr:
+        if "ttww" in pr or "htthww" in pr:
             ttww_procs.append(pr)
-        if "tttt" in pr or "htautauhtautau" in pr:
+        if "tttt" in pr or "htthtt" in pr:
             tttt_procs.append(pr)
-        if "ttzz" in pr or "htautauhzz" in pr:
+        if "ttzz" in pr or "htthzz" in pr:
             ttzz_procs.append(pr)
         if "zzww" in pr or "hzzhww" in pr:
             zzww_procs.append(pr)
@@ -568,7 +568,13 @@ if shape :
         else :
             MC_shape_syst_era = specific_syst
         if not specific_shape_systs[specific_syst]["correlated"] :
-            MC_shape_syst_era_2 = MC_shape_syst_era.replace("CMS_ttHl", "CMS_ttHl%s" % str(era).replace("20","")).replace("Era", str(era))
+            if 'ttH' in analysis:
+                MC_shape_syst_era_2 = MC_shape_syst_era.replace("CMS_ttHl", "CMS_ttHl%s" % str(era).replace("20","")).replace("Era", str(era))
+            else:
+                MC_shape_syst_era_2 = MC_shape_syst_era.replace("Era", str(era))
+                if 'CMS_btag' in MC_shape_syst_era_2:
+                    if era is 2017: MC_shape_syst_era_2 = MC_shape_syst_era_2.replace('2017','2017_2018')
+                    if era is 2018: MC_shape_syst_era_2 = MC_shape_syst_era_2.replace('2018','2017_2018')
             cb.cp().process(procs).RenameSystematic(cb, MC_shape_syst_era, MC_shape_syst_era_2)
             print ("renamed " + MC_shape_syst_era + " as shape uncertainty to MC prcesses to " + MC_shape_syst_era_2)
         else :

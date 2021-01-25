@@ -37,17 +37,11 @@ theory_ln_Syst = {
   
     "EW_ttZ"                      : {"value": (0.998,1.0),               "proc" : ["TTZ"]},  
     "EW_ttW"                      : {"value": (0.968,1.0),               "proc" : ["TTW"]},  
-#     "pdf_ttWW"                    : {"value": 1.03,               "proc" : ["TTWW"]},
-
-
-
-    # "TopmassUnc_HH"               : {"value": 1.026,              "proc" : ["HH"]},
-
 
     #HH https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWGHH#Current_recommendations_for_HH_c modify scale for coupling?
     "pdf_ggHH"                      : {"value": 1.021,               "proc" : ["ggHH"]},
     "QCDscale_ggHH"                 : {"value": (0.95 , 1.022),     "proc" : ["ggHH"]},
-    "alfa_s_ggHH"                    : {"value": 1.021,              "proc" : ["ggHHH"]},
+    "alfa_s_ggHH"                    : {"value": 1.021,              "proc" : ["ggHH"]},
     "TopmassUnc_ggHH"               : {"value": 1.026,              "proc" : ["ggHH"]},
     "pdf_qqHH"                      : {"value": 1.021,               "proc" : ["qqHH"]}, # includes alpha s
     "QCDscale_qqHH"                 : {"value": (0.996 , 1.003),     "proc" : ["qqHH"]},
@@ -67,13 +61,9 @@ theory_ln_Syst = {
     "pdf_ZH"                      : {"value": 1.013,              "proc" : ["ZH"]},
     "alfa_s_ZH"                    : {"value": 1.009,              "proc" : ["ZH"]},
 
-    # "QCDscale_VH"                 : {"value": (0.962 , 1.031),    "proc" : ["VH"]}, # using ZH values for now
-    # "pdf_VH"                      : {"value": 1.013,              "proc" : ["VH"]},
-    # "alfa_s_VH"                    : {"value": 1.009,              "proc" : ["VH"]},
-
-    "QCDscale_ttH"                : {"value": (0.908 , 1.058),    "proc" : ["TTH"]},
-    "pdf_ttH"               : {"value": 1.03,              "proc" : ["TTH"]},
-    "alfa_s_ttH"                    : {"value": 1.02,              "proc" : ["TTH"]},
+    "QCDscale_ttH"                : {"value": (0.908 , 1.058),    "proc" : ["TTH","ttH"]},
+    "pdf_ttH"               : {"value": 1.03,              "proc" : ["TTH","ttH"]},
+    "alfa_s_ttH"                    : {"value": 1.02,              "proc" : ["TTH","ttH"]},
 
     "QCDscale_tHq"                : {"value": (0.853, 1.065),     "proc" : ["tHq"]},
     "pdf_tHq"                      : {"value": 1.035,               "proc" : ["tHq"]},
@@ -82,18 +72,13 @@ theory_ln_Syst = {
     "QCDscale_tHW"                : {"value": (0.933, 1.049),     "proc" : ["tHW"]},
     "pdf_tHW"                    : {"value": 1.063,              "proc" : ["tHW"]},
     "alfa_s_tHW"                    : {"value": 1.015,              "proc" : ["tHW"]}, 
-
-    # "QCDscale_tH"                : {"value": (0.853, 1.065),     "proc" : ["tH"]},# using tHq values for now
-    # "pdf_tH"                      : {"value": 1.035,               "proc" : ["tH"]},
-    # "alfa_s_tH"                    : {"value": 1.012,              "proc" : ["tH"]},
-#ZZ + WZ
 #Andrew
     "pdf_ggZZ"                      : {"value": (0.823/1.236),              "proc" : ["ggZZ"]},
     "QCDscale_ggZZ"                 : {"value": 1.173,              "proc" : ["ggZZ"]},
     "pdf_qqZZ"                      : {"value": (0.9868/1.0208),              "proc" : ["qqZZ"]},
-    #"EW_corr_ggZZ"                 : {"value": 1.,              "proc" : ["ggZZ"]},
+    #"EW_corr_ggZZ"                 : {"value": 1.,              "proc" : ["ggZZ"]}, # ?
     "QCDscale_qqZZ"                 : {"value": 1.0314,              "proc" : ["qqZZ"]},
-   # "EW_corr_qqZZ"                 : {"value": 1.,              "proc" : ["qqZZ"]},
+   # "EW_corr_qqZZ"                 : {"value": 1.,              "proc" : ["qqZZ"]},# ?
     "pdf_WZ"                      : {"value": (0.967/1.038),              "proc" : ["WZ"]},
     "QCDscale_WZ"                 : {"value": 1.014,              "proc" : ["WZ"]},
 # other WZ/ZZ
@@ -121,11 +106,11 @@ higgsBR_exptl = {
     "ttzz" : 1.0319,
     "ttww" : 1.0319,
     "hwwhww": 1.0308,
-    "htautauhww": 1.0319,
+    "htthww": 1.0319,
     "hzzhww": 1.0308,
     "hzzhzz": 1.0308,
-    "htautauhtautau": 1.0330,
-    "htautauhzz": 1.0319
+    "htthtt": 1.0330,
+    "htthzz": 1.0319
 }
 
 ## --- Values taken from LHCHXWG TWiki: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
@@ -143,11 +128,11 @@ higgsBR_theo = {
     "ttzz" : 1.0319,
     "ttww" : 1.0319,
     "hwwhww": 1.0308,
-    "htautauhww": 1.0319,
+    "htthww": 1.0319,
     "hzzhww": 1.0308,
     "hzzhzz": 1.0308,
-    "htautauhtautau":1.0330, 
-    "htautauhzz": 1.0319
+    "htthtt":1.0330, 
+    "htthzz": 1.0319
 }
 
 ################################################
@@ -161,12 +146,12 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
         tHq_procs = ["tHq_htt", "tHq_hww", "tHq_hzz"]
         tHW_procs = ["tHW_htt", "tHW_hww", "tHW_hzz"]
         specific_ln_systs = {
-            "CMS_fakes"            : {"value" : 1.3,  "correlated"   : True,  "renameTo" : "CMS_%s_fakes" %channel, "proc" : ["data_fakes"],          "channels" : [k for k,v in list_channel_opt.items() if "data_fakes"  in v["bkg_proc_from_data"]]},  # for channels with "fakes_data"
-            "CMS_multilepton_FakableID_lnU"   : {"value" : 1.5,  "correlated"   : True,  "proc" : ["data_fakes"],           "channels" : ["1l_3tau", "3l_1tau"]},  #For channels with small changes to the tau selection not properly treated in the fake rate extraction 
-            "CMS_multilepton_QF"               : {"value" : 1.3,  "correlated"   : True,  "renameTo" : None, "proc" : ["data_flips"],          "channels" : [k for k,v in list_channel_opt.items() if "data_flips"  in v["bkg_proc_from_data"]]},  # for channels with "flips_data"
-            "CMS_Convs"            : {"value" : 1.5,  "correlated"   : True,  "proc" : ["Convs"], "renameTo" : "CMS_%s_fakes" %channel, "channels" : [k for k,v in list_channel_opt.items() if "Convs" in v["bkg_procs_from_MC"]]},   # for channels with "conversions"
-            "CMS_Other"           : {"value" : 1.5,  "correlated"   : True, "renameTo" : None, "proc" : ["Other"],                  "channels" : [k for k,v in list_channel_opt.items() if "Other" in v["bkg_procs_from_MC"]]},            # for channels with WZ
-     
+            "CMS_fakes"            : {"value" : 1.3,  "correlated"   : True,  "renameTo" : "CMS_%s_fakes" %channel, "proc" : ["%s_data_fakes"%channel],          "channels" : [k for k,v in list_channel_opt.items() if "data_fakes"  in v["bkg_proc_from_data"]]},  # for channels with "fakes_data"
+            "CMS_multilepton_FakeableID_lnU"   : {"value" : 1.5,  "correlated"   : True,  "proc" : ["%s_data_fakes"%channel],           "channels" : ["1l_3tau", "3l_1tau"]},  #For channels with small changes to the tau selection not properly treated in the fake rate extraction 
+            "CMS_multilepton_QF"               : {"value" : 1.3,  "correlated"   : True,  "renameTo" : None, "proc" : ["%s_data_flips"%channel],          "channels" : [k for k,v in list_channel_opt.items() if "data_flips"  in v["bkg_proc_from_data"]]},  # for channels with "flips_data"
+            "CMS_Convs"            : {"value" : 1.5,  "correlated"   : True,  "proc" : ["%s_Convs"%channel], "renameTo" : "CMS_%s_Convs"%channel, "channels" : [k for k,v in list_channel_opt.items() if "Convs" in v["bkg_procs_from_MC"]]},   # for channels with "conversions"
+            "CMS_Other"           : {"value" : 1.5,  "correlated"   : True, "renameTo" : "CMS_%s_Other"%channel, "proc" : ["%s_Other"%channel],                  "channels" : [k for k,v in list_channel_opt.items() if "Other" in v["bkg_procs_from_MC"]]},            # for channels with WZ
+        }
         ## if it is uncorrelated and the name or renameTo contains "CMS_ttHl_" leave it (a 16/17/18 will be added just after ttHl), if not add an "Era" where the year should be (2016/2017/2018 will replace "Era")
         specific_shape = {
             # ##################################### JER splitted -> not needed
@@ -178,21 +163,21 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
             # "CMS_ttHl_JERForwardHighPt" : {"correlated" : False, "renameTo" : "CMS_JER_Forwardhighpt_Era" ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             # #####################################
             # ################################### trigger
-            "CMS_ttHl_trigger"          : {"correlated" : False, "renameTo" : "CMS_%s_trigger" %channel, "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if not ("2lss" in n)]}, # uncorrelate by channel as well, that renaming is done on the main code
+            "CMS_ttHl_trigger"          : {"correlated" : False, "renameTo" : "CMS_%s_trigger_Era" %channel, "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if not ("2lss" in n)]}, # uncorrelate by channel as well, that renaming is done on the main code
             ## CMS_ttHl16_trigger_ee/em/mm
-            "CMS_ttHl_trigger_2lssEE"   : {"correlated" : False, "renameTo" : "CMS_%s_trigger_ee" %channel,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
-            "CMS_ttHl_trigger_2lssEMu"  : {"correlated" : False, "renameTo" : "CMS_multilepton_trigger_em"   ,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
-            "CMS_ttHl_trigger_2lssMuMu" : {"correlated" : False, "renameTo" : "CMS_multilepton_trigger_mm"    ,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
-            "CMS_ttHl_l1PreFire"        : {"correlated" : False, "renameTo" : "CMS_%s_prefireProbability" %channel ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())}, # should be 2016/2017 not 2018, that is done on the main code
+            "CMS_ttHl_trigger_2lssEE"   : {"correlated" : False, "renameTo" : "CMS_%s_trigger_ee_Era" %channel,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
+            "CMS_ttHl_trigger_2lssEMu"  : {"correlated" : False, "renameTo" : "CMS_multilepton_trigger_em_Era"   ,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
+            "CMS_ttHl_trigger_2lssMuMu" : {"correlated" : False, "renameTo" : "CMS_multilepton_trigger_mm_Era"    ,  "proc" : "MCproc"                 , "channels" : [n for n in list(list_channel_opt.keys()) if ("2lss" in n)]},
+            "CMS_ttHl_l1PreFire"        : {"correlated" : False, "renameTo" : "CMS_%s_prefireProbability_Era" %channel ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())}, # should be 2016/2017 not 2018, that is done on the main code
             # ################################### btag
-            "CMS_ttHl_btag_HFStats1" : {"correlated" : False, "renameTo" : "CMS_btag_hfstats1"     ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_HFStats2" : {"correlated" : False, "renameTo" : "CMS_btag_hfstats2"     ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_LFStats1" : {"correlated" : False, "renameTo" : "CMS_btag_lfstats1",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_LFStats2" : {"correlated" : False, "renameTo" : "CMS_btag_lfstats2",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_HF"       : {"correlated" : True, "renameTo" : "CMS_btag_HF"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_LF"       : {"correlated" : True, "renameTo" : "CMS_btag_LF"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_cErr1"    : {"correlated" : True, "renameTo" : "CMS_btag_cErr1"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
-            "CMS_ttHl_btag_cErr2"    : {"correlated" : True, "renameTo" : "CMS_btag_cErr2"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_HFStats1" : {"correlated" : False, "renameTo" : "CMS_btag_hfstats1_Era"     ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_HFStats2" : {"correlated" : False, "renameTo" : "CMS_btag_hfstats2_Era"     ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_LFStats1" : {"correlated" : False, "renameTo" : "CMS_btag_lfstats1_Era",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_LFStats2" : {"correlated" : False, "renameTo" : "CMS_btag_lfstats2_Era",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_HF"       : {"correlated" : False, "renameTo" : "CMS_btag_HF_Era_Era"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_LF"       : {"correlated" : False, "renameTo" : "CMS_btag_LF_Era"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_cErr1"    : {"correlated" : False, "renameTo" : "CMS_btag_cErr1_Era"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
+            "CMS_ttHl_btag_cErr2"    : {"correlated" : False, "renameTo" : "CMS_btag_cErr2_Era"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             # ################################# JER + JES
             "CMS_ttHl_JER"                  : {"correlated" : False, "renameTo" : "CMS_JER_Era"         ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             # #### JEC_regrouped
@@ -211,26 +196,25 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
             "CMS_ttHl_JESRelativeSample_Era" : {"correlated" : False, "renameTo" : "CMS_JES_RelSample_Era",  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             "CMS_ttHl_JESHF_Era"             : {"correlated" : False, "renameTo" : "CMS_JES_HF_Era"            ,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             # ############################## Lepton efficency:
-            "CMS_ttHl_lepEff_elloose"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_eloose_Era" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_lepEff_eltight"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_etight_Era" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_lepEff_mutight"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_mtight_Era" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_lepEff_muloose"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_mloose_Era" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_lepEff_elloose"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_eloose" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_lepEff_eltight"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_etight" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_lepEff_mutight"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_mtight" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_lepEff_muloose"       : {"correlated" : True, "renameTo" : "CMS_%s_eff_mloose" %channel,  "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
             # ############################## Tau related:
             "CMS_ttHl_tauIDSF"              : {"correlated" : False, "renameTo" : "CMS_%s_eff_t_Era" %channel, "proc" : "MCproc"                 , "channels" :  list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
             "CMS_ttHl_tauES"                : {"correlated" : False, "renameTo" : "CMS_%s_scale_t_Era" %channel, "proc" : "MCproc"                 , "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR"]))},
             # ########################### FakeRate:
-            "CMS_ttHl_FRe_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_pt" %channel , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRe_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_norm" %channel, "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRe_shape_eta_barrel" : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_be" %channel  , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRm_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_pt" %channel , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRm_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_norm" %channel, "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRm_shape_eta_barrel" : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_be" %channel, "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
-            "CMS_ttHl_FRjt_norm"            : {"correlated" : False, "renameTo" :"CMS_%s_FakeRate_jt_norm" %channel, "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
-            "CMS_ttHl_FRjt_shape"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_jt_shape" , "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
-            "CMS_ttHl_FRet_shift"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_et_shift", "proc" : ["data_fakes"], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
+            "CMS_ttHl_FRe_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_pt" %channel , "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRe_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_norm" %channel, "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRe_shape_eta_barrel" : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_e_be" %channel  , "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRm_shape_pt"         : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_pt" %channel , "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRm_shape_norm"       : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_norm" %channel, "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRm_shape_eta_barrel" : {"correlated" : True, "renameTo" : "CMS_%s_FakeRate_m_be" %channel, "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["0l_4tau"]))},
+            "CMS_ttHl_FRjt_norm"            : {"correlated" : False, "renameTo" :"CMS_%s_FakeRate_jt_norm" %channel, "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
+            "CMS_ttHl_FRjt_shape"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_jt_shape" , "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
+            "CMS_ttHl_FRet_shift"           : {"correlated" : False, "renameTo" : "CMS_multilepton_FakeRate_et_shift", "proc" : ["data_fakes"%schannel], "channels" : list(set(list(list_channel_opt.keys())) - set(["4l", "3l", "2lss", "ZZCR", "WZCR", "1l_0tau", "2l_0tau"]))},
             # ################# other
             "CMS_ttHl_topPtReweighting"     : {"correlated" : True, "renameTo" : "CMS_%s_topPtReweighting" %channel, "proc" : ["TT"], "channels" : ["3l", "WZCR", "1l_0tau", "2l_0tau"]},
-            #"CMS_ttHl_DYMCNormScaleFactors" : {"correlated" : False, "renameTo" : "CMS_multilepton_DYMCNormScaleFactors" , "proc" : ["DY"], "channels" : ["3l"]},
             "CMS_ttHl_UnclusteredEn"        : {"correlated" : True, "renameTo" : "CMS_%s_UnclusteredEn" %channel,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             "CMS_ttHl_pileup"               : {"correlated" : True, "renameTo" : "CMS_%s_pileup" %channel,  "proc" : "MCproc"                 , "channels" : list(list_channel_opt.keys())},
             
@@ -246,20 +230,20 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
             "CMS_ttHl_thu_shape_tHW"     : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_tHW" %channel, "proc" : tHW_procs, "channels" : [k for k,v in list_channel_opt.items() if any(i in v["bkg_procs_from_MC"] for i in tHW_procs)]},
             "CMS_ttHl_thu_shape_ttW"     : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_ttW" %channel, "proc" : ["TTW", "TTWW"], "channels" : [k for k,v in list_channel_opt.items() if "TTW" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_ttZ"     : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_ttZ" %channel, "proc" : ["TTZ"], "channels" : [k for k,v in list_channel_opt.items() if "TTZ" in v["bkg_procs_from_MC"]]},
-            "CMS_ttHl_thu_shape_HH"      : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_ggHH" %channel, "proc" : ["ggHH"], "channels" : list(list_channel_opt.keys())},
+            #"CMS_ttHl_thu_shape_HH"      : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_ggHH" %channel, "proc" : ["ggHH"], "channels" : list(list_channel_opt.keys())}, #niot working for LO or Res, done for NLO in the inference FW
             "CMS_ttHl_thu_shape_DY"      : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_DY" %channel, "proc" : ["DY"], "channels" : [k for k,v in list_channel_opt.items() if "DY" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_TT"      : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_TT" %channel, "proc" : ["TT"], "channels" : [k for k,v in list_channel_opt.items() if "TT" in v["bkg_procs_from_MC"]]},
             "CMS_ttHl_thu_shape_WZ"      : {"correlated" : True, "renameTo" : "CMS_%s_thu_shape_WZ" %channel, "proc" : ["WZ"], "channels" : [k for k,v in list_channel_opt.items() if "WZ" in v["bkg_procs_from_MC"]]},
-            "CMS_ttHl_thu_shape_ggZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["ggZZ"], "channels" : [k for k,v in list_channel_opt.items() if "ggZZ" in v["bkg_procs_from_MC"]]},
- #           "CMS_ttHl_thu_shape_qqZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["qqZZ"], "channels" : [k for k,v in list_channel_opt.items() if "qqZZ" in v["bkg_procs_from_MC"]]},
+            #"CMS_ttHl_thu_shape_ggZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["ggZZ"], "channels" : [k for k,v in list_channel_opt.items() if "ggZZ" in v["bkg_procs_from_MC"]]}, not working?
+            "CMS_ttHl_thu_shape_qqZZ"      : {"correlated" : True, "renameTo" : "CMS_multilepton_thu_shape_ggZZ", "proc" : ["qqZZ"], "channels" : [k for k,v in list_channel_opt.items() if "qqZZ" in v["bkg_procs_from_MC"]]},
             # ##################################### MC closure
-            "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_e_shape" %channel, "proc" : ["data_fakes"], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]}, # should be only 2018, that is done on the main code
+            "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_e_shape" %channel, "proc" : ["data_fakes"%schannel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]}, 
             
-            "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_m_shape" %channel , "proc" : ["data_fakes"], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]}, # there is no shape tend in
-            #"CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["data_fakes"], "channels" : list(list_channel_opt.keys())]},
-            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_e_norm" %channel, "proc" : ["data_fakes"], "channels" : ["3l","2lss", "WZCR", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
-            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_m_norm"%channel  , "proc" : ["data_fakes"], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
-        #     "CMS_ttHl_Clos_t_norm"  : {"correlated" : False, "renameTo" : None  , "proc" : ["data_fakes"], "channels" : [n for n in list(list_channel_opt.keys()) if ("1tau" in n or "2tau" in n) and not ("2lss_1tau" in n or "3l_1tau" in n) ]},
+            "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_m_shape" %channel , "proc" : ["data_fakes"%schannel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
+            #"CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["data_fakes"%schannel], "channels" : list(list_channel_opt.keys())]}, #MCClosure not used for any channel containing taus
+            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_e_norm" %channel, "proc" : ["data_fakes"%schannel], "channels" : ["3l","2lss", "WZCR", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
+            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_m_norm"%channel  , "proc" : ["data_fakes"%schannel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
+        #     "CMS_ttHl_Clos_t_norm"  : {"correlated" : False, "renameTo" : None  , "proc" : ["data_fakes"%schannel], "channels" : [n for n in list(list_channel_opt.keys()) if ("1tau" in n or "2tau" in n) and not ("2lss_1tau" in n or "3l_1tau" in n) ]}, #MCClosure not used for any channel containing taus
         }
         specific_ln_shape_systs = {
             ##"CMS_eff_t"             : {"value" : 1.05, "correlated" : True,  "type" : "gentau" , "channels" : [k for k,v in list_channel_opt.items() if v["isSMCSplit"]]},  # only for gentau
