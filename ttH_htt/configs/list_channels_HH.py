@@ -2,7 +2,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #####################
     # signal_type = "noresLO" | "nonresNLO" | "res"
     # mass nonres = "cHHH1" | cHHH... || "SM", "BM12", "kl_1p00"... || "spin0_900",....
-    # HHtype = "bbWW" | "multilep"
+    # HHtype = "bbWW" | "multilepton"
     #####################
     sigs = ["ttH", "tHq", "tHW", "WH", "ZH", "ggH", "qqH" ]
     decays = ["_hww", "_hzz", "_htt", "_hzg", "_hmm" ]
@@ -15,7 +15,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         if HHtype == "bbWW" :
             decays_hh = ["hbbhww", "hbbhtt", "hbbhzz"]
             decays_hh_vbf = ["hbbhtt", "hbbhww", 'hbbhzz']
-        elif HHtype == "multilep" :
+        elif HHtype == "multilepton" :
             decays_hh = ["hwwhww","htthww","hzzhww","hzzhzz","htthtt","htthzz"]
             decays_hh_vbf = ["hwwhww","htthww","hzzhww","hzzhzz","htthzz","htthtt"] # "htautauhtautau"
         elif HHtype == "bbWW_bbtt" :
@@ -33,7 +33,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     else :
         if HHtype == "bbWW" :
             decays_hh = ["bbww", "bbtt", "bbzz"]
-        elif HHtype == "multilep" :
+        elif HHtype == "multilepton" :
             decays_hh = ["wwww","ttww", "tttt", "ttzz", "zzww", "zzzz"]
         elif HHtype == "bbWW_SL" :
             decays_hh = ["bbvv_sl"]

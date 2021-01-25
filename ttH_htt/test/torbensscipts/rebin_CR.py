@@ -84,7 +84,7 @@ def getQuantiles(inputShapesL):
     ns = 0
     for nkey, key in enumerate(tfilein.GetListOfKeys()) :
         name = key.GetName()
-        if not ('signal' in name or 'CMS' in name or 'fakes_mc' in name or 'data_obs' in name):
+        if not ('signal' in name or 'CMS' in name or 'fakes_mc' in name or 'data_obs' in name or 'flips_mc' in name):
             print name
             obj = key.ReadObj()
             #obj.Sumw2()
@@ -162,7 +162,11 @@ def rebin (inputShapesL, inputShapesLnew, bins) :
         nominal_temp  = obj.Rebin(len(bins)-1,obj.GetName() , bins)
         while nominal_temp.GetNbinsX()>20:
             nominal_temp = nominal_temp.Rebin(2, nominal_temp.GetName())
-        if not ('data_obs' in key.GetName()):  nominal = makeBinContentsPositive(nominal)
+        nominal = None
+        if not ('data_obs' in key.GetName()):
+            nominal= makeBinContentsPositive(nominal_temp)
+        else:
+            nominal = nominal_temp
         nominal.Write()
         tfilein1.cd()
     tfilein1.Close()

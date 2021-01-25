@@ -10,7 +10,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--inputPath", type="string", dest="inputPath", help="Full path of where prepareDatacards.root are ")
 parser.add_option("--card",      type="string", dest="card",      help="name of prepareDatacards.root. In not given will pick all from the inputPath", default="none")
-parser.add_option("--analysis",      type="string", dest="card",      help="Name of the analysis to allow for custom proccesses i.e. multilepton_data_fakes", default="multilepton")
+parser.add_option("--analysis",      type="string", dest="analysis",      help="Name of the analysis to allow for custom proccesses i.e. multilepton_data_fakes", default="multilepton")
 (options, args) = parser.parse_args()
 
 inputPath = options.inputPath
@@ -27,11 +27,13 @@ info_channel = {
     # name on prepareDatacard    : name to change
     "signal_ggf_nonresonant_" : "ggHH_",
     "signal_vbf_nonresonant_" : "qqHH_",
-    "TTH_"                    : "ttH_",
-    "data_fakes_"              : "%s_data_fakes_"%analysis,
-    "data_flips_"              : "%s_data_flips_"%analysis,
-    "Convs_"              : "%s_Convs_"%analysis,
-    "Other_"              : "%s_Other_"%analysis,
+    "TTH"                    : "ttH",
+    "data_fakes"              : "%s_data_fakes"%analysis,
+    "data_flips"              : "%s_data_flips"%analysis,
+    "Convs"                   : "%s_Convs"%analysis,
+    "Other"                   : "%s_Other"%analysis,
+    "fakes_mc"                : "%s_fakes_mc"%analysis,
+    "flips_mc"                : "%s_flips_mc"%analysis,
 }
 
 info_coupling = {
