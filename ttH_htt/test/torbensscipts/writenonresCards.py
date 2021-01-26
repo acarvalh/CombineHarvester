@@ -32,7 +32,7 @@ for card in listproc:
             cardname = card.split("/")[-1]
             inPath = card.strip(cardname)
             outputfile = 'datacard_' + channel + '_' + era + '_' + BMCase
-            command1 = 'WriteDatacards.py  --inputShapes %s --channel %s --cardFolder %s --HHtype "multilep" --analysis HH --noX_prefix --era %s --signal_type %s --renamedHHInput --shapeSyst  --forceModifyShapes --output_file %s' %(card,channel, outPath, era, sigtype, outputfile)
+            command1 = 'WriteDatacards.py  --inputShapes %s --channel %s --HHtype "multilepton" --analysis HH --noX_prefix --era %s --signal_type %s --renamedHHInput --shapeSyst  --forceModifyShapes --output_file %s/%s' %(card,channel, era, sigtype, outPath, outputfile)
             if withCR: command1 = command1 + ' --withCR'
             command2= 'rm %s*mod*'%(inputPath)
             commands.append(command1)
