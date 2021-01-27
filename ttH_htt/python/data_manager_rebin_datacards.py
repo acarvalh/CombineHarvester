@@ -197,7 +197,7 @@ def rebinRegular(
                    print (h2.GetName(), h2.Integral())
                    if h2.GetName().find('CMS') == -1 and h2.GetName().find('HH') == -1 and h2.GetName().find('hh') == -1:
                        print 'name=========== ', h2.GetName()
-                       if h2.GetName() not in ["TT", 'W', 'DY', 'ST', 'data_obs', 'data_fakes', 'Convs', 'fakes_mc']:
+                       if h2.GetName() not in ["TT", 'WJets', 'DY', 'ST', 'data_obs', 'Fakes', 'fakes_mc']:
                            if "Other" not in hist_dict.keys() :
                                print 'other========= ', h2.GetName()
                                hist_dict["Other"] = h2
@@ -206,7 +206,8 @@ def rebinRegular(
                                print 'other===========', h2.GetName()
                                hist_dict["Other"].Add(h2)
                        else:
-                           hist_dict[h2.GetName()] = h2
+                           dictkey = h2.GetName().replace('WJets', 'W')
+                           hist_dict[dictkey] = h2
                factor=1.
                if  not h2.GetSumw2N() :
                    h2.Sumw2()
