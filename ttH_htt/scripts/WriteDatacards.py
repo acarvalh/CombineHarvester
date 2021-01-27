@@ -218,10 +218,10 @@ else :
 print ("do not add a process to datacard if the yield is smaller than 0.01 -- if so, do not add it")
 bkg_proc_from_data = make_threshold(0.01, bkg_proc_from_data,  inputShapes, tH_kin)
 bkg_procs_from_MC  = make_threshold(0.01, bkg_procs_from_MC, inputShapes, tH_kin)
-if analysis == "HH" and signal_type == "nonresLO":
+'''if analysis == "HH" and signal_type == "nonresLO":
     ## FIXME: to the ggHH and qqHH processes in NLO cards do not discard any component by threshold
     # by now it is not discarting any H process, narrow that down to ggHH and qqHH processes
-    higgs_procs_plain  = make_threshold(0.01, higgs_procs_plain, inputShapes, tH_kin)
+    higgs_procs_plain  = make_threshold(0.01, higgs_procs_plain, inputShapes, tH_kin)'''
 
 print ("final list of signal/bkg to add to datacards")
 MC_proc = higgs_procs_plain + bkg_procs_from_MC
@@ -568,7 +568,13 @@ if shape :
         else :
             MC_shape_syst_era = specific_syst
         if not specific_shape_systs[specific_syst]["correlated"] :
-            MC_shape_syst_era_2 = MC_shape_syst_era.replace("CMS_ttHl", "CMS_ttHl%s" % str(era).replace("20","")).replace("Era", str(era))
+            if 'ttH' in analysis:
+                MC_shape_syst_era_2 = MC_shape_syst_era.replace("CMS_ttHl", "CMS_ttHl%s" % str(era).replace("20","")).replace("Era", str(era))
+            else:
+                MC_shape_syst_era_2 = MC_shape_syst_era.replace("Era", str(era))
+                if 'CMS_btag' in MC_shape_syst_era_2:
+                    if '2017' in str(era): MC_shape_syst_era_2 = MC_shape_syst_era_2.replace('2017','2017_2018')
+                    if '2018' in str(era): MC_shape_syst_era_2 = MC_shape_syst_era_2.replace('2018','2017_2018')
             cb.cp().process(procs).RenameSystematic(cb, MC_shape_syst_era, MC_shape_syst_era_2)
             print ("renamed " + MC_shape_syst_era + " as shape uncertainty to MC prcesses to " + MC_shape_syst_era_2)
         else :
