@@ -57,7 +57,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         SM_VBF     = "CV_1_C2V_1_kl_1"
         prefix_GF  = "ggHH"
         #couplings_GF_NLO = [ "kl_0_kt_1", "kl_1_kt_1", "kl_5_kt_1" ]
-        couplings_GF_NLO = [ "kl_1_kt_1", "kl_2p45_kt_1", "kl_5_kt_1", "kl_5_kt_1", "kl_2p45_kt_1" ]
+        couplings_GF_NLO = [ "kl_1_kt_1", "kl_2p45_kt_1", "kl_5_kt_1", "kl_0_kt_1" ]
         # --> using "cHHH2p45" as control -- check closure to see if this is the best case
         couplings_VBF    = [ "CV_1_C2V_1_kl_1", "CV_1_C2V_1_kl_2", "CV_1_C2V_2_kl_1",  "CV_1_C2V_1_kl_0", "CV_1p5_C2V_1_kl_1", "CV_0p5_C2V_1_kl_1", "CV_1_C2V_0_kl_1" ]
 
@@ -97,7 +97,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #higgs_proc_no_BR = []
     ## the bellow would be if some list of single h processes with decay modes and correct naming convention are in the inputs, but higgs_proc_no_BR is
     higgs_procs_w_BR = []
-    higgs_proc_no_BR = ["TTH", "tHq","tHW", "WH","ZH","qqH", "ggH"]
+    higgs_proc_no_BR = ["ttH", "tHq","tHW", "WH","ZH","qqH", "ggH"]
     for proc in higgs_proc_no_BR:
         higgs_procs_w_BR.append(proc+"_hww")
         higgs_procs_w_BR.append(proc+"_hzz")
@@ -113,19 +113,19 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         fakes       = "fakes_mc"
         flips       = "flips_mc"
     else :
-        fakes       = "data_fakes"
+        fakes       = "Fakes"
         flips       = "data_flips"
 
     info_channel = {
         "2l_0tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ", "qqZZ", "ggZZ"] + higgs_procs_w_BR + thprocs_bbww,
+            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other_bbWW", "DY", "WJets", "WW", "WZ", "ZZ", "qqZZ", "ggZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "1l_0tau" : {
             "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "ST", "Other", "DY", "W", "WW", "WZ", "ZZ" "qqZZ", "ggZZ"] + higgs_procs_w_BR + thprocs_bbww,
+            "bkg_procs_from_MC"  : ["TT", "ST", "Other_bbWW", "DY", "WJets", "VV"] + higgs_procs_w_BR + thprocs_bbww,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
