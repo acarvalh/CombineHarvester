@@ -18,6 +18,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         elif HHtype == "multilepton" :
             decays_hh = ["hwwhww","htthww","hzzhww","hzzhzz","htthtt","htthzz"]
             decays_hh_vbf = ["hwwhww","htthww","hzzhww","hzzhzz","htthzz","htthtt"] # "htautauhtautau"
+            
         elif HHtype == "bbWW_bbtt" :
             decays_hh = ["hbb_htt"]
             decays_hh_vbf = ["hbb_htt"]

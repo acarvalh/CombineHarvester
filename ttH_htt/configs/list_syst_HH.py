@@ -21,7 +21,19 @@ vbf_dipole_ln_Syst = {
     "4l" :      {"wwww": 1.41, "ttww":0.82, "tttt":0.7,  "zzww":0.71,  "ttzz":2.08,  "zzzz":1.}
 }
 
+Clos_m_norm_ln_Syst = {
+    "WZCR" : {"2016": (0.817,1.224) , "2017": (0.967,1.035), "2018": (0.827,1.209)},
+    "ZZCR" : {"2016": (0.969,1.032) , "2017": (0.935,1.069), "2018": (0.993,1.007)},
+    "2lss" : {"2016": (0.957,1.045) , "2017": (0.913,1.096), "2018": (0.906,1.104)},
+    "3l" : {"2016": (0.940,1.064) , "2017": (0.039,1.065), "2018": (0.871,1.148)}
+}
 
+Clos_e_norm_ln_Syst = {
+    "WZCR" : {"2016": (0.874,1.144) , "2017": (0.791,1.264), "2018": (0.897,1.115)},
+    "ZZCR" : {"2016": (0.5,2.0) , "2017": (0.5,2.0), "2018": (0.5,2.0,)},
+    "2lss" : {"2016": (0.961,1.041) , "2017": (0.997,1.003), "2018": (0.954,1.048,)},
+    "3l" : {"2016": (0.956,1.046) , "2017": (0.917,1.091), "2018": (0.959,1.044)}
+}
 theory_ln_Syst = {
     #https://twiki.cern.ch/twiki/bin/view/LHCPhysics/TtbarNNLO
     "QCDscale_ttjets"             : {"value": (0.965 , 1.024),    "proc" : ["TT"]},
@@ -29,61 +41,61 @@ theory_ln_Syst = {
     "TopmassUnc_ttjets"           : {"value": 0.973/1.028,               "proc" : ["TT"]},
 
 #https://arxiv.org/pdf/1610.07922.pdf
-    "QCDscale_ttZ"                : {"value": (0.887 , 1.096),    "proc" : ["TTZ"]},
-    "QCDscale_ttW"                : {"value": (0.885 , 1.129),    "proc" : ["TTW"]},
+    "QCDscale_ttZ"                : {"value": (0.898 , 1.096),    "proc" : ["TTZ"]}, # old (0.887 , 1.096)
+    "QCDscale_ttW"                : {"value": (0.897 , 1.129),    "proc" : ["TTW"]}, # old (0.885 , 1.129)
 
     "pdf_ttZ"                     : {"value": 1.04,              "proc" : ["TTZ"]},  # includes alpha s 
     "pdf_ttW"                     : {"value": 1.034,               "proc" : ["TTW"]},  
   
-    "EW_ttZ"                      : {"value": (0.998,1.0),               "proc" : ["TTZ"]},  
-    "EW_ttW"                      : {"value": (0.968,1.0),               "proc" : ["TTW"]},  
+    "EW_ttZ"                      : {"value": (0.998,1.0),               "proc" : ["TTZ"]},  # old (0.998,1.0)
+    "EW_ttW"                      : {"value": (0.969,1.0),               "proc" : ["TTW"]},  # old (0.968,1.0)
 
     #HH https://twiki.cern.ch/twiki/bin/view/LHCPhysics/LHCHXSWGHH#Current_recommendations_for_HH_c modify scale for coupling?
     "pdf_ggHH"                      : {"value": 1.021,               "proc" : ["ggHH"]},
-    "QCDscale_ggHH"                 : {"value": (0.95 , 1.022),     "proc" : ["ggHH"]},
+    "QCDscale_ggHH"                 : {"value": (0.952 , 1.022),     "proc" : ["ggHH"]}, # old (0.95 , 1.022)
     "alfa_s_ggHH"                    : {"value": 1.021,              "proc" : ["ggHH"]},
     "TopmassUnc_ggHH"               : {"value": 1.026,              "proc" : ["ggHH"]},
     "pdf_qqHH"                      : {"value": 1.021,               "proc" : ["qqHH"]}, # includes alpha s
-    "QCDscale_qqHH"                 : {"value": (0.996 , 1.003),     "proc" : ["qqHH"]},
+    "QCDscale_qqHH"                 : {"value": (0.996 , 1.003),     "proc" : ["qqHH"]}, # old (0.996 , 1.003)
     # higgs https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageAt13TeV (mh = 125.09)
     "alfa_s_ggH"                    : {"value": 1.025,              "proc" : ["ggH"]},
     "pdf_ggH"                     : {"value": 1.018,              "proc" : ["ggH"]},
-    "QCDscale_ggH"                : {"value": (0.924 , 1.081),    "proc" : ["ggH"]},
+    "QCDscale_ggH"                : {"value": (0.929 , 1.081),    "proc" : ["ggH"]}, # old (0.924 , 1.081)
 
     "pdf_qqH"                     : {"value": 1.021,              "proc" : ["qqH"]},
-    "QCDscale_qqH"                : {"value": (0.96 , 1.03),      "proc" : ["qqH"]},
+    "QCDscale_qqH"                : {"value": (0.962 , 1.03),      "proc" : ["qqH"]}, # (0.96 , 1.03)
     "alfa_s_qqH"                    : {"value": 1.005,              "proc" : ["qqH"]},
 
-    "QCDscale_WH"                 : {"value": (0.95 , 1.07),      "proc" : ["WH"]},
+    "QCDscale_WH"                 : {"value": (0.952 , 1.07),      "proc" : ["WH"]}, # old (0.95 , 1.07)
     "pdf_WH"                      : {"value": 1.017,              "proc" : ["WH"]},
     "alfa_s_WH"                    : {"value": 1.009,              "proc" : ["WH"]},
-    "QCDscale_ZH"                 : {"value": (0.962 , 1.03),    "proc" : ["ZH"]},
+    "QCDscale_ZH"                 : {"value": (0.963 , 1.03),    "proc" : ["ZH"]}, # (0.962 , 1.03)
     "pdf_ZH"                      : {"value": 1.013,              "proc" : ["ZH"]},
     "alfa_s_ZH"                    : {"value": 1.009,              "proc" : ["ZH"]},
 
-    "QCDscale_ttH"                : {"value": (0.908 , 1.058),    "proc" : ["TTH","ttH"]},
+    "QCDscale_ttH"                : {"value": (0.916 , 1.058),    "proc" : ["TTH","ttH"]}, # old (0.908 , 1.058)
     "pdf_ttH"               : {"value": 1.03,              "proc" : ["TTH","ttH"]},
     "alfa_s_ttH"                    : {"value": 1.02,              "proc" : ["TTH","ttH"]},
 
-    "QCDscale_tHq"                : {"value": (0.853, 1.065),     "proc" : ["tHq"]},
+    "QCDscale_tHq"                : {"value": (0.872, 1.065),     "proc" : ["tHq"]}, # old (0.853, 1.065)
     "pdf_tHq"                      : {"value": 1.035,               "proc" : ["tHq"]},
     "alfa_s_tHq"                    : {"value": 1.012,              "proc" : ["tHq"]},
 
-    "QCDscale_tHW"                : {"value": (0.933, 1.049),     "proc" : ["tHW"]},
+    "QCDscale_tHW"                : {"value": (0.937, 1.049),     "proc" : ["tHW"]}, # old (0.933, 1.049)
     "pdf_tHW"                    : {"value": 1.063,              "proc" : ["tHW"]},
     "alfa_s_tHW"                    : {"value": 1.015,              "proc" : ["tHW"]}, 
 #Andrew
-    "pdf_ggZZ"                      : {"value": (0.823/1.236),              "proc" : ["ggZZ"]},
+    "pdf_ggZZ"                      : {"value": (0.85/1.236),              "proc" : ["ggZZ"]}, # old (0.823/1.236)
     "QCDscale_ggZZ"                 : {"value": 1.173,              "proc" : ["ggZZ"]},
-    "pdf_qqZZ"                      : {"value": (0.9868/1.0208),              "proc" : ["qqZZ"]},
+    "pdf_qqZZ"                      : {"value": (0.9869/1.0208),              "proc" : ["qqZZ"]}, # old (0.9868/1.0208)
     #"EW_corr_ggZZ"                 : {"value": 1.,              "proc" : ["ggZZ"]}, # ?
     "QCDscale_qqZZ"                 : {"value": 1.0314,              "proc" : ["qqZZ"]},
    # "EW_corr_qqZZ"                 : {"value": 1.,              "proc" : ["qqZZ"]},# ?
-    "pdf_WZ"                      : {"value": (0.967/1.038),              "proc" : ["WZ"]},
+    "pdf_WZ"                      : {"value": (0.968/1.038),              "proc" : ["WZ"]}, #old (0.967/1.038)
     "QCDscale_WZ"                 : {"value": 1.014,              "proc" : ["WZ"]},
 # other WZ/ZZ
 
-    "CMS_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
+    # "CMS_WZ_theo"            : {"value": 1.07,               "proc" : ["WZ"]},
     }
 
 ## --- BR(H->XX)/BR_sm(H->XX) = (kappa_X)^2 -------------------------------------------------------------- ##
@@ -99,18 +111,18 @@ higgsBR_exptl = {
     "hzg" : 1.0,  # Not observed yet but upper bounds available
     "hmm" : 1.0,  # Not observed yet but upper bounds available
     "hbb" : 1.89, # kappa_b = 0.49 (+0.27)(-0.15) -> Expt. Unc. on H->bb BR: 2*sqrt(((0.550)^2 + (0.306)^2)/2) = 2*0.445 = 89%
-    "tttt" : 1.0330,
-    "zzzz" : 1.0308,
-    "wwww" : 1.0308,
-    "wwzz" : 1.0308,
-    "ttzz" : 1.0319,
-    "ttww" : 1.0319,
-    "hwwhww": 1.0308,
-    "htthww": 1.0319,
-    "hzzhww": 1.0308,
-    "hzzhzz": 1.0308,
-    "htthtt": 1.0330,
-    "htthzz": 1.0319
+    # "tttt" : 1.0330,
+    # "zzzz" : 1.0308,
+    # "wwww" : 1.0308,
+    # "wwzz" : 1.0308,
+    # "ttzz" : 1.0319,
+    # "ttww" : 1.0319,
+    # "hwwhww": 1.0308,
+    # "htthww": 1.0319,
+    # "hzzhww": 1.0308,
+    # "hzzhzz": 1.0308,
+    # "htthtt": 1.0330,
+    # "htthzz": 1.0319
 }
 
 ## --- Values taken from LHCHXWG TWiki: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
@@ -121,18 +133,18 @@ higgsBR_theo = {
     "hzg" : 1.0582,
     "hmm" : 1.0168,
     "hbb" : 1.0126,
-    "tttt" : 1.0330,
-    "zzzz" : 1.0308,
-    "wwww" : 1.0308,
-    "wwzz" : 1.0308,
-    "ttzz" : 1.0319,
-    "ttww" : 1.0319,
-    "hwwhww": 1.0308,
-    "htthww": 1.0319,
-    "hzzhww": 1.0308,
-    "hzzhzz": 1.0308,
-    "htthtt":1.0330, 
-    "htthzz": 1.0319
+    # "tttt" : 1.0330,
+    # "zzzz" : 1.0308,
+    # "wwww" : 1.0308,
+    # "wwzz" : 1.0308,
+    # "ttzz" : 1.0319,
+    # "ttww" : 1.0319,
+    # "hwwhww": 1.0308,
+    # "htthww": 1.0319,
+    # "hzzhww": 1.0308,
+    # "hzzhzz": 1.0308,
+    # "htthtt":1.0330, 
+    # "htthzz": 1.0319
 }
 
 ################################################
@@ -242,8 +254,8 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
             "CMS_ttHl_Clos_e_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_e_shape_Era"%channel, "proc" : ["%s_data_fakes"%channel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]}, 
             "CMS_ttHl_Clos_m_shape" : {"correlated" : False, "renameTo" : "CMS_%s_Clos_m_shape_Era"%channel , "proc" : ["%s_data_fakes"%channel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]}, # there is no shape tend in
             #"CMS_ttHl_Clos_t_shape" : {"correlated" : False, "renameTo" : "CMS_multilepton_Clos_t_shape"  , "proc" : ["%s_data_fakes"%channel], "channels" : list(list_channel_opt.keys())]},
-            "CMS_ttHl_Clos_e_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_e_norm"%channel, "proc" : ["%s_data_fakes"%channel], "channels" : ["3l","2lss", "WZCR", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
-            "CMS_ttHl_Clos_m_norm"  : {"correlated" : True, "renameTo" : "CMS_%s_Clos_m_norm"%channel  , "proc" : ["%s_data_fakes"%channel], "channels" : ["3l","2lss", "WZCR", "1l_0tau", "2l_0tau", "ZZCR"]},
+            "CMS_ttHl_Clos_e_norm"  : {"correlated" : False, "renameTo" : "CMS_%s_Clos_e_norm"%channel, "proc" : ["%s_data_fakes"%channel], "channels" : [ "1l_0tau", "2l_0tau"]},
+            "CMS_ttHl_Clos_m_norm"  : {"correlated" : False, "renameTo" : "CMS_%s_Clos_m_norm"%channel  , "proc" : ["%s_data_fakes"%channel], "channels" : ["1l_0tau", "2l_0tau"]},
             "CMS_ttHl_AK8JESAbsolute"          : {"correlated" : True, "renameTo" : "CMS_AK8JES_Abs"   ,  "proc" : "MCproc"                 , "channels" : ["1l_0tau", "2l_0tau"]},
             "CMS_ttHl_AK8JESBBEC1"             : {"correlated" : True, "renameTo" : "CMS_AK8JES_BBEC1"      ,  "proc" : "MCproc"                 , "channels" : ["1l_0tau", "2l_0tau"]},
             "CMS_ttHl_AK8JESEC2"               : {"correlated" : True, "renameTo" : "CMS_AK8JES_EC2"        ,  "proc" : "MCproc"                 , "channels" : ["1l_0tau", "2l_0tau"]},

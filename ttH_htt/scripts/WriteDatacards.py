@@ -285,7 +285,18 @@ if 0 > 1 : # FIXME: remind why we added that at some point
                 cb.cp().process([proc]).AddSyst(cb, 'scale_%s' % hsbr, 'rateParam', ch.SystMap()(("(@0)", "scale_%s" % hsig[0])))
                 print ("process: " + hsbr + " is proportonal to", hsig[0])
 
-
+########################################
+#add Clos_e_norm and Clos_m_norm for multilepton as lnN
+if (analysis != "ttH") and (not isCR) and  HHtype=="multilepton":
+    if channel in Clos_m_norm_ln_Syst.keys():
+        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_m_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()((Clos_m_norm_ln_Syst[channel][str(era)],1.)))
+        print ("added CMS_multilepton_Clos_m_norm_%s_%s with value "%(str(era),channel) + str(Clos_m_norm_ln_Syst[channel][str(era)]) + " to processes: ", ["multilepton_data_fakes"])
+    if channel in Clos_e_norm_ln_Syst.keys():
+        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_e_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()((Clos_e_norm_ln_Syst[channel][str(era)],1.)))
+        print ("added CMS_multilepton_Clos_e_norm_%s_%s with value "%(str(era),channel) + str(Clos_e_norm_ln_Syst[channel][str(era)]) + " to processes: ", ["multilepton_data_fakes"])
+    else:
+        print ("Skipping CMS_multilepton_Clos_e_norm_ERA_CHANNEL as channel is %s"%channel)
+        print ("Skipping CMS_multilepton_Clos_m_norm_ERA_CHANNEL as channel is %s"%channel)
 ########################################
 # add vbf dipole recoile uncertainties #FIXME bbWW implementation
 if (analysis != "ttH") and (not isCR) and  HHtype=="multilepton":
@@ -386,7 +397,7 @@ for proc in higgs_procs_plain :
         if key in proc :
             cb.cp().process([proc]).AddSyst(cb, "BR_%s" % key, "lnN", ch.SystMap()(BRs[key]))
             print ("added " + "BR_%s" % key + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
-    if "ttH" in proc or "ZH" in proc or "WH" in proc :
+    if ("ttH" in proc or "ZH" in proc or "WH" in proc) and analysis == "ttH":
         key = "hbb"
         cb.cp().process([proc]).AddSyst(cb, "BR_%s" % key, "lnN", ch.SystMap()(BRs[key]))
         print ("added " + "BR_%s" % key + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
@@ -580,6 +591,10 @@ if shape :
         else :
             MC_shape_syst_era_2 = MC_shape_syst_era
         ###################
+        if 'Clos' in specific_syst and analysis == "HH":
+            MC_shape_syst_era_2 = specific_syst+ "_" + channel
+            cb.cp().process(procs).RenameSystematic(cb, specific_syst, MC_shape_syst_era_2)
+            print ("renamed " + specific_syst + " as shape uncertainty to MC prcesses to " + MC_shape_syst_era_2)
         if specific_syst == "CMS_ttHl_trigger" :
             if channel in ["1l_2tau", "1l_1tau"] :
                 MC_shape_syst_era_3 = MC_shape_syst_era_2 + "_leptau"
