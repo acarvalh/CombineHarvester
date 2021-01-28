@@ -117,12 +117,12 @@ higgsBR_exptl = {
     # "wwzz" : 1.0308,
     # "ttzz" : 1.0319,
     # "ttww" : 1.0319,
-    # "hwwhww": 1.0308,
-    # "htthww": 1.0319,
-    # "hzzhww": 1.0308,
-    # "hzzhzz": 1.0308,
-    # "htthtt": 1.0330,
-    # "htthzz": 1.0319
+    "hwwhww": 1.0308, # renamed hww in main code
+    "hzzhzz": 1.0308, # renamed hzz in main code
+    "htthtt": 1.0330, # renamed htt in main code
+    # "htthww": 1.0319, #handled by single higgs decay uncert
+    # "hzzhww": 1.0308, #handled by single higgs decay uncert
+    # "htthzz": 1.0319  #handled by single higgs decay uncert
 }
 
 ## --- Values taken from LHCHXWG TWiki: https://twiki.cern.ch/twiki/bin/view/LHCPhysics/CERNYellowReportPageBR
@@ -139,11 +139,11 @@ higgsBR_theo = {
     # "wwzz" : 1.0308,
     # "ttzz" : 1.0319,
     # "ttww" : 1.0319,
-    # "hwwhww": 1.0308,
+    "hwwhww": 1.0308, # renamed hww in main code
+    "hzzhzz": 1.0308, # renamed hzz in main code
+    "htthtt":1.0330, # renamed htt in main code
     # "htthww": 1.0319,
     # "hzzhww": 1.0308,
-    # "hzzhzz": 1.0308,
-    # "htthtt":1.0330, 
     # "htthzz": 1.0319
 }
 

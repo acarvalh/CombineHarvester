@@ -289,10 +289,10 @@ if 0 > 1 : # FIXME: remind why we added that at some point
 #add Clos_e_norm and Clos_m_norm for multilepton as lnN
 if (analysis != "ttH") and (not isCR) and  HHtype=="multilepton":
     if channel in Clos_m_norm_ln_Syst.keys():
-        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_m_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()((Clos_m_norm_ln_Syst[channel][str(era)],1.)))
+        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_m_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()(Clos_m_norm_ln_Syst[channel][str(era)]))
         print ("added CMS_multilepton_Clos_m_norm_%s_%s with value "%(str(era),channel) + str(Clos_m_norm_ln_Syst[channel][str(era)]) + " to processes: ", ["multilepton_data_fakes"])
     if channel in Clos_e_norm_ln_Syst.keys():
-        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_e_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()((Clos_e_norm_ln_Syst[channel][str(era)],1.)))
+        cb.cp().process(["multilepton_data_fakes"]).AddSyst(cb,  "CMS_multilepton_Clos_e_norm_%s_%s"%(str(era),channel), "lnN", ch.SystMap()(Clos_e_norm_ln_Syst[channel][str(era)]))
         print ("added CMS_multilepton_Clos_e_norm_%s_%s with value "%(str(era),channel) + str(Clos_e_norm_ln_Syst[channel][str(era)]) + " to processes: ", ["multilepton_data_fakes"])
     else:
         print ("Skipping CMS_multilepton_Clos_e_norm_ERA_CHANNEL as channel is %s"%channel)
@@ -321,18 +321,24 @@ if (analysis != "ttH") and (not isCR) and  HHtype=="multilepton":
             zzww_procs.append(pr)
         if "zzzz" in pr or "hzzhzz" in pr:
             zzzz_procs.append(pr)
-    cb.cp().process(wwww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["wwww"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["wwww"]) + " to processes: ", wwww_procs)
-    cb.cp().process(ttww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttww"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttww"]) + " to processes: ", ttww_procs)
-    cb.cp().process(tttt_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["tttt"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["tttt"]) + " to processes: ", tttt_procs)
-    cb.cp().process(zzww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzww"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzww"]) + " to processes: ", zzww_procs)
-    cb.cp().process(ttzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttzz"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttzz"]) + " to processes: ", ttzz_procs)
-    cb.cp().process(zzzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzzz"],1.)))
-    print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzzz"]) + " to processes: ", zzzz_procs)
+    if len(wwww_procs) >0:
+        cb.cp().process(wwww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["wwww"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["wwww"]) + " to processes: ", wwww_procs)
+    if len(ttww_procs) >0:
+        cb.cp().process(ttww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttww"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttww"]) + " to processes: ", ttww_procs)
+    if len(tttt_procs) >0:
+        cb.cp().process(tttt_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["tttt"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["tttt"]) + " to processes: ", tttt_procs)
+    if len(zzww_procs) >0:
+        cb.cp().process(zzww_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzww"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzww"]) + " to processes: ", zzww_procs)
+    if len(ttzz_procs) >0:
+        cb.cp().process(ttzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["ttzz"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["ttzz"]) + " to processes: ", ttzz_procs)
+    if len(zzzz_procs) >0:
+        cb.cp().process(zzzz_procs).AddSyst(cb,  "CMS_multilepton_qqHH_dipoleRecoil", "lnN", ch.SystMap()((vbf_dipole_ln_Syst[channel]["zzzz"],1.)))
+        print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzzz"]) + " to processes: ", zzzz_procs)
 ########################################
 # add rate parameters
 if withCR and analysis != "ttH" and HHtype=="multilepton":
@@ -395,8 +401,20 @@ for proc in higgs_procs_plain :
     else :  BRs = higgsBR_theo
     for key in BRs:
         if key in proc :
-            cb.cp().process([proc]).AddSyst(cb, "BR_%s" % key, "lnN", ch.SystMap()(BRs[key]))
-            print ("added " + "BR_%s" % key + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
+            if (key=="hww" and "hwwhww" in proc) or (key=="htt" and"htthtt" in proc) or (key=="hzz" and"hzzhzz" in proc):
+                continue
+            if "hwwhww" in key:
+                cb.cp().process([proc]).AddSyst(cb, "BR_hww", "lnN", ch.SystMap()(BRs[key]))
+                print ("added " + "BR_hww (hwwhww)" + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
+            elif "hzzhzz" in key:
+                cb.cp().process([proc]).AddSyst(cb, "BR_hzz", "lnN", ch.SystMap()(BRs[key]))
+                print ("added " + "BR_hzz (hzzhzz)" + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
+            elif "htthtt" in key:
+                cb.cp().process([proc]).AddSyst(cb, "BR_htt", "lnN", ch.SystMap()(BRs[key]))
+                print ("added " + "BR_htt (htthtt)" + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
+            else:
+                cb.cp().process([proc]).AddSyst(cb, "BR_%s" % key, "lnN", ch.SystMap()(BRs[key]))
+                print ("added " + "BR_%s" % key + " uncertanity to process: " + proc + " of value = " + str(BRs[key]))
     if ("ttH" in proc or "ZH" in proc or "WH" in proc) and analysis == "ttH":
         key = "hbb"
         cb.cp().process([proc]).AddSyst(cb, "BR_%s" % key, "lnN", ch.SystMap()(BRs[key]))
