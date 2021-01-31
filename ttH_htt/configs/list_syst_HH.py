@@ -175,8 +175,8 @@ def specific_syst(analysis, list_channel_opt, channel="multilepton") :
             "CMS_multilepton_QF"  : {"value" : 1.3,  "correlated"   : True,  "renameTo" : None, "proc" : ["%s_data_flips"%channel],          "channels" : [k for k,v in list_channel_opt.items() if "%s_data_flips"%channel  in v["bkg_proc_from_data"]]},  # for channels with "flips_data"
             "CMS_Convs"           : {"value" : 1.5,  "correlated"   : True,  "proc" : ["%s_Convs"%channel], "renameTo" : "CMS_%s_Convs"%channel, "channels" : [k for k,v in list_channel_opt.items() if "%s_Convs"%channel in v["bkg_procs_from_MC"]]},   # for channels with "conversions"
         }
-        if 'bbWW' in channel:
-            specific_ln_systs["CMS_fakes"] = {"value": 1.3,  "correlated": True,  "renameTo": "CMS_%s_fakes"%channel, "proc": ["Fakes"],     "channels": [k for k,v in list_channel_opt.items() if "Fakes"  in v["bkg_proc_from_data"]]}  # for channels with "fakes_data"
+        if 'bbww' in channel:
+            specific_ln_systs["CMS_Fakes"] = {"value": 1.3,  "correlated": True,  "renameTo": "CMS_%s_fakes"%channel, "proc": ["Fakes"],     "channels": [k for k,v in list_channel_opt.items() if "Fakes"  in v["bkg_proc_from_data"]]}  # for channels with "fakes_data"
             specific_ln_systs["CMS_Other"] = {"value": 1.5,  "correlated": True,  "renameTo": "CMS_%s_Other"%channel, "proc": ["Other_bbWW"], "channels" : ["1l_0tau", "2l_0tau"]}
         elif 'multilepton' in channel:
             specific_ln_systs["CMS_fakes"] =     {"value" : 1.3, "correlated" : True, "renameTo" : "CMS_%s_fakes"%channel,"proc" : ["%s_data_fakes"%channel], "channels" : [k for k,v in list_channel_opt.items() if "%s_data_fakes"%channel in v["bkg_proc_from_data"]]} # for channels with "fakes_data"
