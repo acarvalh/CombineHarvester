@@ -30,7 +30,7 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
         if "TT" in all_procs     : dprocs["TT"]           = {"color" : 114, "fillStype" : 1001, "label" : 't#bar{t} + jets'   , "make border" : True}
         if "ST" in all_procs     : dprocs["ST"]           = {"color" : 212, "fillStype" : 1001, "label" : 'ST'   , "make border" : True}
         if "Rares" in all_procs     : dprocs["Rares"]     = {"color" : 851, "fillStype" : 1001, "label" : "Rares"       , "make border" : True}
-        if "Other_bbWW" in all_procs     : dprocs["Other_bbWW"]     = {"color" : 851, "fillStype" : 1001, "label" : "Rares"       , "make border" : True}
+        if "Other_bbWW" in all_procs     : dprocs["Other_bbWW"]     = {"color" : 851, "fillStype" : 1001, "label" : "Other_bbWW"       , "make border" : True}
         if "EWK" in all_procs       : dprocs["EWK"]       = {"color" : 610, "fillStype" : 1001, "label" : "EWK"         , "make border" : True}
         if "WJets" in all_procs       : dprocs["WJets"]       = {"color" : 610, "fillStype" : 1001, "label" : "WJets"         , "make border" : True}
         if "ZZ" in all_procs        : dprocs["ZZ"]        = {"color" : 52,  "fillStype" : 1001, "label" : "ZZ"          , "make border" : True}
@@ -72,11 +72,11 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
                     else :
                         dprocs["tHq_%s" % decay]                     = {"color" : 4, "fillStype" : 1001, "label" : "none"        , "make border" : False}
         # change the order of the stack if channel is dominated by fakes
-        if "ttH" in all_procs :
+        '''if "ttH" in all_procs :
             for decay in list(set(list(Hdecays_long)) - set(["htt"])) :
                 dprocs["ttH_%s" % decay]                 = {"color" :   2, "fillStype" : 1001, "label" : "none"        , "make border" : False}
             dprocs["ttH_htt"]                                 = {"color" :   2, "fillStype" : 1001, "label" : "t#bar{t}H"         , "make border" : True}
-            #dprocs["ttH"]                                 = {"color" :   2, "fillStype" : 1001, "label" : "ttH"         , "make border" : True}
+            #dprocs["ttH"]                                 = {"color" :   2, "fillStype" : 1001, "label" : "ttH"         , "make border" : True}'''
         if "TTH_htt" in all_procs     : dprocs["TTH_htt"]           = {"color" : 2, "fillStype" : 1001, "label" :  "t#bar{t}H"    , "make border" : True}
         ### changing processes orders
         if channel in ["2l_0tau"] and not leading_minor_H_local =="HH" :
@@ -150,7 +150,7 @@ def list_channels_draw(analysis) :
         },
     "1l_0tau"   : {
         "bkg_proc_from_data" : [fakes       ],
-        "bkg_procs_from_MC"  : [ "TT", "ST", "ttH", "TH", "VV", "Other_bbWW", "WH", "ZH", "DY", "WJets"],
+        "bkg_procs_from_MC"  : [ "TT", "ST", "ttH", "TH", "VV", "Other_bbWW", "WH", "ZH", "ggH", "qqH", "DY", "WJets"],
         "signal_HH" : ["signal_ggf_nonresonant_hh_bbttkl_1p00", "signal_ggf_nonresonant_hh_bbvv_slkl_1p00", "signal_ggf_nonresonant_hh_bbvvkl_1p00"], #
         "leading_minor_H" : "TH", ## The legend for the mino H proc will only appear if this process is in the card
         "leading_minor_tH" : "tHq_htt" ## The legend for the mino H proc will only appear if this process is in the card
