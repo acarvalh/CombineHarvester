@@ -48,7 +48,7 @@ parser.add_option(
     )
 parser.add_option(
     "--HHtype",         type="string",       dest="HHtype",
-    help="Options: \"bbWW\" | \"multilep\" ",
+    help="Options: \"bbWW\" | \"multilep\" | \"bbWWsl\" | \"bbWWdl\" ",
     default="bbWW"
     )
 parser.add_option(
