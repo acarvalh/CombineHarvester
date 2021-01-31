@@ -36,7 +36,7 @@ parser.add_option("--forceModifyShapes",           action="store_true", dest="fo
 
 parser.add_option("--signal_type",    type="string",       dest="signal_type", help="Options: \"nonresLO\" | \"nonresNLO\" | \"res\" ", default="none")
 parser.add_option("--mass",           type="string",       dest="mass",        help="Options: \n nonresNLO = it will be ignored \n noresLO = \"SM\", \"BM12\", \"kl_1p00\"... \n \"spin0_900\", ...", default="none")
-parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilep\" | \"bbWW_bbtt\" ", default="none")
+parser.add_option("--HHtype",         type="string",       dest="HHtype",      help="Options: \"bbWW\" | \"multilepton\" | \"bbWW_bbtt\" ", default="none")
 parser.add_option("--renamedHHInput", action="store_true", dest="renamedHHInput",   help="If used input already renamed.", default=True)
 parser.add_option("--isCR", action="store_true", dest="isCR",   help="If datacard is created for an CR.", default=False)
 parser.add_option("--withCR", action="store_true", dest="withCR",   help="If datacard is created for use with CR.", default=False)
@@ -288,7 +288,7 @@ if 0 > 1 : # FIXME: remind why we added that at some point
 
 ########################################
 # add vbf dipole recoile uncertainties #FIXME bbWW implementation
-if (analysis != "ttH") and (not isCR) and  HHtype=="multilep":
+if (analysis != "ttH") and (not isCR) and  HHtype=="multilepton":
     wwww_procs = []
     ttww_procs = []
     tttt_procs = []
@@ -300,11 +300,11 @@ if (analysis != "ttH") and (not isCR) and  HHtype=="multilep":
             continue
         if "wwww" in pr or "hwwhww" in pr:
             wwww_procs.append(pr)
-        if "ttww" in pr or "htautauhww" in pr:
+        if "ttww" in pr or "htthww" in pr:
             ttww_procs.append(pr)
-        if "tttt" in pr or "htautauhtautau" in pr:
+        if "tttt" in pr or "htthtt" in pr:
             tttt_procs.append(pr)
-        if "ttzz" in pr or "htautauhzz" in pr:
+        if "ttzz" in pr or "htthzz" in pr:
             ttzz_procs.append(pr)
         if "zzww" in pr or "hzzhww" in pr:
             zzww_procs.append(pr)
@@ -324,14 +324,14 @@ if (analysis != "ttH") and (not isCR) and  HHtype=="multilep":
     print ("added CMS_multilepton_qqHH_dipoleRecoil with value " + str(vbf_dipole_ln_Syst[channel]["zzzz"]) + " to processes: ", zzzz_procs)
 ########################################
 # add rate parameters
-if withCR and analysis != "ttH" and HHtype=="multilep":
+if withCR and analysis != "ttH" and HHtype=="multilepton":
     cb.cp().process(["WZ"]).AddSyst(cb, 'CMS_multilepton_xsWZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
     cb.cp().process(["ggZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
     cb.cp().process(["qqZZ"]).AddSyst(cb, 'CMS_multilepton_xsZZ', 'rateParam', ch.SystMap()(("1.0 [0.5/1.5]", "")))
 ########################################
 # add theory systematics
 for specific_syst in theory_ln_Syst :
-    if withCR and analysis != "ttH" and HHtype=="multilep":
+    if withCR and analysis != "ttH" and HHtype=="multilepton":
         if "WZ" in specific_syst and "pdf" not in specific_syst:
             continue
         if ("ggZZ" in specific_syst or "ggZZ" in specific_syst) and "pdf" not in specific_syst:

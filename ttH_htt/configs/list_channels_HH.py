@@ -2,7 +2,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #####################
     # signal_type = "noresLO" | "nonresNLO" | "res"
     # mass nonres = "cHHH1" | cHHH... || "SM", "BM12", "kl_1p00"... || "spin0_900",....
-    # HHtype = "bbWW" | "multilep"
+    # HHtype = "bbWW" | "multilepton"
     #####################
     sigs = ["ttH", "tHq", "tHW", "WH", "ZH", "ggH", "qqH" ]
     decays = ["_hww", "_hzz", "_htt", "_hzg", "_hmm" ]
@@ -12,12 +12,12 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     decays_hh = []
     decays_hh_vbf = []
     if renamedHHInput :
-        if HHtype == "bbWW" :
+        if "bbWW" in HHtype:
             decays_hh = ["hbbhww", "hbbhtt", "hbbhzz"]
             decays_hh_vbf = ["hbbhtt", "hbbhww", 'hbbhzz']
-        elif HHtype == "multilep" :
-            decays_hh = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhtautau","htautauhzz"]
-            decays_hh_vbf = ["hwwhww","htautauhww","hzzhww","hzzhzz","htautauhzz","htautauhtautau"] # "htautauhtautau"
+        elif HHtype == "multilepton" :
+            decays_hh = ["hwwhww","htthww","hzzhww","hzzhzz","htthtt","htthzz"]
+            decays_hh_vbf = ["hwwhww","htthww","hzzhww","hzzhzz","htthzz","htthtt"] # "htautauhtautau"
         elif HHtype == "bbWW_bbtt" :
             decays_hh = ["hbb_htt"]
             decays_hh_vbf = ["hbb_htt"]
@@ -31,9 +31,9 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
             print("HHtype (%s) not implemented" % ( HHtype))
             sys.exit()
     else :
-        if HHtype == "bbWW" :
+        if "bbWW" in HHtype:
             decays_hh = ["bbww", "bbtt", "bbzz"]
-        elif HHtype == "multilep" :
+        elif HHtype == "multilepton" :
             decays_hh = ["wwww","ttww", "tttt", "ttzz", "zzww", "zzzz"]
         elif HHtype == "bbWW_SL" :
             decays_hh = ["bbvv_sl"]
@@ -130,56 +130,56 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
             "proc_to_remove" : {}
         },
         "0l_4tau" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "1l_3tau" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "2lss" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes , 'multilepton_' + flips],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "2l_2tau" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "3l" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "3l_1tau" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ZZ", "ggZZ", "qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ZZ", "ggZZ", "qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "4l" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_procs_w_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_procs_w_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "WZCR" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_proc_no_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_proc_no_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
         "ZZCR" : {
-            "bkg_proc_from_data" : [ fakes    ],
-            "bkg_procs_from_MC"  : ["Convs", "TTZ", "TTW", "TTWW", "TT", "Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ", "Flips"] + higgs_proc_no_BR,
+            "bkg_proc_from_data" : [ 'multilepton_' + fakes    ],
+            "bkg_procs_from_MC"  : ["multilepton_Convs", "TTZ", "TTW", "TTWW", "TT", "multilepton_Other", "DY", "W", "WW", "WZ", "ggZZ","qqZZ"] + higgs_proc_no_BR,
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         }

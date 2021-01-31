@@ -6,20 +6,18 @@ import shutil
 import ROOT
 from collections import OrderedDict
 
-# python test/rename_procs.py --inputPath /home/acaan/hhAnalysis/2016/hh_bb1l_23Jul_baseline_TTSL/datacards/hh_bb1l/prepareDatacards/ --card prepareDatacards_hh_bb1l_hh_bb1l_cat_jet_2BDT_Wjj_BDT_SM_HbbFat_WjjFat_HP_e.root
-"""
-<ggHHsamplename>_<whatever>_Hbb_HZZ
-<ggHHsamplename>_<whatever>_Hbb_Htt
-"""
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--inputPath", type="string", dest="inputPath", help="Full path of where prepareDatacards.root are ")
 parser.add_option("--card",      type="string", dest="card",      help="name of prepareDatacards.root. In not given will pick all from the inputPath", default="none")
+parser.add_option("--analysis",      type="string", dest="analysis",      help="Name of the analysis to allow for custom proccesses i.e. multilepton_data_fakes", default="multilepton")
 (options, args) = parser.parse_args()
 
 inputPath = options.inputPath
 card      = options.card
+analysis      = options.analysis
 
+#Propably unnecesary by now
 info_syst = {
     "HH_Up": "HHUp", 
     "HH_Down": "HHDown", 
@@ -27,12 +25,15 @@ info_syst = {
 
 info_channel = {
     # name on prepareDatacard    : name to change
-    #"EWK"                     : "DY",
     "signal_ggf_nonresonant_" : "ggHH_",
     "signal_vbf_nonresonant_" : "qqHH_",
-    #"TTH"                     : "ttH_hww",
-    #"TH"                      : "tHW_hww",
-    #"VH"                      : "WH_hww",
+    "TTH"                    : "ttH",
+    "data_fakes"              : "%s_data_fakes"%analysis,
+    "data_flips"              : "%s_data_flips"%analysis,
+    "Convs"                   : "%s_Convs"%analysis,
+    "Other"                   : "%s_Other"%analysis,
+    "fakes_mc"                : "%s_fakes_mc"%analysis,
+    "flips_mc"                : "%s_flips_mc"%analysis,
 }
 
 info_coupling = {
@@ -51,8 +52,7 @@ info_coupling = {
 }
 
 info_brs = OrderedDict()
-info_brs["bbww"] = "hbbhww"
-info_brs["bbzz"] = "hbbhzz"
+info_brs["bbvv_sl"] = "SL_hbb_hww"
 info_brs["bbvv"]    = "DL_hbb_hww"
 info_brs["bbtt"]    = "hbbhtt"
 info_brs["ttww"] = "htthww"
@@ -63,14 +63,8 @@ info_brs["zzww"] = "hzzhww"
 info_brs["tttt"] = "htthtt"
 info_brs_remains = OrderedDict()
 info_brs_remains["DL_hbb_hww_sl"] = "SL_hbb_hww"
-#info_brs_remains["TtHW_hww"] = "ttH_hww"
 info_brs_remains["_hh_"] = "_"
-# info_brs_remains["hh_htautauhww"] = "htautauhww"
-# info_brs_remains["hh_hzzhzz"] = "hzzhzz"
-# info_brs_remains["hh_htautauhzz"] = "htautauhzz"
-# info_brs_remains["hh_hwwhww"] = "hwwhww"
-# info_brs_remains["hh_hzzhww"] = "hzzhww"
-# info_brs_remains["hh_htautauhtautau"] = "htautauhtautau"
+
 def rename_procs (inputShapesL,inputShapesLnew ,info_channelL, info_brsL, info_couplingL, info_brs_remainsL, info_syst) :
     ## it assumes no subdirectories in the preparedatacards file,
     tfileout1 = ROOT.TFile(inputShapesL, "UPDATE")
@@ -80,7 +74,6 @@ def rename_procs (inputShapesL,inputShapesLnew ,info_channelL, info_brsL, info_c
     for nkey, key in enumerate(tfileout1.GetListOfKeys()) :
         obj =  key.ReadObj()
         obj_name = key.GetName()
-        #if type(obj) is not ROOT.TH1F and type(obj) is not ROOT.TH1D and type(obj) is not ROOT.TH1 and type(obj) is not ROOT.TH1S and type(obj) is not ROOT.TH1C and type(obj) is not ROOT.TH1 :
         if type(obj) is not ROOT.TH1F :
             if type(obj) is ROOT.TH1 :
                 print ("data_obs can be be TH1")
@@ -88,7 +81,6 @@ def rename_procs (inputShapesL,inputShapesLnew ,info_channelL, info_brsL, info_c
             else :
                 print ("WARNING: All the histograms that are not data_obs should be TH1F - otherwhise combine will crash!!!")
                 sys.exit()
-        #nominal  = ROOT.TH1F()
         obj_newname = obj_name
         
         for proc in info_syst.keys() :
@@ -133,6 +125,4 @@ else :
 
 for prepareDatacard in listproc :
     prepareDatacardNew = prepareDatacard.replace(inputPath, inputPathNew)
-    #shutil.copy2(prepareDatacard, prepareDatacardNew)
-    #print ("done", prepareDatacardNew)
     rename_procs(prepareDatacard, prepareDatacardNew, info_channel, info_brs, info_coupling, info_brs_remains, info_syst)
