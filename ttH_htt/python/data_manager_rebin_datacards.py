@@ -11,6 +11,15 @@ global testPrint
 def testPrint() :
     print ("loaded data_manager_rebin_datacards")
 
+global runCmd
+def runCmd(combinecmd, outfolder='.', saveout=None):
+    print ("Command: ", combinecmd)
+    try:
+        proc=subprocess.Popen(["cd %s ; %s" % (outfolder, combinecmd)],shell=True,stdout=subprocess.PIPE)
+        out = proc.stdout.read()
+    except OSError:
+        print ("command not known\n", combinecmd)
+
 global runCombineCmd
 def runCombineCmd(combinecmd, outfolder='.', saveout=None):
     print ("Command: ", combinecmd)
@@ -71,7 +80,7 @@ def rebinHistogram_binindex(histogram) :
   histogram_rebinned = TH1F(histogram.GetName(), histogram.GetName(),  numBins, 0.5, numBins + 0.5)
   if not histogram_rebinned.GetSumw2N() : histogram_rebinned.Sumw2()
   histogram_rebinned.Reset()
-  for idxBin in range(0, numBins+1) : # CV: include underflow and overflow bins                                                                                                                             
+  for idxBin in range(0, numBins+1) : # CV: include underflow and overflow bins
     binContent = histogram.GetBinContent(idxBin)
     print 'bincont=========== ', binContent, '\t', idxBin
     binError = histogram.GetBinError(idxBin)
@@ -93,7 +102,7 @@ def rebinRegular(
     nbin,
     BINtype,
     do_signalFlat,
-    originalBinning,
+    targetBinning,
     doplots,
     bdtType,
     outdir,
@@ -180,15 +189,16 @@ def rebinRegular(
                 loop_on = file.GetListOfKeys()
             print ("withFolder", withFolder)
             for keyO in loop_on :
-               print ("keys ", keyF.GetName(), keyO.GetName() )
+
                if not withFolder :
                    #print "got histogram"
                    obj = keyO.ReadObj()
-                   if type(obj) is not TH1F :
+                   if not (type(obj) is TH1F or type(obj) is TH1D ) :
                        continue
                    h2  = obj.Clone()
                    #print h2.GetName()
                else :
+                   print ("keys ", keyF.GetName(), keyO.GetName() )
                    print "got histogram"
                    obj = keyO.ReadObj()
                    if type(obj) is not TH1F :
@@ -227,26 +237,12 @@ def rebinRegular(
                        hSumAll.SetName("hSumAllBk1")
                    else :
                        hSumAll.Add(h2)
-               if (h2.GetName().find("hh") != -1 or h2.GetName().find('HH') != -1) and h2.GetName().find("CMS") ==-1:
-                    print 'signal=========', h2.GetName()
-                    if not hSumSignal.Integral()>0 :
-                        hSumSignal=h2.Clone()
-                        hSumSignal.Sumw2()
-                        hSumSignal.SetName("hSumSignal")
-                    else:
-                        hSumSignal.Add(h2)
             #################################################
-            hist_dict["HH"] = hSumSignal
             print ("Sum of BKG: ", hSumAll.Integral(), ", hFakes.Integral: ",hFakes.Integral())
             if BINtype=="quantiles" :
-                if do_signalFlat :
-                    if histSource.find('LBN') != -1:
-                        hist_tobeFlat = getHist_tobeFlat(hist_dict, histSource)
-                        print 'tobeflat============ ', hist_tobeFlat.GetName()
-                        nbinsQuant =  getQuantiles(hist_tobeFlat, nbins, xmax)
-                    else :
-                        nbinsQuant =  getQuantiles(hSumSignal, nbins, xmax)
-                else  :
+                if len(targetBinning) > 0 :
+                    nbinsQuant = targetBinning
+                else :
                     nbinsQuant =  getQuantiles(hSumAll, nbins, xmax)
             ## nbins+1 if first quantile is zero ## getQuantiles(hFakes,nbins,xmax) #
             #print ("Bins by quantiles ",nbins,nbinsQuant)
@@ -287,8 +283,6 @@ def rebinRegular(
                     contentNew =   histo.GetBinContent(newbin)
                     histo.SetBinContent(newbin, content+contentNew)
                     histo.SetBinError(newbin, sqrt(binError*binError+binErrorCopy*binErrorCopy))
-                if do_signalFlat :
-                    histo = rebinHistogram_binindex(histo)
                 if "fakes_data" in histo.GetName() and nkey == 0 :
                     ratio=1.
                     ratioP=1.
