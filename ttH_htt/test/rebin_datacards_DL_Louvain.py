@@ -31,7 +31,7 @@ WriteDatacards = True
 fixed_bin_boundaries = [
 #["HH_cat_DNN10_DY_VVVnode",          [0.0, 0.26, 0.30, 0.33, 0.36, 0.39, 0.42, 0.45, 0.49, 0.55, 1.0], 10],
 #["HH_cat_DNN10_TT_ST_TTVX_Rarenode", [0.0, 0.26, 0.29, 0.31, 0.32, 0.34, 0.36, 0.38, 0.41, 0.45, 1.0], 10],
-["HH_cat_boosted1b_DNN10_GGFnode",   [0.0, 0.4946, 1.0], 2],
+#["HH_cat_boosted1b_DNN10_GGFnode",   [0.0, 0.4946, 1.0], 2],
 #["HH_cat_boosted1b_DNN10_Hnode",     [0.0, 0.33, 0.37, 0.41, 0.48, 1.0], 5],
 #["HH_cat_boosted1b_DNN10_VBFnode",   [0.0, 0.6, 1.0], 2],
 #["HH_cat_resolved1b_DNN10_GGFnode",  [0.0, 0.28, 0.31, 0.33, 0.35, 0.37, 0.39, 0.40, 0.42, 0.44, 0.46, 0.47, 0.49, 0.51, 0.53, 0.55, 0.57, 0.59, 0.61, 0.65, 1.0], 20],
@@ -39,7 +39,7 @@ fixed_bin_boundaries = [
 #["HH_cat_resolved1b_DNN10_VBFnode",  [0.0, 0.42, 0.50, 0.58, 0.65, 0.72, 0.80, 1.0], 7],
 #["HH_cat_resolved2b_DNN10_GGFnode",  [0.0, 0.34, 0.39, 0.43, 0.47, 0.50, 0.53, 0.56, 0.60, 0.64, 1.0], 10],
 #["HH_cat_resolved2b_DNN10_Hnode",    [0.0, 0.30, 0.33, 0.37, 0.41, 1.0], 4],
-#["HH_cat_resolved2b_DNN10_VBFnode",  [0.0, 0.52, 0.64, 0.74, 1.0], 5]
+["HH_cat_resolved2b_DNN10_VBFnode",   [0.0, 0.40, 0.52, 0.64, 0.74, 1.0], 5]
 ]
 
 local_merged = "%s/merging/" % local
@@ -98,14 +98,14 @@ if rebin :
 
         withFolder = False
         partialCopy = False
-        do_signalFlat = False
+        doFlat = "none"
 
         print ( "rebining %s" % histSource )
         errOcont = rebinRegular(
             histSource,
             nbin,
             BINtype,
-            do_signalFlat,
+            doFlat,
             targetBinning,
             doplots,
             bdtType,
@@ -115,8 +115,6 @@ if rebin :
             partialCopy
             )
 
-
-
 if WriteDatacards :
     if not os.path.exists(local_datacards) :
         proc=subprocess.Popen(["mkdir %s" % local_datacards],shell=True,stdout=subprocess.PIPE)
@@ -125,22 +123,25 @@ if WriteDatacards :
     HHtype = "bbWW"
     mass = "nonresNLO"
     signal_type = "nonresNLO"
-    channel = "blabla"
+    channel = "bbWW_DL"
     for subcat in fixed_bin_boundaries :
         source = "%s/%s_%s_%s%s.root" % (local_quantiles, subcat[0], str(era), str(subcat[2]), nameOutFileAdd)
         print (source)
+        outfile = "%s/datacard_%s_%s_%s%s" % (local_datacards, subcat[0], str(era), str(subcat[2]), nameOutFileAdd)
 
         cmd = "WriteDatacards.py "
-        cmd += "--inputShapes %s.root " % (source)
+        cmd += "--inputShapes %s " % (source)
         cmd += "--channel %s " % channel
-        #cmd += "--output_file %s " % (outfile)
-        cmd += "--noX_prefix --era 2017  --no_data --analysis HH "
+        cmd += "--output_file %s " % (outfile)
+        cmd += "--noX_prefix --era 2017   --analysis HH " # --no_data
         cmd += " --signal_type %s "      % signal_type
         cmd += " --mass %s "             % mass
         cmd += " --HHtype %s "           % HHtype
         #cmd += " --shapeSyst"
         log_datacard = "%s_datacard.log" % source
         runCombineCmd(cmd, ".", log_datacard)
+
+        # /afs/cern.ch/work/a/acarvalh/CMSSW_8_1_0/src/job_mytask_2.sh
 
 
 
