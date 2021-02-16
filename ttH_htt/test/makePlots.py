@@ -207,13 +207,13 @@ conversions = "Convs"
 fakes       = "data_fakes"
 
 if HH :
-    info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH.py"
+    info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH_louvain.py"
     execfile(info_file)
     print ("list of HH signals by channel taken from: %s" % info_file)
     higgs_procs_to_draw = list_channels( fakes, signal_type, mass, HHtype, renamedHHInput )["higgs_procs_to_draw"]
     print("higgs_procs_to_draw ", higgs_procs_to_draw)
 
-info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/plot_options_HH.py"
+info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/plot_options_HH_louvain.py"
 execfile(info_file)
 print ("list of signals/bkgs by channel taken from: " +  info_file)
 procs  = list_channels_draw("ttH")[category]
@@ -297,9 +297,9 @@ if not options.original == "none" :
     if options.IHEP :
         histRead = "x_TTZ"
     elif HH :
-        histRead = "TTH"
+        histRead = "TT"
     else :
-        histRead = "TTW" #"ttH_htt"
+        histRead = "TT" #"ttH_htt"
     template = fileorriginal.Get(readFrom + histRead )
     template.GetYaxis().SetTitle(labelY)
     template.SetTitle(" ")
@@ -346,7 +346,7 @@ else :
 
 legend_y0 = 0.645
 legend1 = ROOT.TLegend(0.2400, legend_y0, 0.9450, 0.910)
-legend1.SetNColumns(3)
+legend1.SetNColumns(2)
 legend1.SetFillStyle(0)
 legend1.SetBorderSize(0)
 legend1.SetFillColor(10)
@@ -382,8 +382,10 @@ if options.unblind :
             options.fromHavester,
             lastbin,
             histtotal,
-            nbinscatlist[cc]
+            nbinscatlist[cc],
+            options.unblind
             )
+        # (template, dataTGraph1, folder, fin, fromHavester, lastbin, histtotal, catbin, unblind)
     dataTGraph1.Draw()
     legend1.AddEntry(dataTGraph1, "Data", "p")
 hist_total = template.Clone()
@@ -565,7 +567,8 @@ if HH :
         histHH.SetFillStyle(3315)
         #histHH.Scale(1.18)
         histogramsHH[hh] = histHH.Clone()
-        legend1.AddEntry(histogramsHH[hh], Hproc.replace("signal", "").replace("_", " ").replace("hh", "").replace("spin0", "").replace("ggf", "").replace("nonresonant", "").replace("kl", "").replace("1p00", "SM"), "f")
+        #legend1.AddEntry(histogramsHH[hh], Hproc.replace("signal", "").replace("_", " ").replace("hh", "").replace("spin0", "").replace("ggf", "").replace("nonresonant", "").replace("kl", "").replace("1p00", "SM"), "f")
+        legend1.AddEntry(histogramsHH[hh], Hproc.replace("ggHH_kl_1_kt_1_", "ggHH SM").replace("qqHH_CV_1_C2V_1_kl_1_" , "VBF HH SM").replace("qqHH_CV_1_C2V_2_kl_1_" , "VBF HH (c2V=2)").replace("hbbhww2l", " bbWW DL").replace("hbbhww1l", " bbWW SL").replace("hbbhtt", " bbtt"), "f")
         print(Hproc.replace("signal", "").replace("_", ""), histHH.Integral())
 
 for line1 in linebin :
@@ -664,7 +667,8 @@ if do_bottom :
                 options.fromHavester,
                 hist_total,
                 readFrom,
-                fin[0])
+                fin[0],
+                options.unblind)
         dumb = dataTGraph2.Draw("e1P,same")
         del dumb
     line = ROOT.TF1("line", "0", hist_total_err.GetXaxis().GetXmin(), hist_total_err.GetXaxis().GetXmax())

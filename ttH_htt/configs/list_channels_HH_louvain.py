@@ -7,7 +7,16 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
     #sigs = ["ttH", "tHq", "tHW", "WH", "ZH", "ggH", "qqH" ]
     #decays = ["_hww", "_hzz", "_htt", "_hzg", "_hmm" ]
     sigs = []
-    hproc_louvain = ["ggH_hbb", "ggH_hgg", "ggH_hmm", "ggH_htt", "ggH_hww", "ggH_hzz", "qqH_hbb", "qqH_hgg", "qqH_hmm", "qqH_htt", "qqH_hww", "qqH_hzz", "ttH_hbb", "ttH_hww", "WH_hbb", "ZH_hbb", "ZH_htt", "ZH_hww", "tHq_hww", "tHW_hww", "VH_hww", ]
+    hproc_louvain = [
+        "ggH_hbb", "ggH_hgg", "ggH_hmm", "ggH_htt", "ggH_hww", "ggH_hzz",
+        "qqH_hbb", "qqH_hgg", "qqH_hmm", "qqH_htt", "qqH_hww", "qqH_hzz",
+        "ttH_hbb", "ttH_hgg", "ttH_hmm", "ttH_htt", "ttH_hww", "ttH_hzz",
+        "WH_hbb",  "WH_hgg",   "WH_hmm", "WH_htt",  "WH_hww",  "WH_hzz",
+        "ZH_hbb",   "ZH_hgg", "ZH_hmm", "ZH_htt", "ZH_hww", "ZH_hzz",
+        "tHq_hbb", "tHq_hgg", "tHq_hmm", "tHq_htt", "tHq_hww", "tHq_hzz",
+        "tHW_hbb", "tHW_hgg", "tHW_hmm", "tHW_htt", "tHW_hww", "tHW_hzz",
+        "VH_hbb", "VH_hgg", "VH_hmm", "VH_htt", "VH_hww", "VH_hzz",
+        ]
     # FIXME ---> to be used when the cards are done with Higs processes in Physics model
     # naming convention and separating by branching ratio
     # by now it will look for them (eg ttH_hww) in the prepareDatacards and not find
@@ -47,22 +56,12 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         sigs = [ listSig ]
     elif signal_type == "nonresNLO" :
         listSig = []
-        #for decay_hh in decays_hh :
-        #    #for massType in couplings_GF_NLO :
-        #    #    #listSig = listSig + [ "%s_%s_hh_%s" % (prefix_GF, massType , decay_hh) ]
-        #    #for massType in couplings_VBF :
-        #    #    listSig = listSig + [ "%s_%s_hh_%s" % (prefix_VBF, massType, decay_hh) ]
-        #listSig = listSig + ["ggHH_kl_1_kt_1_2B2VTo2L2Nu", "ggHH_kl_0_kt_1_2B2VTo2L2Nu", "ggHH_kl_5_kt_1_2B2VTo2L2Nu"]
-        #listSig = listSig + ["qqHH_CV_1_C2V_1_kl_1", "qqHH_CV_1_C2V_1_kl_0", "qqHH_CV_1_C2V_1_kl_2", "qqHH_CV_1_C2V_2_kl_1", "qqHH_CV_0p5_C2V_1_kl_1", "qqHH_CV_1p5_C2V_1_kl_1"] # "qqHH_CV_1_C2V_0_kl_1",
-        #listSig = listSig + ["SM"]
         listSig = listSig + ["qqHH_CV_0p5_C2V_1_kl_1_hbbhtt", "qqHH_CV_1p5_C2V_1_kl_1_hbbhtt", "qqHH_CV_1_C2V_1_kl_0_hbbhtt", "qqHH_CV_1_C2V_1_kl_1_hbbhtt", "qqHH_CV_1_C2V_1_kl_2_hbbhtt", "qqHH_CV_1_C2V_2_kl_1_hbbhtt", "qqHH_CV_1_C2V_0_kl_1_hbbhtt",]
-        #
-        listSig = listSig + ["qqHH_CV_0p5_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1p5_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_0_hbbhww2l", "qqHH_CV_1_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_2_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l",]
-        ##listSig = listSig + ["qqHH_CV_0p5_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1p5_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1_C2V_1_kl_0_hbbhww1l", "qqHH_CV_1_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1_C2V_1_kl_2_hbbhww1l", "qqHH_CV_1_C2V_2_kl_1_hbbhww1l", ]
-        # "qqHH_CV_1_C2V_0_kl_1_hbbhww2l",
+        listSig = listSig + ["qqHH_CV_0p5_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1p5_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_0_hbbhww2l", "qqHH_CV_1_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_2_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_0_kl_1_hbbhww2l",]
+        listSig = listSig + ["qqHH_CV_0p5_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1p5_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1_C2V_1_kl_0_hbbhww1l", "qqHH_CV_1_C2V_1_kl_1_hbbhww1l", "qqHH_CV_1_C2V_1_kl_2_hbbhww1l", "qqHH_CV_1_C2V_2_kl_1_hbbhww1l", "qqHH_CV_1_C2V_0_kl_1_hbbhww1l" ]
         listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhtt",  "ggHH_kl_1_kt_1_hbbhtt", "ggHH_kl_5_kt_1_hbbhtt", "ggHH_kl_0_kt_1_hbbhtt",]
         listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhww2l", "ggHH_kl_1_kt_1_hbbhww2l", "ggHH_kl_5_kt_1_hbbhww2l", "ggHH_kl_0_kt_1_hbbhww2l",]
-        ##listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhww1l", "ggHH_kl_1_kt_1_hbbhww1l", "ggHH_kl_5_kt_1_hbbhww1l", ]
+        listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhww1l", "ggHH_kl_1_kt_1_hbbhww1l", "ggHH_kl_5_kt_1_hbbhww1l", ]
         # "ggHH_kl_0_kt_1_hbbhww2l",
         #listSig = listSig + [ "ggHH_kl_1_kt_1_hbbhtt", "ggHH_kl_1_kt_1_hbbhww1l" ]
 

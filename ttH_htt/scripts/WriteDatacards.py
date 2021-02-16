@@ -91,7 +91,7 @@ if analysis == "ttH" :
     syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst.py"
     execfile(syst_file)
 elif analysis == "HH" :
-    info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH.py"
+    info_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_channels_HH_louvain.py"
     execfile(info_file)
     print ("list of signals/bkgs by channel taken from: %s" % info_file)
     syst_file = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/configs/list_syst_HH.py"
@@ -367,7 +367,7 @@ for specific_syst in theory_ln_Syst :
     if "HH" in procs[0] and analysis == "HH":
         procs_hh = []
         for pr in higgs_procs_plain:
-            if procs[0] in pr: 
+            if procs[0] in pr:
                 procs_hh.append(pr)
         procs = procs + procs_hh
     elif "H" in procs[0] and analysis == "HH":
@@ -381,7 +381,7 @@ for specific_syst in theory_ln_Syst :
             singlehiggs_procs_w_BR.append(proc+"_hbb")
             singlehiggs_procs_w_BR.append(proc+"_hgg")
         for pr in singlehiggs_procs_w_BR:
-            if procs[0] in pr: 
+            if procs[0] in pr:
                 procs_H.append(pr)
         procs = procs + procs_H
     else :
@@ -481,7 +481,7 @@ if shape :
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH" ):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst):
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :
@@ -584,7 +584,7 @@ if shape :
         if ("HH" in specific_shape_systs[specific_syst]["proc"][0] and analysis == "HH"):
             procs = []
             for pr in higgs_procs_plain:
-                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst): 
+                if specific_shape_systs[specific_syst]["proc"][0] in pr or ("spin" in pr and "thu_shape_HH" not in specific_syst):
                     procs.append(pr)
         # that above take the overlap of the lists
         if len(procs) == 0 :

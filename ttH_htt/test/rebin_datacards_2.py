@@ -12,7 +12,7 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from subprocess import Popen, PIPE
-# ./rebin_datacards.py --channel "4l_0tau"  --BINtype "regular" --doLimits
+# python test/rebin_datacards_2.py --channel "bbWW_SL" --BINtype quantiles --signal_type nonresNLO --HHtype bbWW --era 2016
 from io import open
 
 functions = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/python/data_manager_rebin_datacards.py"
@@ -34,12 +34,12 @@ parser.add_option("--doLimitsOnly", action="store_true", dest="doLimitsOnly", he
 parser.add_option(
     "--signal_type",    type="string",       dest="signal_type",
     help="Options: \"noresLO\" | \"nonresNLO\" | \"res\" ",
-    default="res" #"noresLO"
+    default="nonresNLO"
     )
 parser.add_option(
     "--mass",           type="string",       dest="mass",
     help="Options: \n nonresNLO = it will be ignored \n noresLO = \"SM\", \"BM12\", \"kl_1p00\"... \n \"spin0_900\", ...",
-    default="X900GeV" #"kl_1p00"
+    default="nonresNLO"
     )
 parser.add_option(
     "--HHtype",         type="string",       dest="HHtype",
@@ -65,11 +65,8 @@ HHtype       = options.HHtype
 era          = options.era
 
 ## HH
-if channel == "2l_0tau"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt//cards/info_2l_0tau_datacards.py")
-if channel == "1l_0tau"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt//cards/info_1l_0tau_datacards.py")
-
 if channel == "bbWW_DL"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_DL_datacards.py")
-if channel == "bbWW_SL"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_1l_0tau_louvain_datacards.py")
+if channel == "bbWW_SL"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_SL_datacards.py")
 
 
 info = read_from()
@@ -98,8 +95,6 @@ print (info["bdtTypes"])
 
 counter=0
 for ii, bdtType in enumerate(info["bdtTypes"]) :
-    #fileName = info["mom"] + "/prepareDatacards_" + info["ch_nickname"] + "_" + bdtType + ".root"
-    #source=local+"/prepareDatacards_" + info["ch_nickname"] + "_" + bdtType
     fileName = info["mom"] + "/" + bdtType + ".root"
     source=local+"/" + bdtType
     print (fileName)
@@ -108,7 +103,7 @@ for ii, bdtType in enumerate(info["bdtTypes"]) :
         out = proc.stdout.read()
         sources           = sources + [source]
         bdtTypesToDo      = bdtTypesToDo +[channel+" "+bdtType]
-        bdtTypesToDoLabel = bdtTypesToDoLabel + [channel+" "+bdtType]
+        bdtTypesToDoLabel = bdtTypesToDoLabel + [bdtType]
         bdtTypesToDoFile  = bdtTypesToDoFile+[bdtType]
         ++counter
         print ("rebinning ", sources[counter])
@@ -120,7 +115,7 @@ if BINtype == "regular" or BINtype == "ranged" :
 if BINtype == "quantiles" :
     binstoDo = info["nbinQuant"]
 if BINtype == "none" :
-    binstoDo=np.arange(1, info["originalBinning"])
+    binstoDo=np.arange(1, info["targetBinning"])
 print binstoDo
 
 ### first we do one datacard.txt / bdtType
@@ -134,8 +129,7 @@ for nn, source in enumerate(sources) :
     cmd += "--inputShapes %s.root " % (source)
     cmd += "--channel %s " % channel
     cmd += "--output_file %s " % (outfile)
-    cmd += "--noX_prefix --era 2017  --no_data --analysis HH " # --only_ttH_sig --only_BKG_sig --only_tHq_sig --fake_mc
-    ## TODO add only_HH_sig in WriteDatacards
+    cmd += "--noX_prefix --era 2017  --analysis HH " # --no_data
     cmd += " --signal_type %s "      % signal_type
     cmd += " --mass %s "             % mass
     cmd += " --HHtype %s "           % HHtype
@@ -167,6 +161,7 @@ if BINtype=="quantiles" :
     nameOutFileAdd = "bins_quantiles"
 
 colorsToDo=['r','g','b','m','y','c', 'fuchsia', "peachpuff",'k','orange','y','c'] #['r','g','b','m','y','c','k']
+do_signalFlat = False
 #########################################
 if not (drawLimitsOnly or doLimitsOnly) :
     ## make rebinned datacards
@@ -183,12 +178,23 @@ if not (drawLimitsOnly or doLimitsOnly) :
     isBKG = False
 
     for nn, sourceL in enumerate(sourcesCards) :
+        if "VBFnode" in sourceL :
+            doFlat = "VBFnode"
+        elif "GGFnode" in sourceL :
+            doFlat = "GGFnode"
+        elif "Hnode" in sourceL :
+            doFlat = "Hnode"
+        else :
+            doFlat = "BKGnode"
+        print("doFlat = %s" % doFlat)
+
         print ( "rebining %s" % sourceL )
         errOcont = rebinRegular(
             sourceL,
             binstoDo,
             BINtype,
-            info["originalBinning"],
+            doFlat,
+            info["targetBinning"],
             doPlots,
             bdtTypesToDo[nn],
             mom_datacards,
@@ -196,8 +202,7 @@ if not (drawLimitsOnly or doLimitsOnly) :
             info["withFolder"],
             isBKG
             )
-        #if max(errOcont[2]) > maxplot :
-        #    maxplot = max(errOcont[2])
+
         print bdtTypesToDo[nn]
         lastQuant=lastQuant+[errOcont[4]]
         xmaxQuant=xmaxQuant+[errOcont[5]]
@@ -224,33 +229,6 @@ if not (drawLimitsOnly or doLimitsOnly) :
     print ("saved",namefig)
     print (bin_isMoreThan02)
     #########################################
-    ## plot quantiles boundaries
-    if BINtype == "quantiles" :
-        ncolor = 0
-        fig, ax = plt.subplots(figsize=(5, 5))
-        plt.title(BINtype+" binning "+options.variables)
-        linestyletype = "-"
-        for nn,source in enumerate(sources) :
-            print (len(binstoDo),len(lastQuant[nn-1]))
-            plt.plot(binstoDo,lastQuant[nn], color=colorsToDo[ncolor],linestyle=linestyletype)
-            plt.plot(binstoDo,lastQuant[nn], color=colorsToDo[ncolor],linestyle=linestyletype,marker='o') # ,label=bdtTypesToDo[nn]
-            plt.plot(binstoDo,xmaxQuant[nn], color=colorsToDo[ncolor],linestyle=linestyletype,marker='x')
-            plt.plot(binstoDo,xminQuant[nn], color=colorsToDo[ncolor],linestyle=linestyletype,marker='.')
-            ncolor = ncolor + 1
-            if ncolor == 10 or ncolor == 20:
-                ncolor = 0
-                if ncolor == 10 : linestyletype = "--"
-                if ncolor == 20 : linestyletype = ":"
-        ax.set_xlabel('nbins')
-        ax.set_ylabel('err/content last bin')
-        plt.axis((min(binstoDo),max(binstoDo),0,1.0))
-        line_up, = plt.plot(binstoDo, 'o-', color='k',label="last bin low")
-        line_down, = ax.plot(binstoDo, 'x--', color='k',label="Max")
-        line_d, = ax.plot(binstoDo, '.--', color='k',label="Min")
-        legend1 = plt.legend(handles=[line_up, line_down, line_d], loc='best', fontsize=8)
-        ax.set_ylabel('boundary')
-        plt.grid(True)
-        fig.savefig(local+'/'+options.variables+'_fullsim_boundaries_quantiles.pdf')
 
 if not drawLimitsOnly :
     ## doint Limits
@@ -301,7 +279,7 @@ if not drawLimitsOnly :
                 runCombineCmd(cmd)
 
                 plainBins = False
-                cmd = "python test/makePlots.py "
+                cmd = "python test/makePlots_louvain.py "
                 cmd += " --input  %s" % fileShapes
                 cmd += " --odir %s" % savePlotsOn
                 #if doPostFit         :
@@ -315,10 +293,12 @@ if not drawLimitsOnly :
                 cmd += " --HH --binToRead HH_%s --binToReadOriginal  HH_%s " % (channel, channel)
                 #cmd += "--nameLabel %s --labelX %s" % (toRead.replace(filebegin, ""), toRead.replace(filebegin, ""))
                 #if not blinded         :
-                #cmd += " --unblind  "
                 cmd += " --signal_type %s "      % signal_type
                 cmd += " --mass %s "             % mass
                 cmd += " --HHtype %s "           % HHtype
+                #cmd += " --do_bottom "
+                #cmd += " --unblind  "
+                cmd += " --nameLabel %s " % bdtTypesToDoLabel[nn]
                 plotlog = "%s/%s_plot.log" % (savePlotsOn, fileCardOnlynBinL)
                 runCombineCmd(cmd, '.', plotlog)
 
