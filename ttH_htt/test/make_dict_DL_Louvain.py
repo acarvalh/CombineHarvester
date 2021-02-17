@@ -28,6 +28,13 @@ parser.add_argument(
     dest="output_dict",
     help="Full path for output Dictionary",
     )
+parser.add_argument(
+    "--unblind_bkg",
+    action="store_true",
+    dest="unblind_bkg",
+    help="dictionary only with bkg nodes -- to unblind",
+    default=False
+    )
 args = parser.parse_args()
 
 
@@ -63,9 +70,9 @@ list_SL_cards = [
     ],
     [
         "Hnode",
-        [ "resolved1b_Hnode", "resolved2b_Hnode", "boosted1b_Hnode",],
-        "[[\"res 1b\"], [\"res 2b\"], [\"boosted\"], ]",
-        "[1, 5, 10]",
+        [ "boosted1b_Hnode", "resolved1b_Hnode", "resolved2b_Hnode",],
+        "[[\"boosted\"], [\"res 1b\"], [\"res 2b\"],  ]",
+        "[1, 6, 11]",
         "single H node"
     ],
 ]
@@ -81,14 +88,17 @@ for node in ["Hnode", "GGFnode", "VBFnode"] :
     else :
         print ("file %s already exists" % local_merged )
 
-dictionary = args.output_dict #"%s/dict_SL.dat" % fitdiagDL
+dictionary = args.output_dict
+unblind_bkg = args.unblind_bkg
+
 ff = open(dictionary, "w")
 ff.write(unicode('{\n'))
 
 for tt, teste_class in enumerate(list_SL_cards) :
     for ee, era in enumerate([2016, 2017, 2018]) :
-        #if teste_class[0] in ["Hnode", "GGFnode", "VBFnode"] :
-        #    continue
+        if unblind_bkg :
+            if teste_class[0] in ["Hnode", "GGFnode", "VBFnode"] :
+                continue
         if not era == 2018 :
             continue
         print(teste_class[0])
