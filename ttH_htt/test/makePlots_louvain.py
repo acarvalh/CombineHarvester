@@ -237,7 +237,8 @@ print (options_plot_ranges("ttH")[typeCat])
 list_cats = options_plot_ranges("ttH")[typeCat]["list_cats"]
 
 if not options.nameLabel == "none" :
-    label_head += options.nameLabel
+    #label_head += options.nameLabel
+    label_head = options.nameLabel
 
 if typeFit == "prefit" :
     label_head = label_head+", \n"+typeFit
@@ -574,9 +575,9 @@ if HH :
         #histHH.Scale(1.18)
         histogramsHH[hh] = histHH.Clone()
         #legend1.AddEntry(histogramsHH[hh], Hproc.replace("signal", "").replace("_", " ").replace("hh", "").replace("spin0", "").replace("ggf", "").replace("nonresonant", "").replace("1p00", "SM").replace("2B2VTo2L2Nu", "DL").replace("ggHH",""), "f") # .replace("kl", "")
-        legend1.AddEntry(histogramsHH[hh], Hproc.replace("ggHH_kl_1_kt_1_", "ggHH SM").replace("qqHH_CV_1_C2V_1_kl_1_" , "VBF HH SM").replace("qqHH_CV_1_C2V_2_kl_1_" , "VBF HH (c2V=2)").replace("hbbhww2l", " bbWW DL").replace("hbbhww1l", " bbWW SL").replace("hbbhtt", " bbtt"), "f") # .replace("kl", "")
+        legend1.AddEntry(histogramsHH[hh], Hproc.replace("ggHH_kl_1_kt_1_", "ggHH SM").replace("qqHH_CV_1_C2V_1_kl_1_" , "VBF HH SM").replace("qqHH_CV_1_C2V_2_kl_1_" , "VBF HH (c2V=2)").replace("hbbhww2l", " bbWW DL").replace("hbbhww1l", " bbWW SL").replace("hbbhttsl", " bbtt").replace("hbbhwwdl", " bbWW DL").replace("hbbhwwsl", " bbWW SL").replace("hbbhtt", " bbtt"), "f") # .replace("kl", "")
         print(Hproc.replace("signal", "").replace("_", ""), histHH.Integral())
-
+        
 for line1 in linebin :
     line1.SetLineColor(1)
     line1.SetLineStyle(3)

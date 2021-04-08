@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from subprocess import Popen, PIPE
 from io import open
 
+"""
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 parser = ArgumentParser(
     description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter
@@ -24,8 +25,8 @@ parser.add_argument(
     help="Folder that contains the datacard.txt/root.",
     )
 args = parser.parse_args()
-
-mom_datacards = args.cards_folder
+"""
+mom_datacards = "/afs/cern.ch/work/a/acarvalh/public/to_HH_bbWW/datacards_louvain_Jan2020/cards_08March_DNN10_2018_allsysts/" # args.cards_folder
 
 def runCombineCmd(combinecmd, outfolder='.', saveout=None):
     print ("Command: ", combinecmd)
@@ -34,7 +35,7 @@ def runCombineCmd(combinecmd, outfolder='.', saveout=None):
         out = proc.stdout.read()
     except OSError:
         print ("command not known\n", combinecmd)
-
+"""
 list_DL_cards = [
     ["DY_VVVnode_2018",          "datacard_HH_cat_DNN10_DY_VVVnode_2018_10_bins_quantiles"],
     ["TT_ST_TTVX_Rarenode_2018", "datacard_HH_cat_DNN10_TT_ST_TTVX_Rarenode_2018_10_bins_quantiles"],
@@ -48,6 +49,22 @@ list_DL_cards = [
     ["resolved2b_Hnode_2018",    "datacard_HH_cat_resolved2b_DNN10_Hnode_2018_4_bins_quantiles"],
     ["resolved2b_VBFnode_2018",  "datacard_HH_cat_resolved2b_DNN10_VBFnode_2018_5_bins_quantiles"],
 ]
+"""
+
+list_DL_cards = [
+    ["DY_VVVnode_2018",          "outputcard_DNN10_DY_VVV_bbWW_nonres_none"],
+    ["TT_ST_TTVX_Rarenode_2018", "outputcard_DNN10_TT_ST_TTVX_Rare_bbWW_nonres_none"],
+    ["boosted1b_GGFnode_2018",   "outputcard_boosted1b_DNN10_GGF_bbWW_nonres_none"],
+    ["boosted1b_Hnode_2018",     "outputcard_boosted1b_DNN10_Hnode_bbWW_nonres_none"],
+    ["boosted1b_VBFnode_2018",   "outputcard_boosted1b_DNN10_VBF_bbWW_nonres_none"],
+    ["resolved1b_GGFnode_2018",  "outputcard_resolved1b_DNN10_GGF_bbWW_nonres_none"],
+    ["resolved1b_Hnode_2018",    "outputcard_resolved1b_DNN10_Hnode_bbWW_nonres_none"],
+    ["resolved1b_VBFnode_2018",  "outputcard_resolved1b_DNN10_VBF_bbWW_nonres_none"],
+    ["resolved2b_GGFnode_2018",  "outputcard_resolved2b_DNN10_GGF_bbWW_nonres_none"],
+    ["resolved2b_Hnode_2018",    "outputcard_resolved2b_DNN10_Hnode_bbWW_nonres_none"],
+    ["resolved2b_VBFnode_2018",  "outputcard_resolved2b_DNN10_VBF_bbWW_nonres_none"],
+]
+
 
 for cards in list_DL_cards :
     FolderOut = "%s/fitdiag_test/" % mom_datacards

@@ -12,7 +12,8 @@ import matplotlib
 matplotlib.use('agg')
 import matplotlib.pyplot as plt
 from subprocess import Popen, PIPE
-# python test/rebin_datacards_2.py --channel "bbWW_SL" --BINtype quantiles --signal_type nonresNLO --HHtype bbWW --era 2016
+# python test/rebin_datacards_2.py --channel "bbWW_SL" --BINtype quantiles --signal_type nonresNLO --HHtype bbWW --era 2018
+# python test/rebin_datacards_2.py --channel "bbWW_DL_aa" --BINtype quantiles --signal_type nonresNLO --HHtype bbWW --era 2018 --drawLimitsOnly
 from io import open
 
 functions = os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/python/data_manager_rebin_datacards.py"
@@ -67,6 +68,8 @@ era          = options.era
 ## HH
 if channel == "bbWW_DL"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_DL_datacards.py")
 if channel == "bbWW_SL"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_SL_datacards.py")
+if channel == "bbWW_SL_aa"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_SL_Aachen_datacards.py")
+if channel == "bbWW_DL_aa"   : execfile(os.environ["CMSSW_BASE"] + "/src/CombineHarvester/ttH_htt/cards/info_bbWW_DL_Aachen_datacards.py")
 
 
 info = read_from()
@@ -178,11 +181,11 @@ if not (drawLimitsOnly or doLimitsOnly) :
     isBKG = False
 
     for nn, sourceL in enumerate(sourcesCards) :
-        if "VBFnode" in sourceL :
+        if "VBFnode" in sourceL or "HHVBF" in sourceL :
             doFlat = "VBFnode"
-        elif "GGFnode" in sourceL :
+        elif "GGFnode" in sourceL or "HHGluGlu" in sourceL :
             doFlat = "GGFnode"
-        elif "Hnode" in sourceL :
+        elif "Hnode" in sourceL or "node_H" in sourceL :
             doFlat = "Hnode"
         else :
             doFlat = "BKGnode"

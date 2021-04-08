@@ -8,7 +8,17 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
     dprocs = OrderedDict()
     Hdecays_long = [ "hww", "hzz", "htt",] #  "hzg", "hmm"
     Hdecays      = ["hww", "htt" , "hzz"]
-    hproc_louvain = ["ggH_hbb", "ggH_hgg", "ggH_hmm", "ggH_htt", "ggH_hww", "ggH_hzz", "qqH_hbb", "qqH_hgg", "qqH_hmm", "qqH_htt", "qqH_hww", "qqH_hzz", "ttH_hbb", "WH_hbb", "ZH_hbb", "ZH_htt", "ZH_hww", "tHq_hww", "tHW_hww", "VH_hww", ] # "ttH_hww"
+    hproc_louvain = [
+    "ggH_hbb", "ggH_hgg", "ggH_hmm", "ggH_htt", "ggH_hww", "ggH_hzz",
+    "qqH_hbb", "qqH_hgg", "qqH_hmm", "qqH_htt", "qqH_hww", "qqH_hzz",
+    "ttH_hbb", "ttH_hgg", "ttH_hmm", "ttH_htt", "ttH_hww", "ttH_hzz",
+    "WH_hbb",  "WH_hgg",   "WH_hmm", "WH_htt",  "WH_hww",  "WH_hzz",
+    "ZH_hbb",   "ZH_hgg", "ZH_hmm", "ZH_htt", "ZH_hww", "ZH_hzz",
+    "tHq_hbb", "tHq_hgg", "tHq_hmm", "tHq_htt", "tHq_hww", "tHq_hzz",
+    "tHW_hbb", "tHW_hgg", "tHW_hmm", "tHW_htt", "tHW_hww", "tHW_hzz",
+    "VH_hbb", "VH_hgg", "VH_hmm", "VH_htt", "VH_hww", "VH_hzz",
+    "ttVH"
+     ] # "ttH_hww"
     other_H_proc = 0
     ## the order of the entries will be the order of the drawing, that is why this is almost manual
     # TODO: write it on a smarther way
@@ -52,8 +62,18 @@ def options_plot (analysis, channel, all_procs, leading_minor_H_local, leading_m
         if "ttH_hww" in all_procs : dprocs["ttH_hww"]         = {"color" : 226, "fillStype" : 1001, "label" : "single H"           , "make border" : True}
         if "WJets" in all_procs     : dprocs["WJets"]           = {"color" : 822, "fillStype" : 1001, "label" :  "Wjets"    , "make border" : True}
         if "Other_bbWW" in all_procs     : dprocs["Other_bbWW"]           = {"color" : 205, "fillStype" : 1001, "label" :  "other"    , "make border" : True}
-        if "VV" in all_procs     : dprocs["VV"]           = {"color" : 46, "fillStype" : 1001, "label" :  "VV"    , "make border" : True}
-        if "VVV" in all_procs : dprocs["VVV"]                                 = {"color" : 208, "fillStype" : 1001, "label" : "VVV"        , "make border" : True}
+
+        if "VV" in all_procs     : dprocs["VV"]           = {"color" : 208, "fillStype" : 1001, "label" :  "none"    , "make border" : False}
+        if "VVV" in all_procs : dprocs["VVV"]                                 = {"color" : 208, "fillStype" : 1001, "label" : "VVV + VV"        , "make border" : True}
+
+        if "VV" in all_procs     : dprocs["VV"]           = {"color" : 208, "fillStype" : 1001, "label" :  "none"    , "make border" : False}
+        if "vvv" in all_procs : dprocs["vvv"]                                 = {"color" : 208, "fillStype" : 1001, "label" : "VVV+VV"        , "make border" : True}
+
+        if "ttZ" in all_procs : dprocs["ttZ"]                                 = {"color" : 9, "fillStype" : 1001, "label" : "none"        , "make border" : False}
+        if "ttW" in all_procs : dprocs["ttW"]                                 = {"color" : 9, "fillStype" : 1001, "label" : "none"        , "make border" : False}
+        if "ttVV" in all_procs : dprocs["ttVV"]                                 = {"color" : 9, "fillStype" : 1001, "label" : "ttW + ttZ + ttVV"        , "make border" : True}
+
+        #"vvv", "ttZ", "ttW", "ttVV",
         if "Fakes" in all_procs       : dprocs["Fakes"]       = {"color" :  12, "fillStype" : 3345, "label" : "Fakes"  , "make border" : True}
         if "ST" in all_procs     : dprocs["ST"]           = {"color" : 610, "fillStype" : 1001, "label" :  "ST"    , "make border" : True}
         if "DY" in all_procs     : dprocs["DY"]                                  = {"color" : 221, "fillStype" : 1001, "label" : "DY"         , "make border" : True}
@@ -155,6 +175,30 @@ def options_plot_ranges (analysis) :
                 "catsX" :  [0.0]
             },
             "bbWW_SL" : {
+                "minY" : 0.01,    "maxY" :  2200000000.,
+                "minYerr": -1.02, "maxYerr" : 1.02,
+                "useLogPlot" : True,
+                "label" : 'HH bbWW 1l ', # (HH SM normalized to 1pb)
+                "labelX" : "BDT bin#",
+                "position_cats": 300. ,
+                "list_cats" : [],
+                "list_cats_original" : [],
+                "cats" : [""],
+                "catsX" :  [0.0]
+            },
+            "bbWW_SL_aa" : {
+                "minY" : 0.01,    "maxY" :  2200000000.,
+                "minYerr": -1.02, "maxYerr" : 1.02,
+                "useLogPlot" : True,
+                "label" : 'HH bbWW 1l ', # (HH SM normalized to 1pb)
+                "labelX" : "BDT bin#",
+                "position_cats": 300. ,
+                "list_cats" : [],
+                "list_cats_original" : [],
+                "cats" : [""],
+                "catsX" :  [0.0]
+            },
+            "bbWW_DL_aa" : {
                 "minY" : 0.01,    "maxY" :  2200000000.,
                 "minYerr": -1.02, "maxYerr" : 1.02,
                 "useLogPlot" : True,
@@ -281,6 +325,20 @@ def list_channels_draw(analysis) :
         "bkg_procs_from_MC"  : ["TT", "ST", "DY", "WJets", "VV", "VVV", "Other_bbWW"] + hproc_louvain,
         "signal_HH" : ["ggHH_kl_1_kt_1_hbbhww1l"], #
         "leading_minor_H" : "TH", ## The legend for the mino H proc will only appear if this process is in the card
+        "leading_minor_tH" : "tHq_htt" ## The legend for the mino H proc will only appear if this process is in the card
+        },
+    "bbWW_SL_aa"   : {
+        "bkg_proc_from_data" : ["Fakes"       ],
+        "bkg_procs_from_MC"  : ["WJets", "DY", "ST", "TT", "VV", "vvv", "ttZ", "ttW", "ttVV", "Other_bbWW"] + hproc_louvain,
+        "signal_HH" : ["ggHH_kl_1_kt_1_hbbhwwsl"], #
+        "leading_minor_H" : "ttH_hbb", ## The legend for the mino H proc will only appear if this process is in the card
+        "leading_minor_tH" : "tHq_htt" ## The legend for the mino H proc will only appear if this process is in the card
+        },
+    "bbWW_DL_aa"   : {
+        "bkg_proc_from_data" : ["Fakes"       ],
+        "bkg_procs_from_MC"  : ["WJets", "DY", "ST", "TT", "VV", "vvv", "ttZ", "ttW", "ttVV", "Other_bbWW"] + hproc_louvain,
+        "signal_HH" : ["ggHH_kl_1_kt_1_hbbhwwsl"], #
+        "leading_minor_H" : "ttH_hbb", ## The legend for the mino H proc will only appear if this process is in the card
         "leading_minor_tH" : "tHq_htt" ## The legend for the mino H proc will only appear if this process is in the card
         },
     "bbWW_DL_BKG"   : {

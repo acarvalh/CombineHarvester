@@ -16,6 +16,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         "tHq_hbb", "tHq_hgg", "tHq_hmm", "tHq_htt", "tHq_hww", "tHq_hzz",
         "tHW_hbb", "tHW_hgg", "tHW_hmm", "tHW_htt", "tHW_hww", "tHW_hzz",
         "VH_hbb", "VH_hgg", "VH_hmm", "VH_htt", "VH_hww", "VH_hzz",
+        "ttVH"
         ]
     # FIXME ---> to be used when the cards are done with Higs processes in Physics model
     # naming convention and separating by branching ratio
@@ -62,8 +63,26 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhtt",  "ggHH_kl_1_kt_1_hbbhtt", "ggHH_kl_5_kt_1_hbbhtt", "ggHH_kl_0_kt_1_hbbhtt",]
         listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhww2l", "ggHH_kl_1_kt_1_hbbhww2l", "ggHH_kl_5_kt_1_hbbhww2l", "ggHH_kl_0_kt_1_hbbhww2l",]
         listSig = listSig + ["ggHH_kl_2p45_kt_1_hbbhww1l", "ggHH_kl_1_kt_1_hbbhww1l", "ggHH_kl_5_kt_1_hbbhww1l", ]
+
+        #listSig = listSig + ["qqHH_CV_1_C2V_1_kl_0_hbbhwwsl", "qqHH_CV_1_C2V_1_kl_1_hbbhwwsl", "qqHH_CV_1_C2V_1_kl_2_hbbhwwsl", "qqHH_CV_1_C2V_2_kl_1_hbbhwwsl", "qqHH_CV_1p5_C2V_1_kl_1_hbbhwwsl", "qqHH_CV_0p5_C2V_1_kl_1_hbbhwwsl", "qqHH_CV_1_C2V_0_kl_1_hbbhwwsl",]
+        #listSig = listSig + ["qqHH_CV_1_C2V_1_kl_0_hbbhwwdl", "qqHH_CV_1_C2V_1_kl_1_hbbhwwdl", "qqHH_CV_1_C2V_1_kl_2_hbbhwwdl", "qqHH_CV_1_C2V_2_kl_1_hbbhwwdl", "qqHH_CV_1p5_C2V_1_kl_1_hbbhwwdl", "qqHH_CV_0p5_C2V_1_kl_1_hbbhwwdl", "qqHH_CV_1_C2V_0_kl_1_hbbhwwdl",]
+        #listSig = listSig + ["qqHH_CV_1_C2V_1_kl_0_hbbhttsl", "qqHH_CV_1_C2V_1_kl_1_hbbhttsl", "qqHH_CV_1_C2V_1_kl_2_hbbhttsl", "qqHH_CV_1_C2V_2_kl_1_hbbhttsl", "qqHH_CV_1p5_C2V_1_kl_1_hbbhttsl", "qqHH_CV_0p5_C2V_1_kl_1_hbbhttsl", "qqHH_CV_1_C2V_0_kl_1_hbbhttsl",]
+        #listSig = listSig + ["qqHH_CV_1_C2V_1_kl_0_hbbhttdl", "qqHH_CV_1_C2V_1_kl_1_hbbhttdl", "qqHH_CV_1_C2V_1_kl_2_hbbhttdl", "qqHH_CV_1_C2V_2_kl_1_hbbhttdl", "qqHH_CV_1p5_C2V_1_kl_1_hbbhttdl", "qqHH_CV_0p5_C2V_1_kl_1_hbbhttdl", "qqHH_CV_1_C2V_0_kl_1_hbbhttdl",]
+
+        #listSig = listSig + ["ggHH_kl_0_kt_1_hbbhwwsl", "ggHH_kl_1_kt_1_hbbhwwsl", "ggHH_kl_2p45_kt_1_hbbhwwsl", "ggHH_kl_5_kt_1_hbbhwwsl",]
+        #listSig = listSig + ["ggHH_kl_0_kt_1_hbbhwwdl", "ggHH_kl_1_kt_1_hbbhwwdl", "ggHH_kl_2p45_kt_1_hbbhwwdl", "ggHH_kl_5_kt_1_hbbhwwdl",]
+        #listSig = listSig + ["ggHH_kl_0_kt_1_hbbhttsl", "ggHH_kl_1_kt_1_hbbhttsl", "ggHH_kl_2p45_kt_1_hbbhttsl", "ggHH_kl_5_kt_1_hbbhttsl",]
+        #listSig = listSig + ["ggHH_kl_0_kt_1_hbbhttdl", "ggHH_kl_1_kt_1_hbbhttdl", "ggHH_kl_2p45_kt_1_hbbhttdl", "ggHH_kl_5_kt_1_hbbhttdl",]
+
         # "ggHH_kl_0_kt_1_hbbhww2l",
-        #listSig = listSig + [ "ggHH_kl_1_kt_1_hbbhtt", "ggHH_kl_1_kt_1_hbbhww1l" ]
+        #listSig = listSig + [ "ggHH_kl_1_kt_1_hbbhtt", "ggHH_kl_1_kt_1_hbbhww1l", "ggHH_kl_1_kt_1_hbbhww2l" ]
+        #listSig = listSig + [ "qqHH_CV_1_C2V_2_kl_1_hbbhww1l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhtt"]
+
+        #listSig = listSig + [ "qqHH_CV_1_C2V_2_kl_1_hbbhwwsl", "qqHH_CV_1_C2V_2_kl_1_hbbhwwdl", "qqHH_CV_1_C2V_2_kl_1_hbbhttsl"]
+        #listSig = listSig + [ "ggHH_kl_1_kt_1_hbbhttsl", "ggHH_kl_1_kt_1_hbbhwwsl", "ggHH_kl_1_kt_1_hbbhwwdl" ]
+        #listSig = listSig + [ "ggHH_kl_1_kt_1_hbbhttdl", "ggHH_kl_1_kt_1_hbbhwwdl" ]
+        #listSig = listSig + [ "qqHH_CV_1_C2V_2_kl_1_hbbhwwdl", "qqHH_CV_1_C2V_2_kl_1_hbbhttdl"]
+        #listSig = listSig + [ "ggH_htt", "qqH_htt", "ZH_hbb", "ZH_htt", "ttH_hbb","tHq_hbb",] #  "WH_hbb",
 
 
         sigs = [ listSig ]
@@ -117,10 +136,26 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         },
         "bbWW_SL" : {
             "bkg_proc_from_data" : [ "Fakes"  ],
-            "bkg_procs_from_MC"  : ["TT", "ST", "DY", "WJets", "VV", "VVV", "Other_bbWW"] + hproc_louvain , #
+            "bkg_procs_from_MC"  : ["TT", "ST", "DY", "WJets", "VV", "VVV", "Other_bbWW"] + hproc_louvain, #
             "isSMCSplit" : False,
             "proc_to_remove" : {}
         },
+        "bbWW_SL_aa" : {
+            "bkg_proc_from_data" : [ "Fakes"  ],
+            "bkg_procs_from_MC"  : ["WJets", "DY", "ST", "TT", "VV", "vvv", "ttZ", "ttW", "ttVV", "Other_bbWW"] + hproc_louvain, #
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+        "bbWW_DL_aa" : {
+            "bkg_proc_from_data" : [ "Fakes"  ],
+            "bkg_procs_from_MC"  : ["DY", "ST", "TT", "VV", "vvv", "ttZ", "ttW", "ttVV", "Other_bbWW"] + hproc_louvain, #
+            "isSMCSplit" : False,
+            "proc_to_remove" : {}
+        },
+
+
+
+
     }
     #---> by now "TTH", "TH" and "VH" are automatically marked as BKG
 
@@ -131,5 +166,7 @@ def list_channels( fake_mc, signal_type="none", mass="none", HHtype="none", rena
         "info_bkg_channel" : info_channel,
         #"higgs_procs_to_draw"      : sigs[0],
         "higgs_procs_to_draw"      : ["ggHH_kl_1_kt_1_hbbhww1l", "qqHH_CV_1_C2V_1_kl_1_hbbhww1l", "ggHH_kl_1_kt_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_1_hbbhww2l", "ggHH_kl_1_kt_1_hbbhtt", "qqHH_CV_1_C2V_1_kl_1_hbbhtt" ],
-        #"higgs_procs_to_draw"      : [ "qqHH_CV_1_C2V_1_kl_1_hbbhww2l", "qqHH_CV_1_C2V_1_kl_1_hbbhtt", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhtt" ],
+        #"higgs_procs_to_draw"      : [ "qqHH_CV_1_C2V_2_kl_1_hbbhww1l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhtt"],
+        #"higgs_procs_to_draw"      : [ "qqHH_CV_1_C2V_2_kl_1_hbbhww1l", "qqHH_CV_1_C2V_2_kl_1_hbbhww2l", "qqHH_CV_1_C2V_2_kl_1_hbbhtt"],
+        #"higgs_procs_to_draw"      : ["ggHH_kl_1_kt_1_hbbhwwsl", "qqHH_CV_1_C2V_2_kl_1_hbbhwwsl", "ggHH_kl_1_kt_1_hbbhwwdl", "qqHH_CV_1_C2V_2_kl_1_hbbhwwdl", "ggHH_kl_1_kt_1_hbbhttsl", "qqHH_CV_1_C2V_2_kl_1_hbbhttdl" ],
     }
